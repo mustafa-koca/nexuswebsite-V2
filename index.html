@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS İSG - İş Sağlığı ve Güvenliği Çözümleri | İSG Yazılımları</title>
+    <meta name="description" content="Türkiye'nin öncü İSG teknoloji firması. İş sağlığı ve güvenliği yazılımları, risk değerlendirmesi, İSG eğitimleri ve danışmanlık hizmetleri.">
+    <meta name="keywords" content="isg yazılım, iş sağlığı güvenliği, risk değerlendirmesi, isg eğitimi, isg danışmanlık, nexus isg, luna isg">
+    <meta name="author" content="NEXUS İSG">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Turkish">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="NEXUS İSG - İş Sağlığı ve Güvenliği Çözümleri">
+    <meta property="og:description" content="İSG alanında teknoloji tabanlı çözümler sunan öncü firma. Luna İSG yazılımları ile işletmenizi dijitalleştirin.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nexusisg.com">
+    <meta property="og:image" content="https://nexusisg.com/media/nexus-logo.svg">
+    <meta property="og:locale" content="tr_TR">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NEXUS İSG - İş Sağlığı ve Güvenliği Çözümleri">
+    <meta name="twitter:description" content="İSG alanında teknoloji tabanlı çözümler sunan öncü firma.">
+    <meta name="twitter:image" content="https://nexusisg.com/media/nexus-logo.svg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nexusisg.com">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="media/favicon.svg">
+    <link rel="apple-touch-icon" href="media/nexus-logo.svg">
+    <link rel="shortcut icon" href="media/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Hero background with animation */
+        .hero-bg {
+            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Enhanced card hover effects */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Section padding with responsive design */
+        .section-padding {
+            padding: 5rem 0;
+        }
+        
+        /* Smooth scrolling for better UX */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Logo animation */
+        .logo-spin:hover {
+            animation: spin 2s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Stats counter animation */
+        .stats-counter {
+            animation: countUp 2s ease-out;
+        }
+        
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Enhanced button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 3rem 0;
+            }
+            .hero-bg {
+                background-size: 200% 200%;
+            }
+        }
+        
+        /* Loading animation for dynamic content */
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Text truncation utilities */
+        .line-clamp-2 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+        }
+        
+        .line-clamp-3 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+        }
+        
+        /* Enhanced product cards */
+        .product-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .product-card:hover::before {
+            left: 100%;
+        }
+        
+        /* Blog card enhancements */
+        .blog-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .blog-image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .blog-card:hover .blog-image-overlay {
+            opacity: 1;
+        }
+        
+        /* Skeleton loading for dynamic content */
+        .skeleton-card {
+            background: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .skeleton-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+            animation: skeleton-wave 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes skeleton-wave {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Improved modal styles */
+        .modal-content {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
+        /* Feature highlight animations */
+        @keyframes feature-highlight {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        
+        .feature-pulse:hover {
+            animation: feature-highlight 1.5s ease-out;
+        }
+        
+        /* Blog filter buttons */
+        .blog-filter-btn {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        .blog-filter-btn:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .blog-filter-btn.active {
+            background-color: #2563eb !important;
+            color: white !important;
+        }
+        
+        /* Search input enhancements */
+        #blog-search:focus {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Blog card animations */
+        .blog-card {
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+            /* Blog modal enhancements */
+        .prose-sm {
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        .prose-sm p {
+            margin-bottom: 1rem;
+        }
+        
+        .prose-sm h1, .prose-sm h2, .prose-sm h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .hero-bg {
+                padding: 2rem 0;
+            }
+            
+            .section-padding {
+                padding: 2rem 0;
+            }
+            
+            .card-hover:hover {
+                transform: none; /* Disable hover effects on mobile */
+            }
+            
+            .blog-card:hover {
+                transform: none;
+            }
+            
+            /* Mobile blog filters */
+            .blog-filter-btn {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.75rem;
+            }
+            
+            /* Mobile search */
+            #blog-search {
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            /* Compact modal for mobile */
+            .fixed .bg-white {
+                margin: 0.5rem;
+                max-height: 95vh;
+                border-radius: 0.75rem;
+            }
+            
+            /* Product cards mobile */
+            .product-card .grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            /* Blog grid mobile spacing */
+            .grid {
+                gap: 1rem;
+            }
+            
+            /* Blog card mobile adjustments */
+            .blog-card .p-6 {
+                padding: 1rem;
+            }
+            
+            .blog-card h3 {
+                font-size: 1.125rem;
+                line-height: 1.4;
+            }
+            
+            /* Mobile modal content */
+            .prose-sm {
+                font-size: 0.8rem;
+                line-height: 1.4;
+            }
+        }        /* Tablet optimizations */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .section-padding {
+                padding: 3rem 0;
+            }
+            
+            .text-3xl {
+                font-size: 1.875rem;
+            }
+            
+            .text-4xl {
+                font-size: 2.25rem;
+            }
+        }
+        
+        /* Large screen optimizations */
+        @media (min-width: 1280px) {
+            .max-w-7xl {
+                max-width: 80rem;
+            }
+            
+            .section-padding {
+                padding: 6rem 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <img src="media/nexus-logo.svg" alt="NEXUS İSG" class="h-16 w-16 mr-4 logo-spin cursor-pointer" data-logo>
+                    <span class="text-2xl font-bold text-gray-800" data-company-name>NEXUS İSG</span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="#anasayfa" class="text-blue-600 font-medium hover:text-blue-800 transition duration-300">Ana Sayfa</a>
+                    <a href="#hakkimizda" class="text-gray-700 hover:text-blue-600 transition duration-300">Hakkımızda</a>
+                    <a href="#hizmetler" class="text-gray-700 hover:text-blue-600 transition duration-300">Hizmetler</a>
+                    <a href="#urunler" class="text-gray-700 hover:text-blue-600 transition duration-300">Ürünler</a>
+                    <a href="#blog" class="text-gray-700 hover:text-blue-600 transition duration-300">Blog</a>
+                    <a href="#ekip" class="text-gray-700 hover:text-blue-600 transition duration-300">Ekip</a>
+                    <a href="#referanslar" class="text-gray-700 hover:text-blue-600 transition duration-300">Referanslar</a>
+                    <a href="#iletisim" class="text-gray-700 hover:text-blue-600 transition duration-300">İletişim</a>
+                </div>
+                
+                <!-- Login Dropdown -->
+                <div class="relative">
+                    <button id="loginBtn" class="hidden md:flex items-center text-gray-700 hover:text-blue-600 transition duration-300 mr-4">
+                        <i class="fas fa-user-circle text-xl mr-2"></i>
+                        <span>Giriş Yap</span>
+                        <i class="fas fa-chevron-down ml-1 text-sm"></i>
+                    </button>
+                    <div id="loginDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                        <a href="login.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-200">
+                            <i class="fas fa-cog mr-2"></i>CMS Giriş
+                        </a>
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-200">
+                            <i class="fas fa-desktop mr-2"></i>Yazılımlarımıza Giriş
+                        </a>
+                    </div>
+                </div>
+                
+                <button id="mobileMenuBtn" class="md:hidden">
+                    <i class="fas fa-bars text-gray-700 text-xl"></i>
+                </button>
+                
+                <!-- Mobile Menu -->
+                <div id="mobileMenu" class="hidden md:hidden absolute top-full left-0 w-full bg-white shadow-lg">
+                    <div class="px-4 py-2 space-y-2">
+                        <a href="#anasayfa" class="block py-2 text-blue-600 font-medium">Ana Sayfa</a>
+                        <a href="#hakkimizda" class="block py-2 text-gray-700 hover:text-blue-600">Hakkımızda</a>
+                        <a href="#hizmetler" class="block py-2 text-gray-700 hover:text-blue-600">Hizmetler</a>
+                        <a href="#urunler" class="block py-2 text-gray-700 hover:text-blue-600">Ürünler</a>
+                        <a href="#blog" class="block py-2 text-gray-700 hover:text-blue-600">Blog</a>
+                        <a href="#ekip" class="block py-2 text-gray-700 hover:text-blue-600">Ekip</a>
+                        <a href="#referanslar" class="block py-2 text-gray-700 hover:text-blue-600">Referanslar</a>
+                        <a href="#iletisim" class="block py-2 text-gray-700 hover:text-blue-600">İletişim</a>
+                        <!-- Mobile Login Options -->
+                        <div class="border-t pt-2 mt-2">
+                            <a href="login.html" class="block py-2 text-gray-700 hover:text-blue-600">
+                                <i class="fas fa-cog mr-2"></i>CMS Giriş
+                            </a>
+                            <a href="#" class="block py-2 text-gray-700 hover:text-blue-600">
+                                <i class="fas fa-desktop mr-2"></i>Yazılımlarımıza Giriş
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="anasayfa" class="hero-bg pt-20">
+        <div class="max-w-7xl mx-auto px-4 section-padding">
+            <div class="text-center text-white">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">İş Sağlığı ve Güvenliği'nde<br class="hidden md:block">Dijital Dönüşüm</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto opacity-90">Modern işletmeler için kapsamlı İSG çözümleri. Yapay zeka destekli yazılımlarımız ve uzman ekibimizle güvenli çalışma ortamları oluşturuyoruz.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="scrollToSection('urunler')" class="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-rocket mr-2"></i>Ürünlerimizi İncele
+                    </button>
+                    <button onclick="openContactModal()" class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-blue-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-play mr-2"></i>Ücretsiz Demo
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 text-center text-white">
+                <div class="bg-white bg-opacity-10 rounded-xl p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                    <div class="text-2xl md:text-3xl font-bold mb-2 stats-counter" data-stats-customers>50+</div>
+                    <div class="text-sm opacity-80">Aktif Müşteri</div>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-xl p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                    <div class="text-2xl md:text-3xl font-bold mb-2 stats-counter" data-stats-satisfaction>98%</div>
+                    <div class="text-sm opacity-80">Memnuniyet Oranı</div>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-xl p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                    <div class="text-2xl md:text-3xl font-bold mb-2 stats-counter" data-stats-support>24/7</div>
+                    <div class="text-sm opacity-80">Destek Hizmeti</div>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-xl p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                    <div class="text-2xl md:text-3xl font-bold mb-2 stats-counter" data-stats-experience>10+</div>
+                    <div class="text-sm opacity-80">Yıl Tecrübe</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="hakkimizda" class="section-padding bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Hakkımızda</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto" id="about-description">
+                    NEXUS İSG olarak, Türkiye'de iş sağlığı ve güvenliği alanında teknoloji tabanlı çözümler sunan öncü bir firmayız. 
+                    2014 yılından beri sektöre hizmet veren ekibimiz, işletmelerin yasal yükümlülüklerini yerine getirmesine ve 
+                    çalışan güvenliğini en üst düzeyde sağlamasına yardımcı olmaktadır.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-lightbulb text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">İnovasyon</h3>
+                    <p class="text-gray-600">En son teknolojileri kullanarak İSG alanında yenilikçi çözümler sunuyoruz.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shield-alt text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Güvenlik</h3>
+                    <p class="text-gray-600">İş güvenliği standartlarında en üst seviye koruma sağlıyoruz.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-users text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Uzman Ekip</h3>
+                    <p class="text-gray-600">Alanında deneyimli profesyonellerden oluşan ekibimizle hizmet veriyoruz.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="hizmetler" class="section-padding bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Hizmetlerimiz</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    İş sağlığı ve güvenliği alanında kapsamlı hizmet yelpazesi ile yanınızdayız.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="services-container">
+                <!-- Services will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="urunler" class="section-padding bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Yazılım Ürünlerimiz</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    İSG süreçlerinizi dijitalleştiren, verimliliği artıran yazılım çözümlerimizi keşfedin.
+                </p>
+                <div class="flex justify-center mt-6">
+                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <i class="fas fa-shield-alt text-green-600 mr-2"></i>
+                            <span>Güvenli & Güvenilir</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-mobile-alt text-blue-600 mr-2"></i>
+                            <span>Mobil Uyumlu</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-headset text-purple-600 mr-2"></i>
+                            <span>7/24 Destek</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-8" id="products-container">
+                <!-- Products will be loaded dynamically -->
+            </div>
+            
+            <!-- Additional Features -->
+            <div class="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Neden NEXUS İSG Yazılımları?</h3>
+                    <p class="text-gray-600">İSG yönetiminde fark yaratan özelliklerimiz</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-brain text-blue-600 text-2xl"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">AI Destekli Analiz</h4>
+                        <p class="text-gray-600 text-sm">Yapay zeka ile risk analizleri ve öngörülü bakım</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-sync-alt text-green-600 text-2xl"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">Gerçek Zamanlı Sync</h4>
+                        <p class="text-gray-600 text-sm">Anlık veri senkronizasyonu ve güncellemeler</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-chart-line text-purple-600 text-2xl"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">Detaylı Raporlama</h4>
+                        <p class="text-gray-600 text-sm">Kapsamlı analitik ve özelleştirilebilir raporlar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="section-padding bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
+                    <i class="fas fa-newspaper text-blue-600 text-2xl"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">İSG Blog</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-6">
+                    İş sağlığı ve güvenliği alanındaki en güncel gelişmeler, uzman görüşleri ve 
+                    pratik çözüm önerilerimizi takip edin.
+                </p>
+                <div class="flex justify-center space-x-6 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-calendar-alt text-blue-600 mr-2"></i>
+                        <span>Düzenli Güncellemeler</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-user-tie text-green-600 mr-2"></i>
+                        <span>Uzman Yazarlar</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-lightbulb text-yellow-600 mr-2"></i>
+                        <span>Pratik İpuçları</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Blog Filter & Search -->
+            <div class="bg-white rounded-lg shadow-lg p-4 md:p-6 mb-8 md:mb-12">
+                <div class="flex flex-col gap-4">
+                    <!-- Filter Buttons -->
+                    <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+                        <button onclick="filterBlogPosts('all')" 
+                                class="blog-filter-btn active px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium transition duration-200">
+                            <i class="fas fa-th-large mr-1 md:mr-2"></i>Tümü
+                        </button>
+                        <button onclick="filterBlogPosts('İSG')" 
+                                class="blog-filter-btn px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium transition duration-200">
+                            <i class="fas fa-shield-alt mr-1 md:mr-2"></i>İSG
+                        </button>
+                        <button onclick="filterBlogPosts('Teknoloji')" 
+                                class="blog-filter-btn px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium transition duration-200">
+                            <i class="fas fa-laptop mr-1 md:mr-2"></i>Teknoloji
+                        </button>
+                        <button onclick="filterBlogPosts('Eğitim')" 
+                                class="blog-filter-btn px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium transition duration-200">
+                            <i class="fas fa-graduation-cap mr-1 md:mr-2"></i>Eğitim
+                        </button>
+                        <button onclick="filterBlogPosts('Yasal')" 
+                                class="blog-filter-btn px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-medium transition duration-200">
+                            <i class="fas fa-gavel mr-1 md:mr-2"></i>Yasal
+                        </button>
+                    </div>
+                    
+                    <!-- Search Box -->
+                    <div class="relative w-full md:w-auto md:ml-auto">
+                        <input type="text" 
+                               id="blog-search" 
+                               placeholder="Blog yazılarında ara..." 
+                               class="w-full md:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                               onkeyup="searchBlogPosts(this.value)">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        <button onclick="clearBlogSearch()" 
+                                class="absolute right-3 top-3 text-gray-400 hover:text-gray-600 hidden" 
+                                id="clear-search-btn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Active Filter Indicator -->
+                <div id="active-filter-info" class="hidden mt-3 text-sm text-blue-600 bg-blue-50 px-3 py-1 rounded-full inline-block">
+                    <i class="fas fa-filter mr-1"></i>
+                    <span id="filter-text">Filtre aktif</span>
+                    <button onclick="clearBlogFilters()" class="ml-2 text-blue-400 hover:text-blue-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Blog Posts Grid -->
+            <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" id="blog-container">
+                <!-- Blog posts will be loaded dynamically -->
+            </div>
+            
+            <!-- Blog Categories -->
+            <div class="mt-16">
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="text-xl font-bold text-center mb-6">Blog Kategorileri</h3>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-200 transition duration-200 cursor-pointer">
+                            <i class="fas fa-shield-alt mr-2"></i>İSG Genel
+                        </span>
+                        <span class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium hover:bg-green-200 transition duration-200 cursor-pointer">
+                            <i class="fas fa-laptop mr-2"></i>Teknoloji
+                        </span>
+                        <span class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium hover:bg-purple-200 transition duration-200 cursor-pointer">
+                            <i class="fas fa-graduation-cap mr-2"></i>Eğitim
+                        </span>
+                        <span class="bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-medium hover:bg-red-200 transition duration-200 cursor-pointer">
+                            <i class="fas fa-gavel mr-2"></i>Yasal Düzenlemeler
+                        </span>
+                        <span class="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-medium hover:bg-orange-200 transition duration-200 cursor-pointer">
+                            <i class="fas fa-hard-hat mr-2"></i>Güvenlik
+                        </span>
+                        <span class="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-200 transition duration-200 cursor-pointer">
+                            <i class="fas fa-newspaper mr-2"></i>Sektör Haberleri
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter Subscription -->
+            <div class="mt-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-white text-center">
+                <h3 class="text-2xl font-bold mb-4">İSG Blog Bültenimize Abone Olun</h3>
+                <p class="mb-6 opacity-90">Yeni blog yazılarımızı ve İSG alanındaki önemli gelişmeleri e-posta ile alın.</p>
+                <div class="max-w-md mx-auto flex gap-3">
+                    <input type="email" placeholder="E-posta adresiniz" 
+                           class="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white">
+                    <button class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
+                        Abone Ol
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="ekip" class="section-padding bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Ekibimiz</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Alanında uzman, deneyimli profesyonellerden oluşan ekibimizle tanışın.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8" id="team-container">
+                <!-- Team members will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- References Section -->
+    <section id="referanslar" class="section-padding bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Referanslarımız</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Güvenilir İSG çözümleriyle birçok kurumun iş güvenliği standartlarını geliştirdik. 
+                    Başarılı projelerimizi ve memnun müşterilerimizi keşfedin.
+                </p>
+            </div>
+            
+            <div class="w-full" id="references-container">
+                <!-- References carousel will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="iletisim" class="section-padding bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">İletişim</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto" id="contact-description">
+                    İSG çözümlerimiz hakkında detaylı bilgi almak, ücretsiz demo talep etmek veya 
+                    projeleriniz için teklif almak için bizimle iletişime geçin.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">Bize Ulaşın</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Merkez Ofis</h4>
+                                <p class="text-gray-600" data-company-address>Maslak Mahallesi, Büyükdere Caddesi<br>No:123 Kat:8 Sarıyer / İSTANBUL</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fas fa-phone text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">İletişim</h4>
+                                <p class="text-gray-600" data-company-phone>+90 212 123 45 67</p>
+                                <p class="text-gray-600 text-sm">+90 532 123 45 67 (WhatsApp)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fas fa-envelope text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">E-posta</h4>
+                                <p class="text-gray-600" data-company-email>info@nexusisg.com</p>
+                                <p class="text-gray-600 text-sm">destek@nexusisg.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <form class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ad Soyad</label>
+                                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">E-posta</label>
+                                <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Konu</label>
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mesaj</label>
+                            <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+                            Mesaj Gönder
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <img src="media/nexus-logo.svg" alt="NEXUS İSG" class="h-16 w-16 mr-3" data-logo>
+                        <span class="text-2xl font-bold" data-company-name>NEXUS İSG</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        İş sağlığı ve güvenliği alanında teknoloji odaklı çözümler sunan öncü şirket.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-300">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-300">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-300">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Hızlı Linkler</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#hakkimizda" class="text-gray-300 hover:text-white transition duration-300">Hakkımızda</a></li>
+                        <li><a href="#hizmetler" class="text-gray-300 hover:text-white transition duration-300">Hizmetler</a></li>
+                        <li><a href="#urunler" class="text-gray-300 hover:text-white transition duration-300">Ürünler</a></li>
+                        <li><a href="#blog" class="text-gray-300 hover:text-white transition duration-300">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">İletişim</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li data-company-address>Maslak, İstanbul</li>
+                        <li data-company-phone>+90 212 123 45 67</li>
+                        <li data-company-email>info@nexusisg.com</li>
+                        <li class="text-sm">Destek: destek@nexusisg.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2025 <span data-company-name>NEXUS İSG</span>. Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-xl font-bold">Demo Talebi</h3>
+                <button onclick="closeContactModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="demoForm" class="space-y-4">
+                <input type="hidden" id="selectedProduct" name="product">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ad Soyad *</label>
+                    <input type="text" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">E-posta *</label>
+                    <input type="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Telefon</label>
+                    <input type="tel" id="phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Şirket</label>
+                    <input type="text" id="company" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Mesaj</label>
+                    <textarea id="message" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+                
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeContactModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition duration-200">
+                        İptal
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                        Gönder
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Debug: Content Refresh Button -->
+    <div class="fixed bottom-4 left-4 z-50">
+        <div class="flex gap-2">
+            <button onclick="window.refreshDynamicContent()" 
+                    class="bg-green-600 text-white px-3 py-2 rounded shadow hover:bg-green-700 transition-colors text-sm">
+                <i class="fas fa-sync mr-1"></i>Yenile
+            </button>
+            <button onclick="window.clearTestReferences()" 
+                    class="bg-red-600 text-white px-3 py-2 rounded shadow hover:bg-red-700 transition-colors text-sm">
+                <i class="fas fa-trash mr-1"></i>Test Sil
+            </button>
+        </div>
+    </div>
+
+    <!-- Dynamic Content Script -->
+    <script src="dynamic-content.js"></script>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Login dropdown toggle
+        document.getElementById('loginBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('loginDropdown');
+            dropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.getElementById('loginDropdown').classList.add('hidden');
+        });
+
+        // Smooth scrolling function
+        function scrollToSection(sectionId) {
+            const target = document.getElementById(sectionId);
+            if (target) {
+                const offsetTop = target.offsetTop - 80;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Smooth scrolling for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                scrollToSection(targetId);
+                
+                // Close mobile menu if open
+                document.getElementById('mobileMenu').classList.add('hidden');
+            });
+        });
+
+        // Contact modal functions
+        function openContactModal(productName = '') {
+            document.getElementById('contactModal').classList.remove('hidden');
+            document.getElementById('selectedProduct').value = productName;
+            if (productName) {
+                document.getElementById('modalTitle').textContent = productName + ' Demo Talebi';
+            }
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('demoForm').reset();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('contactModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeContactModal();
+            }
+        });
+
+        // Form validation function
+        function validateForm(formData) {
+            const errors = [];
+            
+            if (!formData.name || formData.name.length < 2) {
+                errors.push('Geçerli bir ad soyad giriniz');
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!formData.email || !emailRegex.test(formData.email)) {
+                errors.push('Geçerli bir e-posta adresi giriniz');
+            }
+            
+            const phoneRegex = /^[0-9\s\-\+\(\)]{10,}$/;
+            if (!formData.phone || !phoneRegex.test(formData.phone)) {
+                errors.push('Geçerli bir telefon numarası giriniz');
+            }
+            
+            return errors;
+        }
+
+        // Enhanced form submission with loading state
+        document.getElementById('demoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                company: document.getElementById('company').value.trim(),
+                message: document.getElementById('message').value.trim(),
+                product: document.getElementById('selectedProduct').value
+            };
+            
+            // Validate form
+            const errors = validateForm(formData);
+            if (errors.length > 0) {
+                showNotification(errors.join('<br>'), 'error');
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Gönderiliyor...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+                showNotification('Demo talebiniz başarıyla alındı! En kısa sürede size dönüş yapacağız.', 'success');
+                closeContactModal();
+            }, 2000);
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Remove existing notification
+            const existingNotif = document.querySelector('.notification');
+            if (existingNotif) {
+                existingNotif.remove();
+            }
+            
+            const notification = document.createElement('div');
+            notification.className = `notification fixed top-4 right-4 z-50 max-w-sm p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+            
+            let bgColor, icon;
+            switch (type) {
+                case 'success':
+                    bgColor = 'bg-green-500';
+                    icon = 'fas fa-check-circle';
+                    break;
+                case 'error':
+                    bgColor = 'bg-red-500';
+                    icon = 'fas fa-exclamation-triangle';
+                    break;
+                default:
+                    bgColor = 'bg-blue-500';
+                    icon = 'fas fa-info-circle';
+            }
+            
+            notification.className += ` ${bgColor} text-white`;
+            notification.innerHTML = `
+                <div class="flex items-start">
+                    <i class="${icon} mt-1 mr-3"></i>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium">${message}</div>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white opacity-70 hover:opacity-100">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+                notification.classList.add('translate-x-0');
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        // Enhanced contact form submission
+        document.querySelector('#iletisim form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Gönderiliyor...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+                showNotification('Mesajınız başarıyla alındı! En kısa sürede size dönüş yapacağız.', 'success');
+                this.reset();
+            }, 1500);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-xl');
+            } else {
+                nav.classList.remove('shadow-xl');
+            }
+        });
+
+        // ESC key to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeContactModal();
+            }
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add initial classes for animation
+            const animateElements = document.querySelectorAll('.card-hover, .stats-counter, section h2, section p');
+            animateElements.forEach(el => {
+                el.classList.add('opacity-0', 'translate-y-8', 'transition-all', 'duration-700');
+                observer.observe(el);
+            });
+
+            // Stats counter animation
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const finalValue = target.textContent;
+                        if (finalValue.includes('+') || finalValue.includes('%')) {
+                            animateCounter(target, finalValue);
+                        }
+                        statsObserver.unobserve(target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll('.stats-counter').forEach(el => {
+                statsObserver.observe(el);
+            });
+        });
+
+        // Counter animation function
+        function animateCounter(element, finalValue) {
+            const isPercentage = finalValue.includes('%');
+            const hasPlus = finalValue.includes('+');
+            const numValue = parseInt(finalValue.replace(/[^\d]/g, ''));
+            
+            let currentValue = 0;
+            const increment = Math.ceil(numValue / 50);
+            const duration = 2000;
+            const stepTime = duration / (numValue / increment);
+            
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= numValue) {
+                    currentValue = numValue;
+                    clearInterval(timer);
+                }
+                
+                let displayValue = currentValue;
+                if (isPercentage) displayValue += '%';
+                if (hasPlus) displayValue += '+';
+                if (finalValue === '24/7') displayValue = '24/7';
+                
+                element.textContent = displayValue;
+            }, stepTime);
+        }
+
+        // Add CSS class for fade-in animation
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                .animate-fade-in {
+                    opacity: 1 !important;
+                    transform: translateY(0) !important;
+                }
+                
+                /* Loading skeleton for dynamic content */
+                .skeleton {
+                    background: linear-gradient(90deg, #f0f0f0 25%, transparent 37%, #f0f0f0 63%);
+                    background-size: 400% 100%;
+                    animation: skeleton-loading 1.4s ease infinite;
+                }
+                
+                @keyframes skeleton-loading {
+                    0% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+            </style>
+        `);
+    </script>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "NEXUS İSG",
+        "alternateName": "NEXUS İş Sağlığı ve Güvenliği",
+        "url": "https://nexusisg.com",
+        "logo": "https://nexusisg.com/media/nexus-logo.svg",
+        "description": "Türkiye'de iş sağlığı ve güvenliği alanında teknoloji tabanlı çözümler sunan öncü firma",
+        "foundingDate": "2014",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Maslak Mahallesi, Büyükdere Caddesi No:123 Kat:8",
+            "addressLocality": "Sarıyer",
+            "addressRegion": "İstanbul",
+            "addressCountry": "TR"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+90-212-123-45-67",
+            "contactType": "customer service",
+            "availableLanguage": "Turkish"
+        },
+        "sameAs": [
+            "https://linkedin.com/company/nexus-isg"
+        ],
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "İSG Hizmetleri",
+            "itemListElement": [
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Risk Değerlendirmesi",
+                        "description": "Kapsamlı risk analizi ile potansiyel tehlikeleri önceden tespit ediyoruz"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "İSG Eğitimleri",
+                        "description": "Çalışanlarınız için interaktif ve etkili güvenlik eğitimleri"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "SoftwareApplication",
+                        "name": "Luna İSG Pro",
+                        "description": "Büyük işletmeler için kapsamlı İSG yönetim platformu",
+                        "operatingSystem": "Web-based",
+                        "applicationCategory": "BusinessApplication"
+                    }
+                }
+            ]
+        }
+    }
+    </script>
+</body>
+</html>

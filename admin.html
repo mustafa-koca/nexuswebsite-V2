@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS İSG - CMS Yönetim Paneli</title>
+    <link rel="icon" type="image/svg+xml" href="media/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .sidebar-item.active {
+            background: linear-grad    <!-- Product Modal -->
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white rounded-lg max-w-l    <!-- Blog Modal -->
+    <div id="blogModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 id="blogModalTitle" class="text-lg font-semibold">Yeni Blog Yazısı</h3>
+                <button onclick="closeBlogModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 id="productModalTitle" class="text-lg font-semibold">Yeni Ürün Ekle</h3>
+                <button onclick="closeProductModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">eg, #3B82F6 0%, #1E40AF 100%);
+            color: white;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .stat-card.blue {
+            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+        }
+        .stat-card.green {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+        .stat-card.purple {
+            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+        }
+        .stat-card.orange {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        }
+        .stat-card.pink {
+            background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);
+        }
+        
+        /* Compact modal styles */
+        .modal-compact {
+            max-height: 95vh;
+        }
+        
+        .modal-compact input,
+        .modal-compact select,
+        .modal-compact textarea {
+            font-size: 0.875rem;
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .modal-compact textarea {
+            resize: none;
+        }
+        
+        /* Mobile modal adjustments */
+        @media (max-width: 768px) {
+            .modal-compact {
+                margin: 0.5rem;
+                max-height: 95vh;
+            }
+            
+            .modal-compact .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-compact .p-4 {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center">
+                <img src="media/nexus-logo.svg" alt="NEXUS İSG" class="h-12 w-12 mr-3">
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">NEXUS İSG</h1>
+                    <p class="text-sm text-gray-600">CMS Yönetim Paneli</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-600">Hoş geldiniz, Admin</span>
+                <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Çıkış
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-sm h-screen">
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <button onclick="showSection('dashboard')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors active">
+                            <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('hero')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
+                            <i class="fas fa-home mr-3"></i>Ana Sayfa Hero
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('services')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
+                            <i class="fas fa-shield-alt mr-3"></i>Hizmetler
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('products')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
+                            <i class="fas fa-box mr-3"></i>Ürünler
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('blog')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
+                            <i class="fas fa-blog mr-3"></i>Blog
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('team')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
+                            <i class="fas fa-users mr-3"></i>Ekip
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('references')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
+                            <i class="fas fa-building mr-3"></i>Referanslar
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('about')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
+                            <i class="fas fa-info-circle mr-3"></i>Hakkımızda
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('contact')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
+                            <i class="fas fa-envelope mr-3"></i>İletişim
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('settings')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
+                            <i class="fas fa-cog mr-3"></i>Site Ayarları
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section active fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Dashboard</h2>
+                    <p class="text-gray-600">NEXUS İSG CMS yönetim paneline hoş geldiniz</p>
+                </div>
+
+                <!-- İstatistik Kartları -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card blue text-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-blue-100 text-sm">Toplam Hizmet</p>
+                                <p class="text-2xl font-bold" id="totalServices">0</p>
+                            </div>
+                            <i class="fas fa-shield-alt text-3xl text-blue-200"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card green text-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-green-100 text-sm">Toplam Ürün</p>
+                                <p class="text-2xl font-bold" id="totalProducts">0</p>
+                            </div>
+                            <i class="fas fa-box text-3xl text-green-200"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card purple text-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-purple-100 text-sm">Blog Yazısı</p>
+                                <p class="text-2xl font-bold" id="totalBlogPosts">0</p>
+                            </div>
+                            <i class="fas fa-blog text-3xl text-purple-200"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card orange text-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-orange-100 text-sm">Ekip Üyesi</p>
+                                <p class="text-2xl font-bold" id="totalTeamMembers">0</p>
+                            </div>
+                            <i class="fas fa-users text-3xl text-orange-200"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card pink text-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-pink-100 text-sm">Referanslar</p>
+                                <p class="text-2xl font-bold" id="totalReferences">0</p>
+                            </div>
+                            <i class="fas fa-building text-3xl text-pink-200"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hızlı Eylemler -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-4">Hızlı Eylemler</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                        <button onclick="showSection('services'); setTimeout(() => addService(), 100);" class="group bg-white p-6 rounded-lg shadow hover:shadow-lg transition-all duration-300 border-l-4 border-blue-500 hover:border-l-8">
+                            <div class="flex items-center">
+                                <i class="fas fa-plus text-blue-500 text-2xl mr-4 group-hover:scale-110 transition-transform"></i>
+                                <div class="text-left">
+                                    <h4 class="font-semibold text-gray-800 group-hover:text-blue-600">Hizmet Ekle</h4>
+                                    <p class="text-sm text-gray-600">Yeni hizmet oluştur</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="showSection('products'); setTimeout(() => addProduct(), 100);" class="group bg-white p-6 rounded-lg shadow hover:shadow-lg transition-all duration-300 border-l-4 border-green-500 hover:border-l-8">
+                            <div class="flex items-center">
+                                <i class="fas fa-box text-green-500 text-2xl mr-4 group-hover:scale-110 transition-transform"></i>
+                                <div class="text-left">
+                                    <h4 class="font-semibold text-gray-800 group-hover:text-green-600">Ürün Ekle</h4>
+                                    <p class="text-sm text-gray-600">Yeni ürün oluştur</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="showSection('blog'); setTimeout(() => addBlogPost(), 100);" class="group bg-white p-6 rounded-lg shadow hover:shadow-lg transition-all duration-300 border-l-4 border-purple-500 hover:border-l-8">
+                            <div class="flex items-center">
+                                <i class="fas fa-pen text-purple-500 text-2xl mr-4 group-hover:scale-110 transition-transform"></i>
+                                <div class="text-left">
+                                    <h4 class="font-semibold text-gray-800 group-hover:text-purple-600">Blog Yaz</h4>
+                                    <p class="text-sm text-gray-600">Yeni makale oluştur</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="showSection('team'); setTimeout(() => addTeamMember(), 100);" class="group bg-white p-6 rounded-lg shadow hover:shadow-lg transition-all duration-300 border-l-4 border-orange-500 hover:border-l-8">
+                            <div class="flex items-center">
+                                <i class="fas fa-user-plus text-orange-500 text-2xl mr-4 group-hover:scale-110 transition-transform"></i>
+                                <div class="text-left">
+                                    <h4 class="font-semibold text-gray-800 group-hover:text-orange-600">Ekip Ekle</h4>
+                                    <p class="text-sm text-gray-600">Yeni üye ekle</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="showSection('references'); setTimeout(() => addReference(), 100);" class="group bg-white p-6 rounded-lg shadow hover:shadow-lg transition-all duration-300 border-l-4 border-pink-500 hover:border-l-8">
+                            <div class="flex items-center">
+                                <i class="fas fa-building text-pink-500 text-2xl mr-4 group-hover:scale-110 transition-transform"></i>
+                                <div class="text-left">
+                                    <h4 class="font-semibold text-gray-800 group-hover:text-pink-600">Referans Ekle</h4>
+                                    <p class="text-sm text-gray-600">Yeni referans oluştur</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Son Aktiviteler ve Sistem Durumu -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">Son Aktiviteler</h3>
+                            <button onclick="clearActivities()" class="text-sm text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-refresh"></i>
+                            </button>
+                        </div>
+                        <div id="recentActivities" class="space-y-3 max-h-64 overflow-y-auto">
+                            <div class="flex items-center p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                                <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                    <i class="fas fa-rocket text-blue-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium">CMS Sistemi başlatıldı</p>
+                                    <p class="text-xs text-gray-500">Az önce</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Sistem Durumu</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-database text-green-600 mr-3"></i>
+                                    <span class="text-sm">Veri Tabanı</span>
+                                </div>
+                                <span class="text-green-600 text-sm font-medium">Aktif</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-server text-green-600 mr-3"></i>
+                                    <span class="text-sm">Web Sunucu</span>
+                                </div>
+                                <span class="text-green-600 text-sm font-medium">Çalışıyor</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t">
+                            <h4 class="text-sm font-semibold mb-2">Veri Boyutu</h4>
+                            <div class="bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: 25%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Kullanılan: <span id="dataSizeDisplay">-</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Son Güncelleme Bilgisi -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4">Son Güncelleme</h3>
+                    <div class="text-sm text-gray-600">
+                        <p>Son güncelleme: <span class="font-medium" id="lastUpdate">30 Eylül 2025, 14:30</span></p>
+                        <p class="mt-2">Sistem durumu: <span class="text-green-600 font-medium">Aktif</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div id="about-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Hakkımızda</h2>
+                    <p class="text-gray-600">Hakkımızda bölümünün içeriğini düzenleyin</p>
+                </div>
+
+                <form class="bg-white rounded-lg shadow p-6 space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Hakkımızda Açıklaması</label>
+                        <textarea id="aboutDescription" rows="4" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                  placeholder="NEXUS İSG olarak, modern teknoloji ile iş sağlığı ve güvenliği alanında devrim yaratıyoruz...">NEXUS İSG olarak, modern teknoloji ile iş sağlığı ve güvenliği alanında devrim yaratıyoruz. Uzman ekibimiz ve gelişmiş yazılım çözümlerimizle işletmelerin güvenli çalışma ortamları oluşturmasına katkıda bulunuyoruz.</textarea>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button type="button" onclick="saveAboutSection()" 
+                                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Kaydet
+                        </button>
+                        <button type="button" onclick="resetAboutSection()" 
+                                class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-undo mr-2"></i>Sıfırla
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Contact Section -->
+            <div id="contact-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">İletişim</h2>
+                    <p class="text-gray-600">İletişim bölümünün içeriğini düzenleyin</p>
+                </div>
+
+                <form class="bg-white rounded-lg shadow p-6 space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">İletişim Açıklaması</label>
+                        <textarea id="contactDescription" rows="3" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                  placeholder="Projeleriniz hakkında konuşmak ve size nasıl yardımcı olabileceğimizi öğrenmek için bizimle iletişime geçin.">Projeleriniz hakkında konuşmak ve size nasıl yardımcı olabileceğimizi öğrenmek için bizimle iletişime geçin.</textarea>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button type="button" onclick="saveContactSection()" 
+                                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Kaydet
+                        </button>
+                        <button type="button" onclick="resetContactSection()" 
+                                class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-undo mr-2"></i>Sıfırla
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Site Ayarları</h2>
+                    <p class="text-gray-600">Genel site ayarlarını düzenleyin</p>
+                </div>
+
+                <form class="bg-white rounded-lg shadow p-6 space-y-6">
+                    <!-- Şirket Bilgileri -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Şirket Bilgileri</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Şirket Adı</label>
+                                <input type="text" id="companyName" value="NEXUS İSG" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">E-posta</label>
+                                <input type="email" id="companyEmail" value="info@nexusisg.com" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Telefon</label>
+                                <input type="tel" id="companyPhone" value="+90 532 123 45 67" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Adres</label>
+                                <input type="text" id="companyAddress" value="İstanbul, Türkiye" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Logo Ayarları -->
+                    <div class="border-t pt-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Logo Ayarları</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Logo URL</label>
+                                <input type="url" id="logoUrl" value="media/nexus-logo.svg" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                       placeholder="media/nexus-logo.svg">
+                                <small class="text-gray-500">Logo dosyasının yolu veya URL'si</small>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <p class="text-sm font-medium text-gray-700 mb-2">Mevcut Logo:</p>
+                                    <img id="logoPreview" src="media/nexus-logo.svg" alt="Logo Önizleme" class="h-16 w-16 object-contain">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button type="button" onclick="saveSettings()" 
+                                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Hero Section -->
+            <div id="hero-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Ana Sayfa Hero Bölümü</h2>
+                    <p class="text-gray-600">Ana sayfanın üst kısmındaki hero bölümünü düzenleyin</p>
+                </div>
+
+                <form class="bg-white rounded-lg shadow p-6 space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Ana Başlık</label>
+                        <input type="text" id="heroTitle" value="İş Sağlığı ve Güvenliği'nde Dijital Dönüşüm" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Alt Başlık</label>
+                        <textarea id="heroSubtitle" rows="3" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">Modern işletmeler için kapsamlı İSG çözümleri. Yapay zeka destekli yazılımlarımız ve uzman ekibimizle güvenli çalışma ortamları oluşturuyoruz.</textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Müşteri Sayısı</label>
+                            <input type="number" id="customerCount" value="150" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Sektör Sayısı</label>
+                            <input type="number" id="sectorCount" value="5" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Destek</label>
+                            <input type="text" id="supportType" value="24/7" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Deneyim (Yıl)</label>
+                            <input type="number" id="experienceYears" value="15" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button type="button" onclick="saveHeroSection()" 
+                                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Kaydet
+                        </button>
+                        <button type="button" onclick="resetHeroSection()" 
+                                class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-undo mr-2"></i>Sıfırla
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Services Section -->
+            <div id="services-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Hizmetler</h2>
+                    <p class="text-gray-600">Şirket hizmetlerini yönetin</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold">Hizmet Listesi</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="loadDemoServices()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                                <i class="fas fa-download mr-2"></i>Demo Veriler
+                            </button>
+                            <button onclick="addService()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Yeni Hizmet
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-4" id="servicesList">
+                        <!-- Services will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Section -->
+            <div id="products-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Ürünler</h2>
+                    <p class="text-gray-600">Yazılım ürünlerini yönetin</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold">Ürün Listesi</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="loadDemoProducts()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                                <i class="fas fa-download mr-2"></i>Demo Veriler
+                            </button>
+                            <button onclick="addProduct()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Yeni Ürün
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-4" id="productsList">
+                        <!-- Products will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Section -->
+            <div id="blog-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Blog</h2>
+                    <p class="text-gray-600">Blog yazılarını yönetin</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold">Blog Yazıları</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="loadDemoBlogPosts()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                                <i class="fas fa-download mr-2"></i>Demo Veriler
+                            </button>
+                            <button onclick="addBlogPost()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Yeni Yazı
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-4" id="blogList">
+                        <!-- Blog posts will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Section -->
+            <div id="team-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Ekip</h2>
+                    <p class="text-gray-600">Ekip üyelerini yönetin</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold">Ekip Üyeleri</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="loadDemoTeamMembers()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                                <i class="fas fa-download mr-2"></i>Demo Veriler
+                            </button>
+                            <button onclick="addTeamMember()" class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Yeni Üye
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-4" id="teamList">
+                        <!-- Team members will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- References Section -->
+            <div id="references-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Referans Yönetimi</h2>
+                    <p class="text-gray-600">Şirket referanslarını yönetin</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold">Referanslar</h3>
+                        <button onclick="console.log('Button clicked'); addReference();" class="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors">
+                            <i class="fas fa-plus mr-2"></i>Referans Ekle
+                        </button>
+                    </div>
+
+                    <div class="grid gap-4" id="referencesList">
+                        <!-- References will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 md:p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full max-h-[95vh] overflow-hidden flex flex-col modal-compact">
+            <div class="flex justify-between items-center p-4 border-b flex-shrink-0">
+                <h3 id="productModalTitle" class="text-lg font-semibold">Yeni Ürün</h3>
+                <button onclick="closeProductModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+                <form id="productForm" class="space-y-3">
+                    <input type="hidden" id="productId" name="productId">
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="fas fa-box mr-1"></i>Ürün Adı *
+                        </label>
+                        <input type="text" id="productName" name="name" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm" 
+                               required placeholder="Örn: Luna İSG Pro">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Fiyat</label>
+                            <input type="text" id="productPrice" name="price" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm" 
+                                   placeholder="1.500 TL/ay">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                            <input type="text" id="productCategory" name="category" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm" 
+                                   placeholder="İSG Yazılımı">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Hedef Kitle</label>
+                            <input type="text" id="productTarget" name="target" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm" 
+                                   placeholder="50+ çalışan">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Etiketler</label>
+                            <input type="text" id="productTags" name="tags" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm" 
+                                   placeholder="premium, kobi, mobil">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Renk Teması</label>
+                            <select id="productColor" name="color" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm">
+                                <option value="blue">🔵 Mavi</option>
+                                <option value="green">🟢 Yeşil</option>
+                                <option value="purple">🟣 Mor</option>
+                                <option value="orange">🟠 Turuncu</option>
+                                <option value="red">🔴 Kırmızı</option>
+                                <option value="indigo">🟦 İndigo</option>
+                                <option value="pink">🩷 Pembe</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">İkon</label>
+                            <select id="productIcon" name="icon" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm">
+                                <option value="fas fa-crown">👑 Premium (Crown)</option>
+                                <option value="fas fa-building">🏢 Kurumsal (Building)</option>
+                                <option value="fas fa-laptop">💻 Yazılım (Laptop)</option>
+                                <option value="fas fa-mobile-alt">📱 Mobil (Mobile)</option>
+                                <option value="fas fa-rocket">🚀 Hızlı (Rocket)</option>
+                                <option value="fas fa-shield-alt">🛡️ Güvenli (Shield)</option>
+                                <option value="fas fa-cog">⚙️ Sistem (Settings)</option>
+                                <option value="fas fa-cloud">☁️ Bulut (Cloud)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="fas fa-image mr-1"></i>Ürün Görseli
+                        </label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-3 text-center hover:border-green-400 transition-colors">
+                            <input type="file" id="productImageFile" accept="image/*" class="hidden" onchange="handleProductImageUpload(this)">
+                            <input type="url" id="productImage" name="image" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm mb-2" 
+                                   placeholder="Görsel URL'si yapıştırın">
+                            <div class="text-xs text-gray-500 mb-2">veya</div>
+                            <button type="button" onclick="document.getElementById('productImageFile').click()" 
+                                    class="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-xs">
+                                <i class="fas fa-upload mr-1"></i>Dosya Seç
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Açıklama *</label>
+                        <textarea id="productDescription" name="description" rows="2" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm resize-none" 
+                                  required placeholder="Ürünün kısa ve etkileyici açıklaması"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-list-ul mr-1"></i>Özellikler
+                        </label>
+                        <div id="productFeatures" class="space-y-2 mb-3">
+                            <!-- Features will be added dynamically -->
+                        </div>
+                        <button type="button" onclick="addProductFeature()" class="inline-flex items-center text-green-600 hover:text-green-800 text-sm bg-green-50 px-3 py-1 rounded-md hover:bg-green-100 transition-colors">
+                            <i class="fas fa-plus mr-1"></i>Özellik Ekle
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="border-t p-4 flex-shrink-0">
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeProductModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition duration-200 text-sm">
+                        İptal
+                    </button>
+                    <button type="submit" form="productForm" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200 text-sm">
+                        <i class="fas fa-save mr-1"></i>Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="serviceModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full p-6 max-h-90vh overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="serviceModalTitle" class="text-xl font-bold">Yeni Hizmet Ekle</h3>
+                <button onclick="closeServiceModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="serviceForm" class="space-y-4">
+                <input type="hidden" id="serviceId" name="serviceId">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Hizmet Adı *</label>
+                        <input type="text" id="serviceTitle" name="title" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                               required placeholder="Örn: Risk Değerlendirmesi">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Renk</label>
+                        <select id="serviceColor" name="color" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="blue">Mavi</option>
+                            <option value="green">Yeşil</option>
+                            <option value="purple">Mor</option>
+                            <option value="orange">Turuncu</option>
+                            <option value="red">Kırmızı</option>
+                            <option value="indigo">İndigo</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">İkon Sınıfı</label>
+                    <select id="serviceIcon" name="icon" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="fas fa-shield-alt">Kalkan (Shield)</option>
+                        <option value="fas fa-graduation-cap">Eğitim (Graduation Cap)</option>
+                        <option value="fas fa-laptop-code">Yazılım (Laptop Code)</option>
+                        <option value="fas fa-users">Ekip (Users)</option>
+                        <option value="fas fa-chart-line">Analiz (Chart)</option>
+                        <option value="fas fa-cog">Ayarlar (Settings)</option>
+                        <option value="fas fa-clipboard-check">Denetim (Clipboard)</option>
+                        <option value="fas fa-hard-hat">İSG (Hard Hat)</option>
+                        <option value="fas fa-microscope">Araştırma (Microscope)</option>
+                        <option value="fas fa-tools">Araçlar (Tools)</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Açıklama *</label>
+                    <textarea id="serviceDescription" name="description" rows="3" 
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                              required placeholder="Hizmetin kısa açıklaması"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Özellikler</label>
+                    <div id="serviceFeatures">
+                        <div class="flex gap-2 mb-2">
+                            <input type="text" class="feature-input flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                   placeholder="Özellik 1">
+                            <button type="button" onclick="removeFeature(this)" class="text-red-600 hover:text-red-800 px-2">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="flex gap-2 mb-2">
+                            <input type="text" class="feature-input flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                   placeholder="Özellik 2">
+                            <button type="button" onclick="removeFeature(this)" class="text-red-600 hover:text-red-800 px-2">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="flex gap-2 mb-2">
+                            <input type="text" class="feature-input flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                   placeholder="Özellik 3">
+                            <button type="button" onclick="removeFeature(this)" class="text-red-600 hover:text-red-800 px-2">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addFeatureInput()" class="text-blue-600 hover:text-blue-800 text-sm">
+                        <i class="fas fa-plus mr-1"></i>Özellik Ekle
+                    </button>
+                </div>
+                
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeServiceModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition duration-200">
+                        İptal
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                        Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Blog Modal -->
+    <div id="blogModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 md:p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full max-h-[95vh] overflow-hidden flex flex-col modal-compact">
+            <div class="flex justify-between items-center p-4 border-b flex-shrink-0">
+                <h3 id="blogModalTitle" class="text-lg font-semibold">Yeni Blog Yazısı</h3>
+                <button onclick="closeBlogModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+                <form id="blogForm" class="space-y-3">
+                    <input type="hidden" id="blogId" name="blogId">
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Başlık *</label>
+                        <input type="text" id="blogTitle" name="title" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" 
+                               required placeholder="Blog yazısı başlığı">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                            <select id="blogCategory" name="category" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
+                                <option value="İSG">İSG</option>
+                                <option value="Teknoloji">Teknoloji</option>
+                                <option value="Eğitim">Eğitim</option>
+                                <option value="Yasal">Yasal</option>
+                                <option value="Güvenlik">Güvenlik</option>
+                                <option value="Haber">Haber</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Yazar</label>
+                            <input type="text" id="blogAuthor" name="author" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" 
+                                   placeholder="Yazar adı" value="NEXUS İSG">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Okuma Süresi</label>
+                            <input type="text" id="blogReadTime" name="readTime" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" 
+                                   placeholder="5 dk" value="5 dk">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Etiketler (virgülle ayırın)</label>
+                            <input type="text" id="blogTags" name="tags" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" 
+                                   placeholder="isg, güvenlik, eğitim">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="fas fa-image mr-1"></i>Kapak Görseli
+                        </label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-3 text-center hover:border-purple-400 transition-colors">
+                            <input type="file" id="blogImageFile" accept="image/*" class="hidden" onchange="handleBlogImageUpload(this)">
+                            <input type="url" id="blogImage" name="image" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm mb-2" 
+                                   placeholder="Görsel URL'si yapıştırın">
+                            <div class="text-xs text-gray-500 mb-2">veya</div>
+                            <button type="button" onclick="document.getElementById('blogImageFile').click()" 
+                                    class="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-xs">
+                                <i class="fas fa-upload mr-1"></i>Dosya Seç
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Özet *</label>
+                        <textarea id="blogExcerpt" name="excerpt" rows="2" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm resize-none" 
+                                  required placeholder="Yazının kısa özeti (1-2 cümle)"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">İçerik *</label>
+                        <textarea id="blogContent" name="content" rows="6" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm resize-none" 
+                                  required placeholder="Blog yazısının tam içeriği"></textarea>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="border-t p-4 flex-shrink-0">
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeBlogModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition duration-200 text-sm">
+                        İptal
+                    </button>
+                    <button type="submit" form="blogForm" class="flex-1 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition duration-200 text-sm">
+                        <i class="fas fa-pen mr-1"></i>Yayınla
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Modal -->
+    <div id="teamModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 id="teamModalTitle" class="text-lg font-semibold">Yeni Ekip Üyesi</h3>
+                <button onclick="closeTeamModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+            
+                <form id="teamForm" class="space-y-3">
+                    <input type="hidden" id="teamId" name="teamId">
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Ad Soyad *</label>
+                            <input type="text" id="teamName" name="name" 
+                                   class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-orange-500" 
+                                   required placeholder="Ahmet Yılmaz">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Pozisyon *</label>
+                            <input type="text" id="teamPosition" name="position" 
+                                   class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-orange-500" 
+                                   required placeholder="İSG Uzmanı">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">E-posta</label>
+                            <input type="email" id="teamEmail" name="email" 
+                                   class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-orange-500" 
+                                   placeholder="ornek@nexusisg.com">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Telefon</label>
+                            <input type="tel" id="teamPhone" name="phone" 
+                                   class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-orange-500" 
+                                   placeholder="+90 532 123 45 67">
+                        </div>
+                    </div>
+                    
+                    <!-- File Upload for Team Photo -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Profil Fotoğrafı</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded p-3 text-center">
+                            <input type="file" id="teamImage" accept="image/*" class="hidden" onchange="handleTeamImageUpload(this)">
+                            <div id="teamImagePreview" class="hidden">
+                                <img id="teamImageDisplay" src="" alt="Preview" class="w-12 h-12 object-cover mx-auto rounded-full mb-1">
+                                <p id="teamImageName" class="text-xs text-gray-600"></p>
+                            </div>
+                            <div id="teamImageUpload">
+                                <i class="fas fa-user-circle text-gray-400 text-lg mb-1"></i>
+                                <p class="text-xs text-gray-600">Profil fotoğrafı seç</p>
+                                <button type="button" onclick="document.getElementById('teamImage').click()" 
+                                        class="text-xs text-orange-600 hover:text-orange-800 mt-1">Dosya Seç</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">LinkedIn</label>
+                        <input type="url" id="teamLinkedIn" name="linkedin" 
+                               class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-orange-500" 
+                               placeholder="https://linkedin.com/in/...">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Biyografi</label>
+                        <textarea id="teamBio" name="bio" rows="2" 
+                                  class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-orange-500" 
+                                  placeholder="Kısa biyografi"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Uzmanlık Alanları</label>
+                        <div id="teamSpecialties" class="space-y-1 mb-2 max-h-16 overflow-y-auto">
+                            <!-- Specialties will be added dynamically -->
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="text" id="newTeamSpecialty" 
+                                   class="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-orange-500" 
+                                   placeholder="Yeni uzmanlık">
+                            <button type="button" onclick="addTeamSpecialty()" 
+                                    class="bg-orange-500 text-white px-3 py-1 text-sm rounded hover:bg-orange-600">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="flex justify-end space-x-2 p-4 border-t bg-gray-50">
+                <button type="button" onclick="closeTeamModal()" 
+                        class="px-3 py-1.5 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-100">
+                    İptal
+                </button>
+                <button type="submit" form="teamForm"
+                        class="bg-orange-600 text-white px-4 py-1.5 text-sm rounded hover:bg-orange-700">
+                    <i class="fas fa-save mr-1 text-xs"></i>Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reference Modal -->
+    <div id="referenceModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 md:p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full max-h-[95vh] overflow-hidden flex flex-col modal-compact">
+            <div class="flex justify-between items-center p-4 border-b flex-shrink-0">
+                <h3 id="referenceModalTitle" class="text-lg font-semibold">Yeni Referans</h3>
+                <button onclick="closeReferenceModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+                <form id="referenceForm" class="space-y-3">
+                    <input type="hidden" id="referenceId" name="referenceId">
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="fas fa-building mr-1"></i>Şirket Adı *
+                        </label>
+                        <input type="text" id="referenceName" name="companyName" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm" 
+                               required placeholder="Örn: ABC Endüstri A.Ş.">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Sektör</label>
+                            <select id="referenceSector" name="sector" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm">
+                                <option value="">Sektör Seçin</option>
+                                <option value="imalat">🏭 İmalat</option>
+                                <option value="insaat">🏗️ İnşaat</option>
+                                <option value="madencilik">⛏️ Madencilik</option>
+                                <option value="enerji">⚡ Enerji</option>
+                                <option value="petrol-gaz">🛢️ Petrol & Gaz</option>
+                                <option value="gida">🍎 Gıda</option>
+                                <option value="tekstil">👕 Tekstil</option>
+                                <option value="otomotiv">🚗 Otomotiv</option>
+                                <option value="kimya">🧪 Kimya</option>
+                                <option value="metal">🔩 Metal</option>
+                                <option value="lojistik">📦 Lojistik</option>
+                                <option value="saglik">🏥 Sağlık</option>
+                                <option value="egitim">🎓 Eğitim</option>
+                                <option value="finans">💰 Finans</option>
+                                <option value="teknoloji">💻 Teknoloji</option>
+                                <option value="diger">🏢 Diğer</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Çalışan Sayısı</label>
+                            <select id="referenceEmployeeCount" name="employeeCount" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm">
+                                <option value="">Seçin</option>
+                                <option value="1-10">1-10 kişi</option>
+                                <option value="11-50">11-50 kişi</option>
+                                <option value="51-100">51-100 kişi</option>
+                                <option value="101-250">101-250 kişi</option>
+                                <option value="251-500">251-500 kişi</option>
+                                <option value="501-1000">501-1000 kişi</option>
+                                <option value="1000+">1000+ kişi</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Şehir</label>
+                            <input type="text" id="referenceLocation" name="location" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm" 
+                                   placeholder="İstanbul">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Proje Durumu</label>
+                            <select id="referenceStatus" name="status" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm">
+                                <option value="ongoing">� Devam Ediyor</option>
+                                <option value="completed">✅ Tamamlandı</option>
+                                <option value="planned">� Planlanan</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="fas fa-image mr-1"></i>Şirket Logosu
+                        </label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-3 text-center hover:border-pink-400 transition-colors">
+                            <input type="file" id="referenceLogoFile" accept="image/*" class="hidden" onchange="handleReferenceLogoUpload(this)">
+                            <input type="url" id="referenceLogo" name="logo" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm mb-2" 
+                                   placeholder="Logo URL'si yapıştırın">
+                            <div class="text-xs text-gray-500 mb-2">veya</div>
+                            <button type="button" onclick="document.getElementById('referenceLogoFile').click()" 
+                                    class="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-xs">
+                                <i class="fas fa-upload mr-1"></i>Logo Seç
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Proje Açıklaması</label>
+                        <textarea id="referenceDescription" name="description" rows="2" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm resize-none" 
+                                  placeholder="Şirket için yapılan İSG çalışmalarının kısa açıklaması"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="fas fa-cogs mr-1"></i>Kullanılan Hizmetler/Ürünler
+                        </label>
+                        <div id="referenceServices" class="space-y-2 mb-3">
+                            <!-- Services will be added dynamically -->
+                        </div>
+                        <button type="button" onclick="addReferenceService()" class="inline-flex items-center text-pink-600 hover:text-pink-800 text-sm bg-pink-50 px-3 py-1 rounded-md hover:bg-pink-100 transition-colors">
+                            <i class="fas fa-plus mr-1"></i>Hizmet/Ürün Ekle
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Başlangıç Tarihi</label>
+                            <input type="date" id="referenceStartDate" name="startDate" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Web Sitesi</label>
+                            <input type="url" id="referenceWebsite" name="website" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm" 
+                                   placeholder="https://www.sirket.com">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="border-t p-4 flex-shrink-0">
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeReferenceModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition duration-200 text-sm">
+                        İptal
+                    </button>
+                    <button type="submit" form="referenceForm" class="flex-1 px-4 py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700 transition duration-200 text-sm">
+                        <i class="fas fa-building mr-1"></i>Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="fixed top-4 right-4 z-50 transform translate-x-96 transition-transform duration-300">
+        <div class="bg-white border border-gray-200 rounded-lg shadow-lg p-4 min-w-64">
+            <div class="flex items-center">
+                <div id="notificationIcon" class="mr-3"></div>
+                <div class="flex-1">
+                    <p id="notificationMessage" class="text-sm font-medium text-gray-800"></p>
+                </div>
+                <button onclick="hideNotification()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CMS Script -->
+    <script src="cms-script.js"></script>
+</body>
+</html>
