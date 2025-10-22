@@ -1,6 +1,53 @@
 // Dynamic Content Loader for NEXUS İSG Website
 // This script loads content from CMS data to display on the main website
 
+// Prevent flash/flicker: hide company name elements on initial paint
+(function hideCompanyNamesOnStart(){
+    try {
+        const els = document.querySelectorAll('[data-company-name],[data-company-name-footer]');
+        if (!els || els.length === 0) return;
+        els.forEach(el => {
+            // keep transforms but hide opacity until JS sets final text & layout
+            el.style.opacity = '0';
+            el.style.transition = 'opacity 120ms linear';
+            // hint to browser to optimize
+            el.style.willChange = 'opacity, transform';
+        });
+
+        // Safety fallback: if JS doesn't reveal them within 800ms, show anyway
+        window.__unhideCompanyNamesFallback = setTimeout(() => {
+            els.forEach(el => el.style.opacity = '1');
+            window.__unhideCompanyNamesFallback = null;
+        }, 800);
+    } catch (e) {
+        // ignore errors during initial hide
+        console.warn('hideCompanyNamesOnStart error', e);
+    }
+})();
+
+// Centralized reveal function - call this after JS updates company name elements
+function unhideCompanyNames() {
+    try {
+        const els = document.querySelectorAll('[data-company-name],[data-company-name-footer]');
+        if (!els || els.length === 0) return;
+
+        // Clear fallback if set
+        if (window.__unhideCompanyNamesFallback) {
+            clearTimeout(window.__unhideCompanyNamesFallback);
+            window.__unhideCompanyNamesFallback = null;
+        }
+
+        // Force a tiny timeout to ensure DOM writes have flushed, then reveal
+        setTimeout(() => {
+            els.forEach(el => {
+                el.style.opacity = '1';
+            });
+        }, 20);
+    } catch (e) {
+        console.warn('unhideCompanyNames error', e);
+    }
+}
+
 // Load services from CMS data
 function loadServicesFromCMS() {
     const servicesContainer = document.getElementById('services-container');
@@ -411,7 +458,7 @@ function loadTeamFromCMS() {
     // If no team members in CMS, show empty state
     if (teamMembers.length === 0) {
         teamContainer.innerHTML = `
-            <div class="col-span-full text-center py-12">
+            <div class="flex-shrink-0 w-full text-center py-12">
                 <i class="fas fa-users text-gray-300 text-6xl mb-4"></i>
                 <h3 class="text-xl font-semibold text-gray-600 mb-2">Ekip bilgileri güncelleniyor</h3>
                 <p class="text-gray-500">Yakında uzman ekibimizi tanıtacağız.</p>
@@ -420,9 +467,9 @@ function loadTeamFromCMS() {
         return;
     }
 
-    // Generate HTML for team members
+    // Generate HTML for team members with responsive width for slider
     const teamHTML = teamMembers.map(member => `
-        <div class="bg-white rounded-lg shadow-lg p-6 text-center card-hover">
+        <div class="flex-shrink-0 w-80 sm:w-72 md:w-80 bg-white rounded-lg shadow-lg p-6 text-center card-hover">
             <img src="${member.image || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'}" 
                  alt="${member.name}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
             <h3 class="text-xl font-bold mb-2">${member.name}</h3>
@@ -458,6 +505,9 @@ function loadTeamFromCMS() {
     `).join('');
 
     teamContainer.innerHTML = teamHTML;
+    
+    // Initialize team slider after loading
+    initializeTeamSlider();
 }
 
 // Show loading state for containers
@@ -551,38 +601,71 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load all dynamic content with error handling
     setTimeout(() => {
         try {
+            loadHeroFromCMS(); // Load hero section
             loadServicesFromCMS();
             loadProductsFromCMS();
             loadBlogFromCMS();
             loadTeamFromCMS();
             loadReferencesFromCMS();
+            loadSocialMediaFromCMS();
+            loadContactInfoFromCMS();
+            loadStatsFromCMS();
+            loadSiteSettingsFromCMS();
         } catch (error) {
             console.error('Error loading dynamic content:', error);
         }
     }, 500); // Small delay to show loading states
     
-    // Listen for CMS data updates
-    window.addEventListener('cmsDataUpdated', function() {
-        console.log('CMS data updated, refreshing content...');
-        refreshDynamicContent();
-    });
-    
-    // Also listen for storage changes (when data is updated in another tab)
-    window.addEventListener('storage', function(e) {
-        if (e.key === 'nexus-isg-cms-data') {
-            console.log('CMS data changed in storage, refreshing content...');
-            refreshDynamicContent();
+    // Listen for CMS data updates (both custom events and storage changes)
+    window.addEventListener('cmsDataUpdated', function(e) {
+        console.log('CMS data updated event received, refreshing content...');
+        loadSiteSettingsFromCMS();
+        loadHeroFromCMS(); // Refresh hero section
+        
+        // Refresh specific sections if needed
+        if (e.detail?.section === 'hero') {
+            loadHeroFromCMS();
+            loadStatsFromCMS();
         }
     });
     
+    // Listen for storage changes (when data is updated in another tab)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'nexus-isg-cms-data') {
+            console.log('CMS data changed in storage, refreshing site settings...');
+            setTimeout(() => {
+                loadSiteSettingsFromCMS();
+            }, 100); // Kısa bir gecikme ile
+        }
+    });
+    
+    // Listen for custom storage events
+    window.addEventListener('storageUpdate', function(e) {
+        if (e.detail && e.detail.key === 'nexus-isg-cms-data') {
+            console.log('Storage update event received, refreshing site settings...');
+            loadSiteSettingsFromCMS();
+        }
+    });
+    
+    // Test event listener
+    console.log('CMS event listeners registered successfully');
+    
     // Refresh content every 30 seconds to sync with CMS changes
     setInterval(function() {
-        loadServicesFromCMS();
-        loadProductsFromCMS();
-        loadBlogFromCMS();
-        loadTeamFromCMS();
+        try {
+            loadServicesFromCMS();
+            loadProductsFromCMS();
+            loadBlogFromCMS();
+            loadTeamFromCMS();
+            loadReferencesFromCMS();
+            loadSocialMediaFromCMS();
+            loadContactInfoFromCMS();
+            loadStatsFromCMS();
+            loadSiteSettingsFromCMS();
+        } catch (e) {
+            console.warn('Periodic refresh error:', e);
+        }
     }, 30000);
-});
 
 // Helper functions for products and blog
 
@@ -1432,4 +1515,821 @@ window.refreshDynamicContent = function() {
     loadBlogFromCMS();
     loadTeamFromCMS();
     loadReferencesFromCMS();
+    loadSocialMediaFromCMS();
+    loadContactInfoFromCMS();
+    loadStatsFromCMS();
+    loadSiteSettingsFromCMS();
+};
+
+// Load social media links from CMS data
+function loadSocialMediaFromCMS() {
+    const socialContainer = document.getElementById('social-media-links');
+    if (!socialContainer) return;
+
+    // Get social media data from localStorage
+    let socialLinks = [];
+    try {
+        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        socialLinks = cmsData.social || [];
+    } catch (e) {
+        console.error('Error loading social media data:', e);
+    }
+
+    // Filter only active social media links
+    const activeSocialLinks = socialLinks.filter(social => social.active);
+
+    // If no active social links, show default ones or hide
+    if (activeSocialLinks.length === 0) {
+        // Show default social media links or hide container
+        socialContainer.innerHTML = `
+            <a href="#" class="text-gray-300 hover:text-white transition duration-300">
+                <i class="fab fa-linkedin text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-300 hover:text-white transition duration-300">
+                <i class="fab fa-twitter text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-300 hover:text-white transition duration-300">
+                <i class="fab fa-instagram text-xl"></i>
+            </a>
+        `;
+        return;
+    }
+
+    // Platform icon mapping
+    const platformIcons = {
+        facebook: 'fab fa-facebook',
+        twitter: 'fab fa-twitter',
+        instagram: 'fab fa-instagram',
+        linkedin: 'fab fa-linkedin',
+        youtube: 'fab fa-youtube',
+        tiktok: 'fab fa-tiktok',
+        whatsapp: 'fab fa-whatsapp',
+        telegram: 'fab fa-telegram'
+    };
+
+    // Generate HTML for active social media links
+    const socialHTML = activeSocialLinks.map(social => {
+        const icon = platformIcons[social.platform] || 'fas fa-share-alt';
+        return `
+            <a href="${social.url}" target="_blank" rel="noopener noreferrer" 
+               class="text-gray-300 hover:text-white transition duration-300"
+               title="${social.platform}: ${social.username}">
+                <i class="${icon} text-xl"></i>
+            </a>
+        `;
+    }).join('');
+
+    socialContainer.innerHTML = socialHTML;
+}
+
+// Load contact information from CMS data
+function loadContactInfoFromCMS() {
+    // Get contact data from localStorage
+    let contactData = {};
+    try {
+        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        contactData = cmsData.contact || {};
+    } catch (e) {
+        console.error('Error loading contact data:', e);
+    }
+
+    // Update contact section description
+    const contactDescription = document.getElementById('contact-description');
+    if (contactDescription && contactData.description) {
+        contactDescription.textContent = contactData.description;
+    }
+
+    // Update address elements
+    const addressElements = document.querySelectorAll('[data-company-address]');
+    addressElements.forEach(element => {
+        if (contactData.address) {
+            // For paragraph elements, preserve line breaks
+            if (element.tagName.toLowerCase() === 'p') {
+                element.innerHTML = contactData.address.replace(/\n/g, '<br>');
+            } else {
+                // For list items, use short version (first line only)
+                const firstLine = contactData.address.split('\n')[0];
+                element.textContent = firstLine;
+            }
+        }
+    });
+
+    // Update main phone elements
+    const phoneElements = document.querySelectorAll('[data-company-phone]');
+    phoneElements.forEach(element => {
+        if (contactData.mainPhone) {
+            element.textContent = contactData.mainPhone;
+        }
+    });
+
+    // Update WhatsApp phone elements
+    const whatsappElements = document.querySelectorAll('[data-company-whatsapp]');
+    whatsappElements.forEach(element => {
+        if (contactData.whatsappPhone) {
+            element.textContent = `${contactData.whatsappPhone} (WhatsApp)`;
+        }
+    });
+
+    // Update main email elements
+    const emailElements = document.querySelectorAll('[data-company-email]');
+    emailElements.forEach(element => {
+        if (contactData.mainEmail) {
+            element.textContent = contactData.mainEmail;
+        }
+    });
+
+    // Update support email elements in contact section
+    const supportEmailElements = document.querySelectorAll('[data-company-support-email]');
+    supportEmailElements.forEach(element => {
+        if (contactData.supportEmail) {
+            element.textContent = contactData.supportEmail;
+        }
+    });
+
+    // Update support email elements in footer (with "Destek:" prefix)
+    const supportEmailFooterElements = document.querySelectorAll('[data-company-support-email-footer]');
+    supportEmailFooterElements.forEach(element => {
+        if (contactData.supportEmail) {
+            element.textContent = `Destek: ${contactData.supportEmail}`;
+        }
+    });
+
+    // Update working hours if there's a specific element for it
+    const workingHoursElements = document.querySelectorAll('[data-working-hours]');
+    workingHoursElements.forEach(element => {
+        if (contactData.workingHours) {
+            element.textContent = contactData.workingHours;
+        }
+    });
+
+    // Update company name elements
+    const companyNameElements = document.querySelectorAll('[data-company-name]');
+    companyNameElements.forEach(element => {
+        if (contactData.companyName) {
+            element.textContent = contactData.companyName;
+        }
+    });
+    
+    // Reveal company names after contact info updates
+    unhideCompanyNames();
+}
+
+// Load statistics from CMS data
+// Load Hero Section from CMS
+function loadHeroFromCMS() {
+    let cmsData = {};
+    try {
+        cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+    } catch (e) {
+        console.error('Error loading hero data:', e);
+        return;
+    }
+
+    // Update hero title
+    const heroTitle = document.querySelector('[data-hero-title]');
+    if (heroTitle && cmsData.hero?.title) {
+        heroTitle.innerHTML = cmsData.hero.title.replace(/\n/g, '<br>');
+    }
+
+    // Update hero subtitle
+    const heroSubtitle = document.querySelector('[data-hero-subtitle]');
+    if (heroSubtitle && cmsData.hero?.subtitle) {
+        heroSubtitle.textContent = cmsData.hero.subtitle;
+    }
+
+    // Also update stats if hero data contains them
+    if (cmsData.hero?.stats) {
+        loadStatsFromCMS();
+    }
+}
+
+// Load Stats from CMS
+function loadStatsFromCMS() {
+    // Get stats data from localStorage
+    let statsData = {};
+    try {
+        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        statsData = cmsData.stats || {};
+    } catch (e) {
+        console.error('Error loading stats data:', e);
+    }
+
+    // Update customers stats
+    const customersValueElement = document.querySelector('[data-stats-customers]');
+    const customersTitleElement = document.querySelector('[data-stats-customers-title]');
+    if (customersValueElement && statsData.customers?.value) {
+        // Reset animation and trigger counter animation
+        customersValueElement.textContent = '0';
+        setTimeout(() => animateCounter(customersValueElement, statsData.customers.value), 100);
+    }
+    if (customersTitleElement && statsData.customers?.title) {
+        customersTitleElement.textContent = statsData.customers.title;
+    }
+
+    // Update satisfaction stats
+    const satisfactionValueElement = document.querySelector('[data-stats-satisfaction]');
+    const satisfactionTitleElement = document.querySelector('[data-stats-satisfaction-title]');
+    if (satisfactionValueElement && statsData.satisfaction?.value) {
+        // Reset animation and trigger counter animation
+        satisfactionValueElement.textContent = '0%';
+        setTimeout(() => animateCounter(satisfactionValueElement, statsData.satisfaction.value), 200);
+    }
+    if (satisfactionTitleElement && statsData.satisfaction?.title) {
+        satisfactionTitleElement.textContent = statsData.satisfaction.title;
+    }
+
+    // Update support stats
+    const supportValueElement = document.querySelector('[data-stats-support]');
+    const supportTitleElement = document.querySelector('[data-stats-support-title]');
+    if (supportValueElement && statsData.support?.value) {
+        // For special values like 24/7, directly set without animation
+        if (statsData.support.value === '24/7') {
+            supportValueElement.textContent = statsData.support.value;
+        } else {
+            supportValueElement.textContent = '0';
+            setTimeout(() => animateCounter(supportValueElement, statsData.support.value), 300);
+        }
+    }
+    if (supportTitleElement && statsData.support?.title) {
+        supportTitleElement.textContent = statsData.support.title;
+    }
+
+    // Update experience stats
+    const experienceValueElement = document.querySelector('[data-stats-experience]');
+    const experienceTitleElement = document.querySelector('[data-stats-experience-title]');
+    if (experienceValueElement && statsData.experience?.value) {
+        // Reset animation and trigger counter animation
+        experienceValueElement.textContent = '0+';
+        setTimeout(() => animateCounter(experienceValueElement, statsData.experience.value), 400);
+    }
+    if (experienceTitleElement && statsData.experience?.title) {
+        experienceTitleElement.textContent = statsData.experience.title;
+    }
+}
+
+// Counter animation function (copied from index.html to work with CMS)
+function animateCounter(element, finalValue) {
+    const isPercentage = finalValue.includes('%');
+    const hasPlus = finalValue.includes('+');
+    const numValue = parseInt(finalValue.replace(/[^\d]/g, ''));
+    
+    let currentValue = 0;
+    const increment = Math.ceil(numValue / 50);
+    const duration = 2000;
+    const stepTime = duration / (numValue / increment);
+    
+    const timer = setInterval(() => {
+        currentValue += increment;
+        if (currentValue >= numValue) {
+            currentValue = numValue;
+            clearInterval(timer);
+        }
+        
+        let displayValue = currentValue;
+        if (isPercentage) displayValue += '%';
+        if (hasPlus) displayValue += '+';
+        if (finalValue === '24/7') displayValue = '24/7';
+        
+        element.textContent = displayValue;
+    }, stepTime);
+}
+
+// Team Slider Functionality
+let currentTeamSlide = 0;
+let isTeamSliding = false;
+
+function initializeTeamSlider() {
+    const teamContainer = document.getElementById('team-container');
+    const prevBtn = document.getElementById('teamPrevBtn');
+    const nextBtn = document.getElementById('teamNextBtn');
+    
+    console.log('Team Slider Debug:', {
+        teamContainer: !!teamContainer,
+        prevBtn: !!prevBtn,
+        nextBtn: !!nextBtn,
+        prevBtnVisible: prevBtn ? getComputedStyle(prevBtn).display : 'not found',
+        nextBtnVisible: nextBtn ? getComputedStyle(nextBtn).display : 'not found'
+    });
+    
+    if (!teamContainer || !prevBtn || !nextBtn) {
+        console.error('Team slider elements not found!');
+        return;
+    }
+    
+    const teamMembers = teamContainer.children;
+    const totalMembers = teamMembers.length;
+    
+    if (totalMembers === 0) return;
+    
+    // Calculate visible cards based on screen size
+    function getVisibleCards() {
+        const containerWidth = teamContainer.parentElement.clientWidth;
+        const cardWidth = 320; // 280px + 40px margin
+        const visibleCards = Math.floor(containerWidth / cardWidth);
+        return Math.max(1, visibleCards); // En az 1 kart görünsün
+    }
+    
+    // Update slider position
+    function updateSliderPosition() {
+        if (isTeamSliding) return;
+        
+        isTeamSliding = true;
+        const cardWidth = 320; // 280px card + 40px gap
+        const translateX = -currentTeamSlide * cardWidth;
+        teamContainer.style.transform = `translateX(${translateX}px)`;
+        
+        // Update button states
+        const visibleCards = getVisibleCards();
+        const maxSlide = Math.max(0, totalMembers - visibleCards);
+        
+        // Previous button state
+        if (currentTeamSlide === 0) {
+            prevBtn.style.backgroundColor = '#94a3b8';
+            prevBtn.style.borderColor = '#94a3b8';
+            prevBtn.style.opacity = '0.5';
+            prevBtn.style.pointerEvents = 'none';
+        } else {
+            prevBtn.style.backgroundColor = '#ffffff';
+            prevBtn.style.borderColor = '#e5e7eb';
+            prevBtn.style.opacity = '1';
+            prevBtn.style.pointerEvents = 'auto';
+        }
+        
+        // Next button state
+        if (currentTeamSlide >= maxSlide) {
+            nextBtn.style.backgroundColor = '#94a3b8';
+            nextBtn.style.borderColor = '#94a3b8';
+            nextBtn.style.opacity = '0.5';
+            nextBtn.style.pointerEvents = 'none';
+        } else {
+            nextBtn.style.backgroundColor = '#ffffff';
+            nextBtn.style.borderColor = '#e5e7eb';
+            nextBtn.style.opacity = '1';
+            nextBtn.style.pointerEvents = 'auto';
+        }
+        
+        setTimeout(() => {
+            isTeamSliding = false;
+        }, 500);
+    }
+    
+    // Previous slide
+    prevBtn.addEventListener('click', () => {
+        if (currentTeamSlide > 0 && !isTeamSliding) {
+            currentTeamSlide--;
+            updateSliderPosition();
+        }
+    });
+    
+    // Next slide
+    nextBtn.addEventListener('click', () => {
+        const visibleCards = getVisibleCards();
+        const maxSlide = Math.max(0, totalMembers - visibleCards);
+        if (currentTeamSlide < maxSlide && !isTeamSliding) {
+            currentTeamSlide++;
+            updateSliderPosition();
+        }
+    });
+    
+    // Touch/swipe support for mobile
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+    
+    teamContainer.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+    });
+    
+    teamContainer.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        e.preventDefault();
+    });
+    
+    teamContainer.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const diffX = startX - currentX;
+        const threshold = 50; // Minimum swipe distance
+        
+        if (Math.abs(diffX) > threshold) {
+            if (diffX > 0) {
+                // Swipe left - next slide
+                const visibleCards = getVisibleCards();
+                const maxSlide = Math.max(0, totalMembers - visibleCards);
+                if (currentTeamSlide < maxSlide) {
+                    currentTeamSlide++;
+                    updateSliderPosition();
+                }
+            } else {
+                // Swipe right - previous slide
+                if (currentTeamSlide > 0) {
+                    currentTeamSlide--;
+                    updateSliderPosition();
+                }
+            }
+        }
+    });
+    
+    // Initialize position
+    currentTeamSlide = 0;
+    updateSliderPosition();
+    
+    // Force show navigation buttons on desktop
+    if (window.innerWidth >= 768) {
+        prevBtn.style.display = 'flex';
+        nextBtn.style.display = 'flex';
+        prevBtn.classList.remove('hidden');
+        nextBtn.classList.remove('hidden');
+    }
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        const visibleCards = getVisibleCards();
+        const maxSlide = Math.max(0, totalMembers - visibleCards);
+        if (currentTeamSlide > maxSlide) {
+            currentTeamSlide = maxSlide;
+        }
+        updateSliderPosition();
+        
+        // Show/hide buttons based on screen size
+        if (window.innerWidth >= 768) {
+            prevBtn.style.display = 'flex';
+            nextBtn.style.display = 'flex';
+            prevBtn.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+        } else {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+    });
+    
+    // Auto-slide functionality (optional)
+    let autoSlideInterval;
+    
+    function startAutoSlide() {
+        autoSlideInterval = setInterval(() => {
+            const visibleCards = getVisibleCards();
+            const maxSlide = Math.max(0, totalMembers - visibleCards);
+            
+            if (currentTeamSlide >= maxSlide) {
+                currentTeamSlide = 0;
+            } else {
+                currentTeamSlide++;
+            }
+            updateSliderPosition();
+        }, 4000); // 4 saniyede bir otomatik geçiş
+    }
+    
+    function stopAutoSlide() {
+        if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+        }
+    }
+    
+    // Start auto-slide
+    startAutoSlide();
+    
+    // Pause auto-slide on hover
+    teamContainer.addEventListener('mouseenter', stopAutoSlide);
+    teamContainer.addEventListener('mouseleave', startAutoSlide);
+    prevBtn.addEventListener('mouseenter', stopAutoSlide);
+    nextBtn.addEventListener('mouseenter', stopAutoSlide);
+    prevBtn.addEventListener('mouseleave', startAutoSlide);
+    nextBtn.addEventListener('mouseleave', startAutoSlide);
+}
+
+// Site Settings Integration
+function loadSiteSettingsFromCMS() {
+    try {
+        console.log('Loading site settings from CMS...');
+        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        const settings = cmsData.siteSettings || {};
+        
+        console.log('Site settings data:', settings);
+        console.log('Available settings keys:', Object.keys(settings));
+        
+        // Default values ile birleştir
+        const defaultSettings = {
+            companyName: 'NEXUS İSG',
+            companyEmail: 'info@nexusisg.com',
+            companyPhone: '+90 212 123 45 67',
+            companyAddress: 'İstanbul, Türkiye',
+            logoUrl: 'media/nexus-logo.svg'
+        };
+        
+        const finalSettings = { ...defaultSettings, ...settings };
+        console.log('Final settings to apply:', finalSettings);
+        
+        // Update logos
+        updateSiteLogos(finalSettings);
+        
+        // Update company info
+        updateCompanyInfo(finalSettings);
+        
+        console.log('Site settings applied successfully');
+        
+    } catch (error) {
+        console.error('Site ayarları yüklenirken hata:', error);
+    }
+}
+
+function updateSiteLogos(settings) {
+    const logoUrl = settings.logoUrl || 'media/nexus-logo.svg';
+    // Header logo boyutu - responsive (mobil: 60px, desktop: 90px)
+    const isMobile = window.innerWidth < 768;
+    const logoWidth = isMobile ? 60 : 90;
+    const logoHeight = isMobile ? 60 : 90;
+    
+    console.log('Updating logos with:', { logoUrl, logoWidth, logoHeight });
+    
+    // Tüm logo elementlerini güncelle
+    const logoElements = document.querySelectorAll('[data-logo]');
+    console.log('Found logo elements:', logoElements.length);
+    
+    logoElements.forEach(logo => {
+        logo.src = logoUrl;
+        logo.style.width = logoWidth + 'px';
+        logo.style.height = logoHeight + 'px';
+        // Parlak efekt ekle
+        logo.style.filter = 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.6)) brightness(1.1)';
+    });
+    
+    // Fallback için manuel selector'lar
+    const headerLogos = document.querySelectorAll('header img, nav img');
+    headerLogos.forEach(logo => {
+        if (logo.alt && logo.alt.includes('İSG')) {
+            logo.src = logoUrl;
+            logo.style.width = logoWidth + 'px';
+            logo.style.height = logoHeight + 'px';
+            logo.style.filter = 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.6)) brightness(1.1)';
+        }
+    });
+    
+    // Footer logoları - biraz daha büyük
+    const footerLogoWidth = settings.logoWidth ? parseInt(settings.logoWidth) * 1.5 : 120;
+    const footerLogoHeight = settings.logoHeight ? parseInt(settings.logoHeight) * 1.5 : 120;
+    
+    const footerLogos = document.querySelectorAll('[data-logo-footer]');
+    footerLogos.forEach(logo => {
+        logo.src = logoUrl;
+        logo.style.width = footerLogoWidth + 'px';
+        logo.style.height = footerLogoHeight + 'px';
+    });
+    
+    // Fallback footer logos
+    const footerLogosAlt = document.querySelectorAll('footer img');
+    footerLogosAlt.forEach(logo => {
+        if (logo.alt && logo.alt.includes('İSG') && !logo.hasAttribute('data-logo-footer')) {
+            logo.src = logoUrl;
+            logo.style.width = footerLogoWidth + 'px';
+            logo.style.height = footerLogoHeight + 'px';
+        }
+    });
+    
+    // Favicon güncelleme
+    updateFavicon(logoUrl);
+}
+
+function updateCompanyInfo(settings) {
+    console.log('🔄 updateCompanyInfo called with:', settings);
+    
+    // Check display type (text or logo)
+    const displayType = settings.companyDisplayType || 'text';
+    
+    if (displayType === 'logo' && settings.companyLogo) {
+        // Display as logo/image
+        const companyNameElements = document.querySelectorAll('[data-company-name], [data-company-name-footer]');
+        console.log('🖼️ Updating to logo display, found elements:', companyNameElements.length);
+        
+        companyNameElements.forEach((element, index) => {
+            // Replace text with image
+            const img = document.createElement('img');
+            img.src = settings.companyLogo;
+            img.alt = settings.companyName || 'Company Logo';
+            img.className = 'inline-block flex-shrink-0';
+            
+            // Adjust size based on location
+            if (element.hasAttribute('data-company-name-footer')) {
+                img.style.maxHeight = '40px';
+                img.style.maxWidth = '40px';
+                img.style.width = '40px';
+                img.style.height = '40px';
+            } else {
+                img.style.maxHeight = '60px';
+                img.style.maxWidth = '60px';
+                img.style.width = '60px';
+                img.style.height = '60px';
+            }
+            
+            img.style.objectFit = 'contain';
+            
+            // Replace element content
+            element.innerHTML = '';
+            element.appendChild(img);
+            
+            console.log(`🖼️ Replaced element ${index + 1} with logo`);
+        });
+    } else {
+        // Display as text
+        const companyName = settings.companyName || 'NEXUS İSG';
+        const companyNameElements = document.querySelectorAll('[data-company-name]');
+        console.log('🎯 Found company name elements:', companyNameElements.length);
+        
+        if (companyNameElements.length === 0) {
+            console.error('❌ NO COMPANY NAME ELEMENTS FOUND!');
+        }
+        
+        companyNameElements.forEach((element, index) => {
+            console.log(`📝 Updating element ${index + 1}: ${element.tagName} - Old: "${element.textContent}" -> New: "${companyName}"`);
+            element.textContent = companyName;
+        });
+        
+        // Footer şirket adı
+        const footerNameElements = document.querySelectorAll('[data-company-name-footer]');
+        footerNameElements.forEach(element => {
+            element.textContent = companyName;
+        });
+    }
+
+    // Reveal after updates to avoid initial flicker
+    unhideCompanyNames();
+    
+    // Title tag güncelleme
+    if (settings.companyName) {
+        const currentTitle = document.title;
+        const newTitle = currentTitle.replace(/NEXUS İSG/g, settings.companyName);
+        document.title = newTitle;
+        
+        // Meta tag güncellemeleri
+        const metaAuthor = document.querySelector('meta[name="author"]');
+        if (metaAuthor) {
+            metaAuthor.content = settings.companyName;
+        }
+    }
+    
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) {
+            ogTitle.content = ogTitle.content.replace(/NEXUS İSG/g, settings.companyName);
+        }
+        
+        const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twitterTitle) {
+            twitterTitle.content = twitterTitle.content.replace(/NEXUS İSG/g, settings.companyName);
+        }
+        
+        // JSON-LD structured data güncelleme
+        const jsonLdScript = document.querySelector('script[type="application/ld+json"]');
+        if (jsonLdScript) {
+            try {
+                const jsonData = JSON.parse(jsonLdScript.textContent);
+                if (jsonData.name) {
+                    jsonData.name = settings.companyName;
+                }
+                if (jsonData.alternateName) {
+                    jsonData.alternateName = settings.companyName + ' İş Sağlığı ve Güvenliği';
+                }
+                jsonLdScript.textContent = JSON.stringify(jsonData, null, 2);
+            } catch (e) {
+                console.warn('JSON-LD güncellenirken hata:', e);
+            }
+        }
+    }
+    
+    // E-posta güncellemeleri
+    if (settings.companyEmail) {
+        const emailElements = document.querySelectorAll('[data-company-email]');
+        console.log('Found email elements:', emailElements.length);
+        emailElements.forEach(element => {
+            element.textContent = settings.companyEmail;
+            if (element.tagName === 'A') {
+                element.href = `mailto:${settings.companyEmail}`;
+            }
+        });
+    }
+    
+    // Telefon güncellemeleri
+    if (settings.companyPhone) {
+        const phoneElements = document.querySelectorAll('[data-company-phone]');
+        console.log('Found phone elements:', phoneElements.length);
+        phoneElements.forEach(element => {
+            element.textContent = settings.companyPhone;
+            if (element.tagName === 'A') {
+                element.href = `tel:${settings.companyPhone}`;
+            }
+        });
+    }
+    
+    // Adres güncellemeleri
+    if (settings.companyAddress) {
+        const addressElements = document.querySelectorAll('[data-company-address]');
+        console.log('Found address elements:', addressElements.length);
+        addressElements.forEach(element => {
+            element.textContent = settings.companyAddress;
+        });
+    }
+}
+
+function updateFavicon(logoUrl) {
+    // Favicon'u güncelle
+    let favicon = document.querySelector('link[rel="icon"]');
+    if (!favicon) {
+        favicon = document.createElement('link');
+        favicon.rel = 'icon';
+        document.head.appendChild(favicon);
+    }
+    favicon.href = logoUrl;
+    
+    // Apple touch icon
+    let appleFavicon = document.querySelector('link[rel="apple-touch-icon"]');
+    if (!appleFavicon) {
+        appleFavicon = document.createElement('link');
+        appleFavicon.rel = 'apple-touch-icon';
+        document.head.appendChild(appleFavicon);
+    }
+    appleFavicon.href = logoUrl;
+}
+
+// Test function for manual site settings update
+window.testSiteSettings = function() {
+    console.log('Testing site settings...');
+    loadSiteSettingsFromCMS();
+};
+
+// Force refresh site settings when called from console
+window.forceUpdateSiteSettings = function() {
+    console.log('Force updating site settings...');
+    const testSettings = {
+        companyName: 'TEST COMPANY',
+        companyEmail: 'test@test.com',
+        companyPhone: '+90 123 456 78 90',
+        companyAddress: 'Test Şehir, Test Ülke',
+        logoUrl: 'media/nexus-logo.svg'
+    };
+    updateCompanyInfo(testSettings);
+    updateSiteLogos(testSettings);
+    // Ensure company names are visible after force update
+    unhideCompanyNames();
+};
+
+// Emergency manual update function - call this from console if nothing works
+window.manualUpdateSiteSettings = function(newName) {
+    console.log('🚨 MANUAL UPDATE TRIGGERED');
+    const settings = {
+        companyName: newName || 'TEST COMPANY MANUEL',
+        companyEmail: 'test@test.com',
+        companyPhone: '+90 999 999 99 99',
+        companyAddress: 'Test Adres, Test Şehir'
+    };
+    
+    console.log('🔧 Manually updating all elements...');
+    
+    // Direct DOM update with line break
+    const nameElements = document.querySelectorAll('[data-company-name]');
+    console.log(`Found ${nameElements.length} name elements`);
+    nameElements.forEach(el => {
+        // İlk boşluktan sonra satır sonu ekle
+        const firstSpaceIndex = settings.companyName.indexOf(' ');
+        if (firstSpaceIndex > 0 && (el.tagName === 'DIV' || el.tagName === 'SPAN')) {
+            const firstWord = settings.companyName.substring(0, firstSpaceIndex);
+            const rest = settings.companyName.substring(firstSpaceIndex + 1);
+            el.innerHTML = firstWord + '<br>' + rest;
+        } else {
+            el.textContent = settings.companyName;
+        }
+    });
+    
+    // Footer şirket adı - tek satır
+    const footerNameElements = document.querySelectorAll('[data-company-name-footer]');
+    footerNameElements.forEach(el => {
+        el.textContent = settings.companyName;
+    });
+    
+    const emailElements = document.querySelectorAll('[data-company-email]');
+    console.log(`Found ${emailElements.length} email elements`);
+    emailElements.forEach(el => {
+        el.textContent = settings.companyEmail;
+    });
+    
+    const phoneElements = document.querySelectorAll('[data-company-phone]');
+    console.log(`Found ${phoneElements.length} phone elements`);
+    phoneElements.forEach(el => {
+        el.textContent = settings.companyPhone;
+    });
+    
+    const addressElements = document.querySelectorAll('[data-company-address]');
+    console.log(`Found ${addressElements.length} address elements`);
+    addressElements.forEach(el => {
+        el.textContent = settings.companyAddress;
+    });
+    
+    // Also update title
+    document.title = `${settings.companyName} - İş Sağlığı ve Güvenliği Çözümleri`;
+    
+    console.log('✅ Manual update completed!');
+    // Reveal after manual update
+    unhideCompanyNames();
+    return settings;
 };

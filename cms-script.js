@@ -142,6 +142,79 @@ let cmsData = {
         companyEmail: "info@nexusisg.com",
         companyPhone: "+90 212 XXX XX XX",
         companyAddress: "İstanbul, Türkiye"
+    },
+    social: [
+        {
+            id: 1,
+            platform: "linkedin",
+            username: "@nexus-isg",
+            url: "https://linkedin.com/company/nexus-isg",
+            color: "#0077B5",
+            active: true
+        },
+        {
+            id: 2,
+            platform: "twitter",
+            username: "@nexusisg",
+            url: "https://twitter.com/nexusisg",
+            color: "#1DA1F2",
+            active: true
+        },
+        {
+            id: 3,
+            platform: "instagram",
+            username: "@nexusisg",
+            url: "https://instagram.com/nexusisg",
+            color: "#E4405F",
+            active: true
+        }
+    ],
+    contact: {
+        companyName: "NEXUS İSG",
+        address: "Maslak Mahallesi, Büyükdere Caddesi\nNo:123 Kat:8 Sarıyer / İSTANBUL",
+        mainPhone: "+90 212 123 45 67",
+        whatsappPhone: "+90 532 123 45 67",
+        mainEmail: "info@nexusisg.com",
+        supportEmail: "destek@nexusisg.com",
+        description: "İSG çözümlerimiz hakkında detaylı bilgi almak, ücretsiz demo talep etmek veya projeleriniz için teklif almak için bizimle iletişime geçin.",
+        workingHours: "Pazartesi - Cuma: 09:00 - 18:00"
+    },
+    contactForm: {
+        formTitle: "Bize Ulaşın",
+        labels: {
+            name: "Ad Soyad",
+            email: "E-posta",
+            subject: "Konu",
+            message: "Mesaj"
+        },
+        placeholders: {
+            name: "Adınız ve soyadınız",
+            email: "E-posta adresiniz",
+            subject: "Mesajınızın konusu",
+            message: "Mesajınızı buraya yazın"
+        },
+        buttons: {
+            submit: "Mesaj Gönder",
+            cancel: "İptal"
+        }
+    },
+    stats: {
+        customers: {
+            value: "50+",
+            title: "Aktif Müşteri"
+        },
+        satisfaction: {
+            value: "98%",
+            title: "Memnuniyet Oranı"
+        },
+        support: {
+            value: "24/7",
+            title: "Destek Hizmeti"
+        },
+        experience: {
+            value: "10+",
+            title: "Yıl Tecrübe"
+        }
     }
 };
 
@@ -179,13 +252,6 @@ function triggerContentRefresh() {
     }
 }
 
-// Initialize CMS
-function initCMS() {
-    loadCMSData();
-    showSection('dashboard');
-    loadAllData();
-}
-
 // Load all data for sections
 function loadAllData() {
     loadServices();
@@ -193,76 +259,10 @@ function loadAllData() {
     loadBlog();
     loadTeam();
     loadReferences();
+    loadSocial();
+    loadContact();
+    loadStats();
     updateStats();
-}
-
-// Show section
-function showSection(sectionName) {
-    // Hide all sections
-    const sections = document.querySelectorAll('.content-section');
-    sections.forEach(section => {
-        section.classList.remove('active');
-        section.classList.add('hidden');
-    });
-    
-    // Show selected section
-    const selectedSection = document.getElementById(sectionName + '-section');
-    if (selectedSection) {
-        selectedSection.classList.remove('hidden');
-        selectedSection.classList.add('active');
-    }
-    
-    // Update sidebar navigation
-    const sidebarItems = document.querySelectorAll('.sidebar-item');
-    sidebarItems.forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    // Find and activate current sidebar item
-    const currentItem = document.querySelector(`[onclick*="showSection('${sectionName}')"]`);
-    if (currentItem) {
-        currentItem.classList.add('active');
-    }
-    
-    // Load data for specific sections
-    switch(sectionName) {
-        case 'services':
-            loadServices();
-            break;
-        case 'products':
-            loadProducts();
-            break;
-        case 'blog':
-            loadBlog();
-            break;
-        case 'team':
-            loadTeam();
-            break;
-        case 'references':
-            loadReferences();
-            break;
-        case 'dashboard':
-            updateStats();
-            break;
-    }
-    // Hide all sections
-    document.querySelectorAll('.content-section').forEach(section => {
-        section.classList.add('hidden');
-    });
-    
-    // Remove active class from all sidebar items
-    document.querySelectorAll('.sidebar-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    // Show selected section
-    document.getElementById(sectionName + '-section').classList.remove('hidden');
-    
-    // Add active class to selected sidebar item
-    event.target.classList.add('active');
-    
-    // Load section specific data
-    loadSectionData(sectionName);
 }
 
 // Load section specific data
@@ -307,21 +307,9 @@ function loadHeroData() {
     document.getElementById('heroTitle').value = cmsData.hero.title;
     document.getElementById('heroSubtitle').value = cmsData.hero.subtitle;
     document.getElementById('customerCount').value = cmsData.hero.stats.customers;
-    document.getElementById('satisfactionRate').value = cmsData.hero.stats.satisfaction;
+    document.getElementById('sectorCount').value = cmsData.hero.stats.satisfaction;
     document.getElementById('supportType').value = cmsData.hero.stats.support;
     document.getElementById('experienceYears').value = cmsData.hero.stats.experience;
-}
-
-function saveHeroSection() {
-    cmsData.hero.title = document.getElementById('heroTitle').value;
-    cmsData.hero.subtitle = document.getElementById('heroSubtitle').value;
-    cmsData.hero.stats.customers = parseInt(document.getElementById('customerCount').value);
-    cmsData.hero.stats.satisfaction = parseInt(document.getElementById('satisfactionRate').value);
-    cmsData.hero.stats.support = document.getElementById('supportType').value;
-    cmsData.hero.stats.experience = parseInt(document.getElementById('experienceYears').value);
-    
-    saveCMSData();
-    showNotification('Hero bölümü başarıyla kaydedildi!', 'success');
 }
 
 function resetHeroSection() {
@@ -484,38 +472,6 @@ function loadSettingsData() {
     document.getElementById('companyEmail').value = cmsData.settings.companyEmail;
     document.getElementById('companyPhone').value = cmsData.settings.companyPhone;
     document.getElementById('companyAddress').value = cmsData.settings.companyAddress;
-}
-
-function saveSettings() {
-    const companyName = document.getElementById('companyName').value;
-    const companyEmail = document.getElementById('companyEmail').value;
-    const companyPhone = document.getElementById('companyPhone').value;
-    const companyAddress = document.getElementById('companyAddress').value;
-    const logoUrl = document.getElementById('logoUrl').value;
-    
-    // Site ayarlarını güncelle
-    if (!data.settings) {
-        data.settings = {};
-    }
-    
-    data.settings.companyName = companyName;
-    data.settings.companyEmail = companyEmail;
-    data.settings.companyPhone = companyPhone;
-    data.settings.companyAddress = companyAddress;
-    data.settings.logoUrl = logoUrl;
-    
-    // Ana sayfada şirket adını güncelle
-    updateCompanyNameOnSite(companyName);
-    
-    // Logo'yu güncelle
-    if (logoUrl) {
-        updateLogoOnSite(logoUrl);
-    }
-    
-    saveData();
-    updateMainSite();
-    addActivity('edit', 'Site ayarları güncellendi');
-    showNotification('Site ayarları başarıyla kaydedildi!', 'success');
 }
 
 function updateCompanyNameOnSite(companyName) {
@@ -1769,27 +1725,6 @@ function updateHeroOnSite() {
                 statsElements[3].textContent = `${data.hero.stats.experience}+`;
             }
         }
-    }
-}
-
-// CMS başlangıcında veri boyutunu hesapla
-function initCMS() {
-    loadData();
-    loadHero();
-    loadHeroSection();
-    loadServices();
-    loadProducts();
-    loadBlog();
-    loadTeam();
-    loadSettings();
-    loadAboutSection();
-    loadContactSection();
-    updateDashboardStats();
-    calculateDataSize();
-    
-    // İlk aktiviteyi ekle
-    if (activities.length === 0) {
-        addActivity('system', 'NEXUS İSG CMS sistemi başlatıldı');
     }
 }
 
@@ -3499,4 +3434,979 @@ function saveTeamMember(member) {
     loadTeam();
     updateStats();
     closeTeamModal();
+}
+
+// Social Media Functions
+function loadSocial() {
+    loadSocialData();
+    loadSocialPreview();
+}
+
+function loadSocialData() {
+    const container = document.getElementById('social-links-container');
+    const emptyState = document.getElementById('social-empty-state');
+    
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (!cmsData.social || cmsData.social.length === 0) {
+        container.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+    }
+    
+    container.classList.remove('hidden');
+    emptyState.classList.add('hidden');
+    
+    cmsData.social.forEach(social => {
+        const socialElement = createSocialElement(social);
+        container.appendChild(socialElement);
+    });
+}
+
+function createSocialElement(social) {
+    const div = document.createElement('div');
+    div.className = 'bg-gray-50 rounded-lg p-4 flex items-center justify-between border hover:border-gray-300 transition-colors';
+    
+    const platformIcons = {
+        facebook: 'fab fa-facebook',
+        twitter: 'fab fa-twitter',
+        instagram: 'fab fa-instagram', 
+        linkedin: 'fab fa-linkedin',
+        youtube: 'fab fa-youtube',
+        tiktok: 'fab fa-tiktok',
+        whatsapp: 'fab fa-whatsapp',
+        telegram: 'fab fa-telegram'
+    };
+    
+    const platformNames = {
+        facebook: 'Facebook',
+        twitter: 'Twitter (X)',
+        instagram: 'Instagram',
+        linkedin: 'LinkedIn',
+        youtube: 'YouTube',
+        tiktok: 'TikTok',
+        whatsapp: 'WhatsApp',
+        telegram: 'Telegram'
+    };
+    
+    const statusBadge = social.active 
+        ? '<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Aktif</span>'
+        : '<span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Pasif</span>';
+    
+    div.innerHTML = `
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background-color: ${social.color};">
+                <i class="${platformIcons[social.platform] || 'fas fa-share-alt'} text-white text-lg"></i>
+            </div>
+            <div>
+                <div class="font-medium text-gray-900">${platformNames[social.platform] || social.platform}</div>
+                <div class="text-sm text-gray-600">${social.username}</div>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2">
+            ${statusBadge}
+            <button onclick="editSocial(${social.id})" class="text-blue-600 hover:text-blue-800 text-sm">
+                <i class="fas fa-edit mr-1"></i>Düzenle
+            </button>
+            <button onclick="deleteSocial(${social.id})" class="text-red-600 hover:text-red-800 text-sm">
+                <i class="fas fa-trash mr-1"></i>Sil
+            </button>
+        </div>
+    `;
+    
+    return div;
+}
+
+function loadSocialPreview() {
+    const previewContainer = document.getElementById('social-preview');
+    if (!previewContainer) return;
+    
+    previewContainer.innerHTML = '';
+    
+    if (!cmsData.social || cmsData.social.length === 0) {
+        previewContainer.innerHTML = '<p class="text-gray-500 text-sm">Henüz sosyal medya hesabı eklenmemiş</p>';
+        return;
+    }
+    
+    const activeSocials = cmsData.social.filter(social => social.active);
+    
+    if (activeSocials.length === 0) {
+        previewContainer.innerHTML = '<p class="text-gray-500 text-sm">Aktif sosyal medya hesabı yok</p>';
+        return;
+    }
+    
+    const platformIcons = {
+        facebook: 'fab fa-facebook',
+        twitter: 'fab fa-twitter',
+        instagram: 'fab fa-instagram',
+        linkedin: 'fab fa-linkedin',
+        youtube: 'fab fa-youtube',
+        tiktok: 'fab fa-tiktok',
+        whatsapp: 'fab fa-whatsapp',
+        telegram: 'fab fa-telegram'
+    };
+    
+    activeSocials.forEach(social => {
+        const link = document.createElement('a');
+        link.href = social.url;
+        link.target = '_blank';
+        link.className = 'text-gray-300 hover:text-white transition duration-300';
+        link.style.color = social.color;
+        link.innerHTML = `<i class="${platformIcons[social.platform] || 'fas fa-share-alt'} text-xl"></i>`;
+        previewContainer.appendChild(link);
+    });
+}
+
+function openSocialModal(socialData = null) {
+    const modal = document.getElementById('socialModal');
+    const modalTitle = document.getElementById('socialModalTitle');
+    const form = document.getElementById('socialForm');
+    
+    // Reset form
+    form.reset();
+    
+    if (socialData) {
+        // Edit mode
+        modalTitle.textContent = 'Sosyal Medya Hesabını Düzenle';
+        document.getElementById('socialId').value = socialData.id;
+        document.getElementById('socialPlatform').value = socialData.platform;
+        document.getElementById('socialUsername').value = socialData.username;
+        document.getElementById('socialUrl').value = socialData.url;
+        document.getElementById('socialColor').value = socialData.color;
+        document.getElementById('socialActive').checked = socialData.active;
+    } else {
+        // Add mode
+        modalTitle.textContent = 'Sosyal Medya Hesabı Ekle';
+        document.getElementById('socialId').value = '';
+        document.getElementById('socialColor').value = '#3B82F6';
+        document.getElementById('socialActive').checked = true;
+    }
+    
+    modal.classList.remove('hidden');
+}
+
+function closeSocialModal() {
+    const modal = document.getElementById('socialModal');
+    modal.classList.add('hidden');
+}
+
+function editSocial(id) {
+    const social = cmsData.social.find(s => s.id == id);
+    if (social) {
+        openSocialModal(social);
+    }
+}
+
+function deleteSocial(id) {
+    if (confirm('Bu sosyal medya hesabını silmek istediğinize emin misiniz?')) {
+        cmsData.social = cmsData.social.filter(s => s.id != id);
+        saveData();
+        loadSocial();
+        showNotification('Sosyal medya hesabı başarıyla silindi!', 'success');
+        
+        // Trigger frontend update
+        window.dispatchEvent(new CustomEvent('cmsDataUpdated'));
+    }
+}
+
+function saveSocial(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const social = {
+        id: formData.get('id') || Date.now(),
+        platform: formData.get('platform'),
+        username: formData.get('username'),
+        url: formData.get('url'),
+        color: formData.get('color'),
+        active: formData.get('active') === 'on'
+    };
+    
+    // Validation
+    if (!social.platform) {
+        showNotification('Platform seçimi zorunludur!', 'error');
+        return;
+    }
+    
+    if (!social.username) {
+        showNotification('Kullanıcı adı zorunludur!', 'error');
+        return;
+    }
+    
+    if (!social.url) {
+        showNotification('URL zorunludur!', 'error');
+        return;
+    }
+    
+    // URL validation
+    try {
+        new URL(social.url);
+    } catch {
+        showNotification('Geçerli bir URL giriniz!', 'error');
+        return;
+    }
+    
+    if (!cmsData.social) cmsData.social = [];
+    
+    const existingIndex = cmsData.social.findIndex(s => s.id == social.id);
+    if (existingIndex > -1) {
+        cmsData.social[existingIndex] = social;
+        showNotification('Sosyal medya hesabı başarıyla güncellendi!', 'success');
+    } else {
+        cmsData.social.push(social);
+        showNotification('Sosyal medya hesabı başarıyla eklendi!', 'success');
+    }
+    
+    saveData();
+    loadSocial();
+    closeSocialModal();
+    
+    // Trigger frontend update
+    window.dispatchEvent(new CustomEvent('cmsDataUpdated'));
+}
+
+// ================================
+// CONTACT MANAGEMENT FUNCTIONS
+// ================================
+
+// Load contact information
+function loadContact() {
+    loadContactData();
+    loadContactPreview();
+    loadContactFormData();
+    loadContactFormPreview();
+    showContactTab('info'); // Default tab
+}
+
+// Load contact form data
+function loadContactData() {
+    const contact = cmsData.contact || {};
+    
+    // Fill form fields
+    document.getElementById('companyName').value = contact.companyName || '';
+    document.getElementById('companyAddress').value = contact.address || '';
+    document.getElementById('mainPhone').value = contact.mainPhone || '';
+    document.getElementById('whatsappPhone').value = contact.whatsappPhone || '';
+    document.getElementById('mainEmail').value = contact.mainEmail || '';
+    document.getElementById('supportEmail').value = contact.supportEmail || '';
+    document.getElementById('contactDescription').value = contact.description || '';
+    document.getElementById('workingHours').value = contact.workingHours || '';
+}
+
+// Load contact preview
+function loadContactPreview() {
+    const contact = cmsData.contact || {};
+    const previewContainer = document.getElementById('contactPreview');
+    
+    previewContainer.innerHTML = `
+        <div class="space-y-4">
+            <div class="p-4 border border-gray-200 rounded-lg">
+                <h4 class="font-semibold text-gray-900 mb-2">İletişim Bilgileri Önizlemesi</h4>
+                
+                <div class="space-y-3">
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fas fa-building text-blue-600 text-sm"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-gray-900 text-sm">Şirket Adı</h5>
+                            <p class="text-gray-600 text-sm">${contact.companyName || 'Şirket adı girilmemiş'}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fas fa-map-marker-alt text-blue-600 text-sm"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-gray-900 text-sm">Merkez Ofis</h5>
+                            <p class="text-gray-600 text-sm whitespace-pre-line">${contact.address || 'Adres bilgisi girilmemiş'}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fas fa-phone text-blue-600 text-sm"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-gray-900 text-sm">Telefon</h5>
+                            <p class="text-gray-600 text-sm">${contact.mainPhone || 'Telefon girilmemiş'}</p>
+                            ${contact.whatsappPhone ? `<p class="text-gray-600 text-xs">${contact.whatsappPhone} (WhatsApp)</p>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fas fa-envelope text-blue-600 text-sm"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-gray-900 text-sm">E-posta</h5>
+                            <p class="text-gray-600 text-sm">${contact.mainEmail || 'E-posta girilmemiş'}</p>
+                            ${contact.supportEmail ? `<p class="text-gray-600 text-xs">${contact.supportEmail} (Destek)</p>` : ''}
+                        </div>
+                    </div>
+                    
+                    ${contact.workingHours ? `
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fas fa-clock text-blue-600 text-sm"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-gray-900 text-sm">Çalışma Saatleri</h5>
+                            <p class="text-gray-600 text-sm">${contact.workingHours}</p>
+                        </div>
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+            
+            <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h4 class="font-semibold text-blue-900 mb-2">Sayfa Açıklaması</h4>
+                <p class="text-blue-800 text-sm">${contact.description || 'Açıklama metni girilmemiş'}</p>
+            </div>
+        </div>
+    `;
+}
+
+// Save contact information
+function saveContactInfo() {
+    // Get form data
+    const contactData = {
+        companyName: document.getElementById('companyName').value.trim(),
+        address: document.getElementById('companyAddress').value.trim(),
+        mainPhone: document.getElementById('mainPhone').value.trim(),
+        whatsappPhone: document.getElementById('whatsappPhone').value.trim(),
+        mainEmail: document.getElementById('mainEmail').value.trim(),
+        supportEmail: document.getElementById('supportEmail').value.trim(),
+        description: document.getElementById('contactDescription').value.trim(),
+        workingHours: document.getElementById('workingHours').value.trim()
+    };
+    
+    // Validation
+    if (!contactData.companyName) {
+        showNotification('Şirket adı zorunludur!', 'error');
+        return;
+    }
+    
+    if (!contactData.address) {
+        showNotification('Şirket adresi zorunludur!', 'error');
+        return;
+    }
+    
+    if (!contactData.mainPhone) {
+        showNotification('Ana telefon numarası zorunludur!', 'error');
+        return;
+    }
+    
+    if (!contactData.mainEmail) {
+        showNotification('Ana e-posta adresi zorunludur!', 'error');
+        return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(contactData.mainEmail)) {
+        showNotification('Geçerli bir e-posta adresi giriniz!', 'error');
+        return;
+    }
+    
+    if (contactData.supportEmail && !emailRegex.test(contactData.supportEmail)) {
+        showNotification('Geçerli bir destek e-posta adresi giriniz!', 'error');
+        return;
+    }
+    
+    // Save to cmsData
+    cmsData.contact = contactData;
+    
+    // Save to localStorage
+    saveData();
+    
+    // Update preview
+    loadContactPreview();
+    
+    // Show success message
+    showNotification('İletişim bilgileri başarıyla kaydedildi!', 'success');
+    
+    // Trigger frontend update
+    window.dispatchEvent(new CustomEvent('cmsDataUpdated'));
+}
+
+// ================================
+// STATISTICS MANAGEMENT FUNCTIONS
+// ================================
+
+// Load stats section
+function loadStats() {
+    loadStatsData();
+    loadStatsPreview();
+}
+
+// Load stats data into form
+function loadStatsData() {
+    const stats = cmsData.stats || {};
+    
+    // Fill form fields
+    document.getElementById('customersValue').value = stats.customers?.value || '';
+    document.getElementById('customersTitle').value = stats.customers?.title || '';
+    document.getElementById('satisfactionValue').value = stats.satisfaction?.value || '';
+    document.getElementById('satisfactionTitle').value = stats.satisfaction?.title || '';
+    document.getElementById('supportValue').value = stats.support?.value || '';
+    document.getElementById('supportTitle').value = stats.support?.title || '';
+    document.getElementById('experienceValue').value = stats.experience?.value || '';
+    document.getElementById('experienceTitle').value = stats.experience?.title || '';
+}
+
+// Load stats preview
+function loadStatsPreview() {
+    const stats = cmsData.stats || {};
+    const previewContainer = document.getElementById('statsPreview');
+    
+    previewContainer.innerHTML = `
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold mb-1 stats-preview-value" data-final-value="${stats.customers?.value || '0'}">0</div>
+                <div class="text-sm opacity-80">${stats.customers?.title || 'Başlık Girilmemiş'}</div>
+            </div>
+            <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold mb-1 stats-preview-value" data-final-value="${stats.satisfaction?.value || '0'}">0</div>
+                <div class="text-sm opacity-80">${stats.satisfaction?.title || 'Başlık Girilmemiş'}</div>
+            </div>
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold mb-1 stats-preview-value" data-final-value="${stats.support?.value || '0'}">0</div>
+                <div class="text-sm opacity-80">${stats.support?.title || 'Başlık Girilmemiş'}</div>
+            </div>
+            <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold mb-1 stats-preview-value" data-final-value="${stats.experience?.value || '0'}">0</div>
+                <div class="text-sm opacity-80">${stats.experience?.title || 'Başlık Girilmemiş'}</div>
+            </div>
+        </div>
+    `;
+    
+    // Trigger animations for preview
+    setTimeout(() => {
+        document.querySelectorAll('.stats-preview-value').forEach((element, index) => {
+            const finalValue = element.getAttribute('data-final-value');
+            if (finalValue && finalValue !== '0' && finalValue !== 'Değer Girilmemiş') {
+                setTimeout(() => animateCounterPreview(element, finalValue), index * 100);
+            }
+        });
+    }, 100);
+}
+
+// Counter animation function for admin preview
+function animateCounterPreview(element, finalValue) {
+    // For special values like 24/7, directly set without animation
+    if (finalValue === '24/7') {
+        element.textContent = finalValue;
+        return;
+    }
+    
+    const isPercentage = finalValue.includes('%');
+    const hasPlus = finalValue.includes('+');
+    const numValue = parseInt(finalValue.replace(/[^\d]/g, ''));
+    
+    let currentValue = 0;
+    const increment = Math.ceil(numValue / 30); // Faster animation for preview
+    const duration = 1500; // Shorter duration for preview
+    const stepTime = duration / (numValue / increment);
+    
+    const timer = setInterval(() => {
+        currentValue += increment;
+        if (currentValue >= numValue) {
+            currentValue = numValue;
+            clearInterval(timer);
+        }
+        
+        let displayValue = currentValue;
+        if (isPercentage) displayValue += '%';
+        if (hasPlus) displayValue += '+';
+        
+        element.textContent = displayValue;
+    }, stepTime);
+}
+
+// Save stats information
+function saveStatsInfo() {
+    // Get form data
+    const statsData = {
+        customers: {
+            value: document.getElementById('customersValue').value.trim(),
+            title: document.getElementById('customersTitle').value.trim()
+        },
+        satisfaction: {
+            value: document.getElementById('satisfactionValue').value.trim(),
+            title: document.getElementById('satisfactionTitle').value.trim()
+        },
+        support: {
+            value: document.getElementById('supportValue').value.trim(),
+            title: document.getElementById('supportTitle').value.trim()
+        },
+        experience: {
+            value: document.getElementById('experienceValue').value.trim(),
+            title: document.getElementById('experienceTitle').value.trim()
+        }
+    };
+    
+    // Validation
+    if (!statsData.customers.value) {
+        showNotification('Müşteri değeri zorunludur!', 'error');
+        return;
+    }
+    
+    if (!statsData.customers.title) {
+        showNotification('Müşteri başlığı zorunludur!', 'error');
+        return;
+    }
+    
+    if (!statsData.satisfaction.value) {
+        showNotification('Memnuniyet değeri zorunludur!', 'error');
+        return;
+    }
+    
+    if (!statsData.satisfaction.title) {
+        showNotification('Memnuniyet başlığı zorunludur!', 'error');
+        return;
+    }
+    
+    if (!statsData.support.value) {
+        showNotification('Destek değeri zorunludur!', 'error');
+        return;
+    }
+    
+    if (!statsData.support.title) {
+        showNotification('Destek başlığı zorunludur!', 'error');
+        return;
+    }
+    
+    if (!statsData.experience.value) {
+        showNotification('Tecrübe değeri zorunludur!', 'error');
+        return;
+    }
+    
+    if (!statsData.experience.title) {
+        showNotification('Tecrübe başlığı zorunludur!', 'error');
+        return;
+    }
+    
+    // Save to cmsData
+    cmsData.stats = statsData;
+    
+    // Save to localStorage
+    saveData();
+    
+    // Update preview
+    loadStatsPreview();
+    
+    // Show success message
+    showNotification('İstatistikler başarıyla kaydedildi!', 'success');
+    
+    // Trigger frontend update
+    window.dispatchEvent(new CustomEvent('cmsDataUpdated'));
+}
+
+// ================================
+// CONTACT FORM MANAGEMENT FUNCTIONS
+// ================================
+
+// Show contact tab
+function showContactTab(tab) {
+    // Update tab buttons
+    document.querySelectorAll('.contact-tab').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    if (tab === 'info') {
+        document.getElementById('contactInfoTab').classList.add('active');
+        document.querySelector('.grid.grid-cols-1.lg\\:grid-cols-2.gap-6:not(#contactFormSettings .grid)').style.display = 'grid';
+        document.getElementById('contactFormSettings').classList.add('hidden');
+    } else if (tab === 'form') {
+        document.getElementById('contactFormTab').classList.add('active');
+        document.querySelector('.grid.grid-cols-1.lg\\:grid-cols-2.gap-6:not(#contactFormSettings .grid)').style.display = 'none';
+        document.getElementById('contactFormSettings').classList.remove('hidden');
+    }
+}
+
+// Load contact form settings data
+function loadContactFormData() {
+    const contactForm = cmsData.contactForm || {};
+    
+    // Fill form fields
+    document.getElementById('formTitle').value = contactForm.formTitle || 'Bize Ulaşın';
+    document.getElementById('nameLabel').value = contactForm.labels?.name || 'Ad Soyad';
+    document.getElementById('emailLabel').value = contactForm.labels?.email || 'E-posta';
+    document.getElementById('subjectLabel').value = contactForm.labels?.subject || 'Konu';
+    document.getElementById('messageLabel').value = contactForm.labels?.message || 'Mesaj';
+    document.getElementById('namePlaceholder').value = contactForm.placeholders?.name || 'Adınız ve soyadınız';
+    document.getElementById('emailPlaceholder').value = contactForm.placeholders?.email || 'E-posta adresiniz';
+    document.getElementById('subjectPlaceholder').value = contactForm.placeholders?.subject || 'Mesajınızın konusu';
+    document.getElementById('messagePlaceholder').value = contactForm.placeholders?.message || 'Mesajınızı buraya yazın';
+    document.getElementById('submitButtonText').value = contactForm.buttons?.submit || 'Mesaj Gönder';
+    document.getElementById('cancelButtonText').value = contactForm.buttons?.cancel || 'İptal';
+}
+
+// Load contact form preview
+function loadContactFormPreview() {
+    const contactForm = cmsData.contactForm || {};
+    const previewContainer = document.getElementById('contactFormPreview');
+    
+    previewContainer.innerHTML = `
+        <div class="border border-gray-200 rounded-lg p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">${contactForm.formTitle || 'Bize Ulaşın'}</h3>
+            <form class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">${contactForm.labels?.name || 'Ad Soyad'}</label>
+                        <input type="text" placeholder="${contactForm.placeholders?.name || 'Adınız ve soyadınız'}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">${contactForm.labels?.email || 'E-posta'}</label>
+                        <input type="email" placeholder="${contactForm.placeholders?.email || 'E-posta adresiniz'}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" disabled>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">${contactForm.labels?.subject || 'Konu'}</label>
+                    <input type="text" placeholder="${contactForm.placeholders?.subject || 'Mesajınızın konusu'}" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" disabled>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">${contactForm.labels?.message || 'Mesaj'}</label>
+                    <textarea rows="4" placeholder="${contactForm.placeholders?.message || 'Mesajınızı buraya yazın'}" 
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" disabled></textarea>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm" disabled>
+                        ${contactForm.buttons?.submit || 'Mesaj Gönder'}
+                    </button>
+                    <button type="button" class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm" disabled>
+                        ${contactForm.buttons?.cancel || 'İptal'}
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+}
+
+// Save contact form settings
+function saveContactFormSettings() {
+    // Get form data
+    const contactFormData = {
+        formTitle: document.getElementById('formTitle').value.trim(),
+        labels: {
+            name: document.getElementById('nameLabel').value.trim(),
+            email: document.getElementById('emailLabel').value.trim(),
+            subject: document.getElementById('subjectLabel').value.trim(),
+            message: document.getElementById('messageLabel').value.trim()
+        },
+        placeholders: {
+            name: document.getElementById('namePlaceholder').value.trim(),
+            email: document.getElementById('emailPlaceholder').value.trim(),
+            subject: document.getElementById('subjectPlaceholder').value.trim(),
+            message: document.getElementById('messagePlaceholder').value.trim()
+        },
+        buttons: {
+            submit: document.getElementById('submitButtonText').value.trim(),
+            cancel: document.getElementById('cancelButtonText').value.trim()
+        }
+    };
+    
+    // Validation
+    if (!contactFormData.formTitle) {
+        showNotification('Form başlığı zorunludur!', 'error');
+        return;
+    }
+    
+    if (!contactFormData.labels.name || !contactFormData.labels.email) {
+        showNotification('Tüm alan etiketleri zorunludur!', 'error');
+        return;
+    }
+    
+    // Save to cmsData
+    cmsData.contactForm = contactFormData;
+    
+    // Save to localStorage
+    saveData();
+    
+    // Update preview
+    loadContactFormPreview();
+    
+    // Show success message
+    showNotification('İletişim formu ayarları başarıyla kaydedildi!', 'success');
+    
+    // Trigger frontend update
+    window.dispatchEvent(new CustomEvent('cmsDataUpdated'));
+}
+
+// Site Settings Functions
+let debounceTimer;
+
+function debounceUpdate() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+        updateSiteSettings();
+    }, 300); // 300ms bekle (daha hızlı)
+}
+
+function updateSiteSettings() {
+    console.log('🔥 updateSiteSettings ÇAĞRILDI!');
+    try {
+        // Get company display type
+        const displayType = document.querySelector('input[name="companyDisplayType"]:checked')?.value || 'text';
+        
+        const settings = {
+            companyName: document.getElementById('companyName')?.value || 'NEXUS İSG',
+            companyDisplayType: displayType,
+            companyLogo: null, // Will be set from localStorage if exists
+            companyEmail: document.getElementById('companyEmail')?.value || 'info@nexusisg.com',
+            companyPhone: document.getElementById('companyPhone')?.value || '+90 532 123 45 67',
+            companyAddress: document.getElementById('companyAddress')?.value || 'İstanbul, Türkiye',
+            logoUrl: document.getElementById('logoUrl')?.value || 'media/nexus-logo.svg',
+            logoWidth: document.getElementById('logoWidth')?.value || '120',
+            logoHeight: document.getElementById('logoHeight')?.value || '40'
+        };
+        
+        // Get existing company logo from localStorage
+        const existingData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        if (existingData.siteSettings?.companyLogo) {
+            settings.companyLogo = existingData.siteSettings.companyLogo;
+        }
+        
+        console.log('💾 Kaydediliyor:', settings);
+        
+        // Save to localStorage - BU EN ÖNEMLİSİ
+        let cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        cmsData.siteSettings = settings;
+        localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
+        
+        console.log('✅ LocalStorage\'a kaydedildi!');
+        
+        // Kaydetme durumunu göster
+        const saveStatus = document.getElementById('saveStatus');
+        if (saveStatus) {
+            saveStatus.innerHTML = '<span class="text-green-600 font-semibold">✓ Kaydedildi!</span>';
+            setTimeout(() => {
+                saveStatus.innerHTML = '';
+            }, 2000);
+        }
+        
+        // Update status (eski sistem)
+        updateSettingsStatus('Değişiklikler kaydedildi', 'success');
+        
+        // Trigger multiple update events for robust cross-tab communication
+        console.log('Dispatching cmsDataUpdated event');
+        window.dispatchEvent(new CustomEvent('cmsDataUpdated', { detail: { type: 'siteSettings', data: settings } }));
+        
+        // Trigger custom storage event
+        window.dispatchEvent(new CustomEvent('storageUpdate', { detail: { key: 'nexus-isg-cms-data', data: settings } }));
+        
+        // Force trigger storage event manually for other tabs
+        setTimeout(() => {
+            const storageEvent = new StorageEvent('storage', {
+                key: 'nexus-isg-cms-data',
+                newValue: JSON.stringify(cmsData),
+                storageArea: localStorage
+            });
+            window.dispatchEvent(storageEvent);
+        }, 100);
+        
+        // IMMEDIATE UPDATE: Direkt ana sayfayı güncellemek için window.postMessage kullan
+        try {
+            // Tüm açık pencereler/tablar için broadcast
+            if (window.BroadcastChannel) {
+                const channel = new BroadcastChannel('nexus-cms-updates');
+                channel.postMessage({
+                    type: 'siteSettingsUpdated',
+                    data: settings
+                });
+            }
+            
+            // Ana sayfayı direkt güncellemek için parent window kontrol et
+            if (window.opener) {
+                window.opener.postMessage({
+                    type: 'siteSettingsUpdated',
+                    data: settings
+                }, '*');
+            }
+        } catch (e) {
+            console.log('BroadcastChannel not supported or error:', e);
+        }
+        
+    } catch (error) {
+        console.error('Site ayarları güncellenirken hata:', error);
+        updateSettingsStatus('Hata oluştu', 'error');
+    }
+}
+
+function handleLogoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // Dosya boyutu kontrolü (2MB)
+    if (file.size > 2 * 1024 * 1024) {
+        showNotification('Dosya boyutu 2MB\'dan küçük olmalıdır', 'error');
+        return;
+    }
+    
+    // Dosya türü kontrolü
+    if (!file.type.startsWith('image/')) {
+        showNotification('Sadece resim dosyaları yüklenebilir', 'error');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const logoUrl = e.target.result;
+        document.getElementById('logoUrl').value = logoUrl;
+        document.getElementById('logoFileName').textContent = file.name;
+        updateLogoPreview();
+        updateSiteSettings();
+        showNotification('Logo başarıyla yüklendi!', 'success');
+    };
+    reader.readAsDataURL(file);
+}
+
+function updateLogoPreview() {
+    const logoUrl = document.getElementById('logoUrl')?.value;
+    const logoPreview = document.getElementById('logoPreview');
+    const logoWidth = document.getElementById('logoWidth')?.value || '120';
+    const logoHeight = document.getElementById('logoHeight')?.value || '40';
+    
+    if (logoPreview && logoUrl) {
+        logoPreview.src = logoUrl;
+        logoPreview.style.width = logoWidth + 'px';
+        logoPreview.style.height = logoHeight + 'px';
+        updateSiteSettings();
+    }
+}
+
+function updateLogoSize() {
+    updateLogoPreview();
+}
+
+function resetLogo() {
+    document.getElementById('logoUrl').value = 'media/nexus-logo.svg';
+    document.getElementById('logoWidth').value = '120';
+    document.getElementById('logoHeight').value = '40';
+    document.getElementById('logoFileName').textContent = 'Dosya seçilmedi';
+    updateLogoPreview();
+    showNotification('Logo varsayılan değerlere sıfırlandı', 'info');
+}
+
+function saveSettings() {
+    updateSiteSettings();
+    showNotification('Site ayarları başarıyla kaydedildi!', 'success');
+}
+
+function resetAllSettings() {
+    if (confirm('Tüm site ayarlarını varsayılan değerlere sıfırlamak istediğinizden emin misiniz?')) {
+        document.getElementById('companyName').value = 'NEXUS İSG';
+        document.getElementById('companyEmail').value = 'info@nexusisg.com';
+        document.getElementById('companyPhone').value = '+90 532 123 45 67';
+        document.getElementById('companyAddress').value = 'İstanbul, Türkiye';
+        resetLogo();
+        updateSiteSettings();
+        showNotification('Tüm ayarlar varsayılan değerlere sıfırlandı', 'info');
+    }
+}
+
+function updateSettingsStatus(message, type) {
+    const statusElement = document.getElementById('settingsStatus');
+    if (statusElement) {
+        statusElement.textContent = message;
+        statusElement.className = `text-sm ${type === 'success' ? 'text-green-600' : type === 'error' ? 'text-red-600' : 'text-blue-600'}`;
+        
+        // 3 saniye sonra temizle
+        setTimeout(() => {
+            statusElement.textContent = '';
+        }, 3000);
+    }
+}
+
+function loadSettings() {
+    try {
+        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        const settings = cmsData.siteSettings || {};
+        
+        // Form alanlarını doldur
+        if (settings.companyName) document.getElementById('companyName').value = settings.companyName;
+        if (settings.companyEmail) document.getElementById('companyEmail').value = settings.companyEmail;
+        if (settings.companyPhone) document.getElementById('companyPhone').value = settings.companyPhone;
+        if (settings.companyAddress) document.getElementById('companyAddress').value = settings.companyAddress;
+        if (settings.logoUrl) document.getElementById('logoUrl').value = settings.logoUrl;
+        if (settings.logoWidth) document.getElementById('logoWidth').value = settings.logoWidth;
+        if (settings.logoHeight) document.getElementById('logoHeight').value = settings.logoHeight;
+        
+        updateLogoPreview();
+        
+    } catch (error) {
+        console.error('Site ayarları yüklenirken hata:', error);
+    }
+}
+
+// Test functions for debugging
+window.testSiteSettingsUpdate = function() {
+    console.log('Testing site settings update...');
+    
+    // Test localStorage save
+    const testSettings = {
+        companyName: 'TEST ŞIRKET',
+        companyEmail: 'test@test.com',
+        companyPhone: '+90 555 123 45 67',
+        companyAddress: 'Test Adres, Test Şehir',
+        logoUrl: 'media/nexus-logo.svg'
+    };
+    
+    let cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+    cmsData.siteSettings = testSettings;
+    localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
+    
+    console.log('Test settings saved:', testSettings);
+    
+    // Trigger update
+    window.dispatchEvent(new CustomEvent('cmsDataUpdated'));
+    
+    return testSettings;
+};
+
+window.checkCurrentSettings = function() {
+    const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+    console.log('Current CMS data:', cmsData);
+    console.log('Site settings:', cmsData.siteSettings);
+    return cmsData.siteSettings;
+};
+
+// Immediate preview update function
+function immediateUpdatePreview(settings) {
+    console.log('Immediate preview update with:', settings);
+    
+    // 1. BroadcastChannel ile tüm tabları güncelle
+    if (window.BroadcastChannel) {
+        const channel = new BroadcastChannel('nexus-cms-updates');
+        channel.postMessage({
+            type: 'siteSettingsUpdated',
+            data: settings
+        });
+        console.log('Broadcast message sent');
+    }
+    
+    // 2. LocalStorage event trigger
+    const event = new Event('storage');
+    event.key = 'nexus-isg-cms-data';
+    event.newValue = localStorage.getItem('nexus-isg-cms-data');
+    window.dispatchEvent(event);
+    
+    // 3. Manual window referencing
+    try {
+        if (window.opener) {
+            window.opener.postMessage({
+                type: 'siteSettingsUpdated',
+                data: settings
+            }, '*');
+        }
+    } catch (e) {
+        console.log('Window messaging error:', e);
+    }
 }

@@ -7,32 +7,59 @@
     <link rel="icon" type="image/svg+xml" href="media/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Quill.js Rich Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    
+    <!-- Toast Notifications -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <style>
+        /* Sidebar Styles */
+        .sidebar-item {
+            position: relative;
+            overflow: hidden;
+        }
+        
         .sidebar-item:hover {
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(59, 130, 246, 0.15);
+            transform: translateX(3px);
         }
+        
         .sidebar-item.active {
-            background: linear-grad    <!-- Product Modal -->
-    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4">
-        <div class="bg-white rounded-lg max-w-l    <!-- Blog Modal -->
-    <div id="blogModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4">
-        <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-hidden flex flex-col">
-            <div class="flex justify-between items-center p-4 border-b">
-                <h3 id="blogModalTitle" class="text-lg font-semibold">Yeni Blog Yazısı</h3>
-                <button onclick="closeBlogModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-4">max-h-[90vh] overflow-hidden flex flex-col">
-            <div class="flex justify-between items-center p-4 border-b">
-                <h3 id="productModalTitle" class="text-lg font-semibold">Yeni Ürün Ekle</h3>
-                <button onclick="closeProductModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-4">eg, #3B82F6 0%, #1E40AF 100%);
+            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
+        
+        .sidebar-item.active .w-8 {
+            background: rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        .sidebar-item.active i {
+            color: white !important;
+        }
+        
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(180deg, #3B82F6, #1E40AF);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar-item.active::before {
+            transform: scaleY(1);
+        }
+        
         .content-section {
             display: none;
         }
@@ -96,9 +123,140 @@
                 padding: 1rem;
             }
         }
+        
+        /* Contact Tab Styles */
+        .contact-tab {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        /* Message Card Styles */
+        .message-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .message-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-card.unread {
+            border-left-color: #3B82F6;
+            background: linear-gradient(to right, #EFF6FF, #ffffff);
+        }
+        
+        .message-card.read {
+            border-left-color: #6B7280;
+            opacity: 0.8;
+        }
+        
+        .message-card.replied {
+            border-left-color: #10B981;
+        }
+        
+        .filter-btn {
+            background: #F3F4F6;
+            color: #6B7280;
+        }
+        
+        .filter-btn:hover {
+            background: #E5E7EB;
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+            color: white;
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+        }
+        .contact-tab.active {
+            background-color: #3B82F6 !important;
+            color: white !important;
+        }
+        .contact-tab:not(.active) {
+            background-color: #E5E7EB;
+            color: #6B7280;
+        }
+        .contact-tab:not(.active):hover {
+            background-color: #D1D5DB;
+        }
+        
+        /* Modern Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        .animate-slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* Hover Effects */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Modern Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3B82F6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gradient-to-br from-gray-50 to-gray-100">
     <!-- Header -->
     <header class="bg-white shadow-sm border-b">
         <div class="flex items-center justify-between px-6 py-4">
@@ -119,61 +277,254 @@
     </header>
 
     <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-sm h-screen">
+        <!-- Modern Sidebar -->
+        <aside class="w-72 bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-2xl h-screen overflow-y-auto sticky top-0">
+            <!-- Sidebar Header -->
+            <div class="p-6 border-b border-gray-700">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-shield-alt text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-lg">CMS Panel</h2>
+                        <p class="text-xs text-gray-400">Yönetim Merkezi</p>
+                    </div>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="relative">
+                    <input type="text" 
+                           id="sidebarSearch" 
+                           placeholder="Menüde ara..." 
+                           class="w-full bg-gray-800 text-white text-sm px-4 py-2 pl-10 rounded-lg border border-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                           onkeyup="filterSidebarMenu()">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm"></i>
+                </div>
+            </div>
+
             <nav class="p-4">
-                <ul class="space-y-2">
-                    <li>
-                        <button onclick="showSection('dashboard')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors active">
-                            <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="showSection('hero')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
-                            <i class="fas fa-home mr-3"></i>Ana Sayfa Hero
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="showSection('services')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
-                            <i class="fas fa-shield-alt mr-3"></i>Hizmetler
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="showSection('products')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
-                            <i class="fas fa-box mr-3"></i>Ürünler
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="showSection('blog')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
-                            <i class="fas fa-blog mr-3"></i>Blog
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="showSection('team')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
-                            <i class="fas fa-users mr-3"></i>Ekip
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="showSection('references')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
-                            <i class="fas fa-building mr-3"></i>Referanslar
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="showSection('about')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
-                            <i class="fas fa-info-circle mr-3"></i>Hakkımızda
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="showSection('contact')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
-                            <i class="fas fa-envelope mr-3"></i>İletişim
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="showSection('settings')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg transition-colors">
-                            <i class="fas fa-cog mr-3"></i>Site Ayarları
-                        </button>
-                    </li>
-                </ul>
+                <!-- Ana Menü -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-3 px-3">
+                        <i class="fas fa-grip-horizontal text-blue-400 text-xs mr-2"></i>
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Ana Menü</span>
+                    </div>
+                    <ul class="space-y-1">
+                        <li>
+                            <button onclick="showSection('dashboard')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 active flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-blue-500/30 transition-colors">
+                                        <i class="fas fa-tachometer-alt text-blue-400"></i>
+                                    </div>
+                                    <span class="font-medium">Dashboard</span>
+                                </div>
+                                <i class="fas fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('settings')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-purple-500/30 transition-colors">
+                                        <i class="fas fa-cog text-purple-400"></i>
+                                    </div>
+                                    <span class="font-medium">Site Ayarları</span>
+                                </div>
+                                <i class="fas fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('chatbot')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-colors">
+                                        <i class="fas fa-robot text-purple-400"></i>
+                                    </div>
+                                    <span class="font-medium">AI Chatbot</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-purple-300 px-2 py-1 rounded-full">AI</span>
+                                    <i class="fas fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                </div>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('messages')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-pink-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-pink-500/30 transition-colors">
+                                        <i class="fas fa-envelope text-pink-400"></i>
+                                    </div>
+                                    <span class="font-medium">Mesajlar</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span id="unreadCount" class="text-xs bg-red-500/80 text-white px-2 py-1 rounded-full font-semibold hidden">0</span>
+                                    <i class="fas fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                </div>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('stats')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-orange-500/30 transition-colors">
+                                        <i class="fas fa-chart-bar text-orange-400"></i>
+                                    </div>
+                                    <span class="font-medium">İstatistikler</span>
+                                </div>
+                                <i class="fas fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- İçerik Yönetimi -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-3 px-3">
+                        <i class="fas fa-layer-group text-green-400 text-xs mr-2"></i>
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">İçerik Yönetimi</span>
+                    </div>
+                    <ul class="space-y-1">
+                        <li>
+                            <button onclick="showSection('hero')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-indigo-500/30 transition-colors">
+                                        <i class="fas fa-home text-indigo-400"></i>
+                                    </div>
+                                    <span class="font-medium">Ana Sayfa Hero</span>
+                                </div>
+                                <i class="fas fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('services')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-blue-500/30 transition-colors">
+                                        <i class="fas fa-shield-alt text-blue-400"></i>
+                                    </div>
+                                    <span class="font-medium">Hizmetler</span>
+                                </div>
+                                <span class="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full" id="servicesCount">0</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('products')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-green-500/30 transition-colors">
+                                        <i class="fas fa-box text-green-400"></i>
+                                    </div>
+                                    <span class="font-medium">Yazılımlar</span>
+                                </div>
+                                <span class="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full" id="productsCount">0</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('blog')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-purple-500/30 transition-colors">
+                                        <i class="fas fa-blog text-purple-400"></i>
+                                    </div>
+                                    <span class="font-medium">Blog</span>
+                                </div>
+                                <span class="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded-full" id="blogCount">0</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('about')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-cyan-500/30 transition-colors">
+                                        <i class="fas fa-info-circle text-cyan-400"></i>
+                                    </div>
+                                    <span class="font-medium">Hakkımızda</span>
+                                </div>
+                                <i class="fas fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- İletişim & Sosyal -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-3 px-3">
+                        <i class="fas fa-share-alt text-pink-400 text-xs mr-2"></i>
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">İletişim & Sosyal</span>
+                    </div>
+                    <ul class="space-y-1">
+                        <li>
+                            <button onclick="showSection('contact')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-teal-500/30 transition-colors">
+                                        <i class="fas fa-envelope text-teal-400"></i>
+                                    </div>
+                                    <span class="font-medium">İletişim Bölümü</span>
+                                </div>
+                                <i class="fas fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('contact-management')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-emerald-500/30 transition-colors">
+                                        <i class="fas fa-phone text-emerald-400"></i>
+                                    </div>
+                                    <span class="font-medium">İletişim Bilgileri</span>
+                                </div>
+                                <i class="fas fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('social')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-pink-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-pink-500/30 transition-colors">
+                                        <i class="fab fa-facebook text-pink-400"></i>
+                                    </div>
+                                    <span class="font-medium">Sosyal Medya</span>
+                                </div>
+                                <i class="fas fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Ekip & Referanslar -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-3 px-3">
+                        <i class="fas fa-users text-yellow-400 text-xs mr-2"></i>
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Ekip & Referanslar</span>
+                    </div>
+                    <ul class="space-y-1">
+                        <li>
+                            <button onclick="showSection('team')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-amber-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-amber-500/30 transition-colors">
+                                        <i class="fas fa-users text-amber-400"></i>
+                                    </div>
+                                    <span class="font-medium">Ekip</span>
+                                </div>
+                                <span class="text-xs bg-amber-500/20 text-amber-300 px-2 py-1 rounded-full" id="teamCount">0</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('references')" class="sidebar-item group w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between hover-lift">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-rose-500/20 rounded-lg flex items-center justify-center mr-3 group-hover:bg-rose-500/30 transition-colors">
+                                        <i class="fas fa-building text-rose-400"></i>
+                                    </div>
+                                    <span class="font-medium">Referanslar</span>
+                                </div>
+                                <span class="text-xs bg-rose-500/20 text-rose-300 px-2 py-1 rounded-full" id="referencesCount">0</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Sidebar Footer -->
+                <div class="mt-8 p-4 bg-gray-800/50 rounded-xl border border-gray-700">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-400">Depolama</span>
+                        <span class="text-xs text-gray-300 font-medium" id="storagePercentage">0%</span>
+                    </div>
+                    <div class="bg-gray-700 rounded-full h-2 overflow-hidden">
+                        <div id="storageBar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">LocalStorage kullanımı</p>
+                </div>
             </nav>
         </aside>
 
@@ -201,7 +552,7 @@
                     <div class="stat-card green text-white p-6 rounded-lg shadow-lg">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-green-100 text-sm">Toplam Ürün</p>
+                                <p class="text-green-100 text-sm">Toplam Yazılım</p>
                                 <p class="text-2xl font-bold" id="totalProducts">0</p>
                             </div>
                             <i class="fas fa-box text-3xl text-green-200"></i>
@@ -228,13 +579,26 @@
                         </div>
                     </div>
 
-                    <div class="stat-card pink text-white p-6 rounded-lg shadow-lg">
+                    <div class="stat-card pink text-white p-6 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform" onclick="showSection('messages')">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-pink-100 text-sm">Referanslar</p>
+                                <p class="text-pink-100 text-sm">Toplam Mesaj</p>
+                                <p class="text-2xl font-bold" id="totalMessages">0</p>
+                                <p class="text-xs text-pink-200 mt-1">
+                                    <span id="dashboardUnreadMessages">0</span> okunmamış
+                                </p>
+                            </div>
+                            <i class="fas fa-envelope text-3xl text-pink-200"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-red-500 to-pink-500 text-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-red-100 text-sm">Referanslar</p>
                                 <p class="text-2xl font-bold" id="totalReferences">0</p>
                             </div>
-                            <i class="fas fa-building text-3xl text-pink-200"></i>
+                            <i class="fas fa-building text-3xl text-red-200"></i>
                         </div>
                     </div>
                 </div>
@@ -257,8 +621,8 @@
                             <div class="flex items-center">
                                 <i class="fas fa-box text-green-500 text-2xl mr-4 group-hover:scale-110 transition-transform"></i>
                                 <div class="text-left">
-                                    <h4 class="font-semibold text-gray-800 group-hover:text-green-600">Ürün Ekle</h4>
-                                    <p class="text-sm text-gray-600">Yeni ürün oluştur</p>
+                                    <h4 class="font-semibold text-gray-800 group-hover:text-green-600">Yazılım Ekle</h4>
+                                    <p class="text-sm text-gray-600">Yeni yazılım oluştur</p>
                                 </div>
                             </div>
                         </button>
@@ -283,15 +647,72 @@
                             </div>
                         </button>
 
-                        <button onclick="showSection('references'); setTimeout(() => addReference(), 100);" class="group bg-white p-6 rounded-lg shadow hover:shadow-lg transition-all duration-300 border-l-4 border-pink-500 hover:border-l-8">
+                        <button onclick="showSection('messages')" class="group bg-white p-6 rounded-lg shadow hover:shadow-lg transition-all duration-300 border-l-4 border-pink-500 hover:border-l-8">
                             <div class="flex items-center">
-                                <i class="fas fa-building text-pink-500 text-2xl mr-4 group-hover:scale-110 transition-transform"></i>
+                                <i class="fas fa-envelope-open-text text-pink-500 text-2xl mr-4 group-hover:scale-110 transition-transform"></i>
                                 <div class="text-left">
-                                    <h4 class="font-semibold text-gray-800 group-hover:text-pink-600">Referans Ekle</h4>
+                                    <h4 class="font-semibold text-gray-800 group-hover:text-pink-600">Mesajlar</h4>
+                                    <p class="text-sm text-gray-600">
+                                        <span id="quickActionUnread">0</span> okunmamış mesaj
+                                    </p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="showSection('references'); setTimeout(() => addReference(), 100);" class="group bg-white p-6 rounded-lg shadow hover:shadow-lg transition-all duration-300 border-l-4 border-red-500 hover:border-l-8">
+                            <div class="flex items-center">
+                                <i class="fas fa-building text-red-500 text-2xl mr-4 group-hover:scale-110 transition-transform"></i>
+                                <div class="text-left">
+                                    <h4 class="font-semibold text-gray-800 group-hover:text-red-600">Referans Ekle</h4>
                                     <p class="text-sm text-gray-600">Yeni referans oluştur</p>
                                 </div>
                             </div>
                         </button>
+                    </div>
+                </div>
+
+                <!-- Son Mesajlar ve Gelen Kutusu -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Son 3 Mesaj -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">
+                                <i class="fas fa-clock text-pink-600 mr-2"></i>Son Mesajlar
+                            </h3>
+                            <span class="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full font-semibold">Son 3</span>
+                        </div>
+                        <div id="recentMessages" class="space-y-3 max-h-80 overflow-y-auto">
+                            <div class="flex items-center justify-center p-8 text-gray-400">
+                                <div class="text-center">
+                                    <i class="fas fa-inbox text-4xl mb-2"></i>
+                                    <p class="text-sm">Henüz mesaj yok</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gelen Kutusu -->
+                    <div class="lg:col-span-2 bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">
+                                <i class="fas fa-inbox text-blue-600 mr-2"></i>Gelen Kutusu
+                            </h3>
+                            <div class="flex items-center gap-3">
+                                <span id="inboxCount" class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">0 mesaj</span>
+                                <button onclick="showSection('messages')" class="text-sm bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all font-medium">
+                                    <i class="fas fa-external-link-alt mr-1"></i>Tümünü Aç
+                                </button>
+                            </div>
+                        </div>
+                        <div id="inboxMessages" class="space-y-2 max-h-80 overflow-y-auto">
+                            <div class="flex items-center justify-center p-12 text-gray-400">
+                                <div class="text-center">
+                                    <i class="fas fa-inbox text-5xl mb-3"></i>
+                                    <p class="text-sm font-medium">Gelen kutunuz boş</p>
+                                    <p class="text-xs text-gray-400 mt-1">Yeni mesajlar burada görünecektir</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -319,7 +740,7 @@
 
                     <div class="bg-white rounded-lg shadow p-6">
                         <h3 class="text-lg font-semibold mb-4">Sistem Durumu</h3>
-                        <div class="space-y-4">
+                        <div class="grid md:grid-cols-2 gap-4">
                             <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                                 <div class="flex items-center">
                                     <i class="fas fa-database text-green-600 mr-3"></i>
@@ -342,6 +763,27 @@
                             </div>
                             <p class="text-xs text-gray-500 mt-1">Kullanılan: <span id="dataSizeDisplay">-</span></p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Grafikler -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- İçerik Dağılımı Grafik -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">
+                            <i class="fas fa-chart-pie text-blue-600 mr-2"></i>
+                            İçerik Dağılımı
+                        </h3>
+                        <canvas id="contentDistributionChart" style="max-height: 300px;"></canvas>
+                    </div>
+
+                    <!-- Aylık Aktivite Grafik -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">
+                            <i class="fas fa-chart-line text-green-600 mr-2"></i>
+                            Son 7 Gün Aktivite
+                        </h3>
+                        <canvas id="activityChart" style="max-height: 300px;"></canvas>
                     </div>
                 </div>
 
@@ -411,66 +853,1041 @@
                 </form>
             </div>
 
+            <!-- Social Media Section -->
+            <div id="social-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Sosyal Medya Yönetimi</h2>
+                    <p class="text-gray-600">Sosyal medya hesaplarınızı yönetin</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <!-- Social Media Links List -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Sosyal Medya Hesapları</h3>
+                            <button onclick="openSocialModal()" 
+                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                                <i class="fas fa-plus mr-2"></i>Yeni Hesap Ekle
+                            </button>
+                        </div>
+                        
+                        <div id="social-links-container" class="space-y-3">
+                            <!-- Social media links will be loaded here -->
+                        </div>
+                        
+                        <div id="social-empty-state" class="text-center py-8 hidden">
+                            <i class="fab fa-facebook text-gray-300 text-4xl mb-3"></i>
+                            <p class="text-gray-500 mb-4">Henüz sosyal medya hesabı eklenmemiş</p>
+                            <button onclick="openSocialModal()" 
+                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                İlk Hesabı Ekle
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Preview -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Önizleme</h3>
+                        <div class="border rounded-lg p-4 bg-gray-50">
+                            <h4 class="font-medium mb-3">Footer'da Görünüm:</h4>
+                            <div id="social-preview" class="flex space-x-3">
+                                <!-- Preview will be generated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p><i class="fas fa-info-circle mr-1"></i> Sosyal medya bağlantıları sitenin footer kısmında görüntülenir.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Management Section -->
+            <div id="contact-management-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">İletişim Bilgileri Yönetimi</h2>
+                    <p class="text-gray-600">Şirket iletişim bilgilerini yönetin</p>
+                </div>
+
+                <!-- Tab Navigation -->
+                <div class="flex space-x-1 mb-6">
+                    <button onclick="showContactTab('info')" id="contactInfoTab" class="contact-tab px-6 py-2 font-medium text-sm rounded-t-lg bg-blue-600 text-white">
+                        <i class="fas fa-info-circle mr-2"></i>Şirket Bilgileri
+                    </button>
+                    <button onclick="showContactTab('form')" id="contactFormTab" class="contact-tab px-6 py-2 font-medium text-sm rounded-t-lg bg-gray-200 text-gray-600 hover:bg-gray-300">
+                        <i class="fas fa-edit mr-2"></i>İletişim Formu Ayarları
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- İletişim Bilgileri Formu -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">İletişim Bilgileri</h3>
+                            <button onclick="saveContactInfo()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                <i class="fas fa-save mr-1"></i>Kaydet
+                            </button>
+                        </div>
+
+                        <form id="contactForm" class="space-y-4">
+                            <!-- Şirket Adı -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Şirket Adı</label>
+                                <input type="text" id="contactCompanyName" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="NEXUS İSG">
+                            </div>
+
+                            <!-- Adres Bilgileri -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Şirket Adresi</label>
+                                <textarea id="contactCompanyAddress" rows="3" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Tam adres bilgisini giriniz"></textarea>
+                            </div>
+
+                            <!-- Telefon Bilgileri -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Ana Telefon</label>
+                                    <input type="tel" id="mainPhone" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="+90 212 123 45 67">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">WhatsApp</label>
+                                    <input type="tel" id="whatsappPhone" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="+90 532 123 45 67">
+                                </div>
+                            </div>
+
+                            <!-- E-posta Bilgileri -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Ana E-posta</label>
+                                    <input type="email" id="mainEmail" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="info@nexusisg.com">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Destek E-posta</label>
+                                    <input type="email" id="supportEmail" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="destek@nexusisg.com">
+                                </div>
+                            </div>
+
+                            <!-- İletişim Açıklaması -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">İletişim Sayfası Açıklaması</label>
+                                <textarea id="contactDescription" rows="3" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="İletişim sayfasında görünecek açıklama metni"></textarea>
+                            </div>
+
+                            <!-- Çalışma Saatleri -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Çalışma Saatleri</label>
+                                <input type="text" id="workingHours" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Pazartesi - Cuma: 09:00 - 18:00">
+                            </div>
+                        </form>
+
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p><i class="fas fa-info-circle mr-1"></i> Bu bilgiler sitedeki iletişim bölümünde ve footer'da görüntülenir.</p>
+                        </div>
+                    </div>
+
+                    <!-- Önizleme -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Önizleme</h3>
+                        <div id="contactPreview" class="space-y-4">
+                            <!-- Önizleme içeriği buraya dinamik olarak yüklenecek -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İletişim Formu Ayarları Tab -->
+                <div id="contactFormSettings" class="hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Form Ayarları -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold">İletişim Formu Ayarları</h3>
+                                <button onclick="saveContactFormSettings()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                    <i class="fas fa-save mr-1"></i>Kaydet
+                                </button>
+                            </div>
+
+                            <form id="contactFormSettingsForm" class="space-y-4">
+                                <!-- Form Başlığı -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Form Başlığı</label>
+                                    <input type="text" id="formTitle" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Bize Ulaşın">
+                                </div>
+
+                                <!-- Alan Etiketleri -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Ad Soyad Etiketi</label>
+                                        <input type="text" id="nameLabel" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Ad Soyad">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">E-posta Etiketi</label>
+                                        <input type="text" id="emailLabel" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="E-posta">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Konu Etiketi</label>
+                                        <input type="text" id="subjectLabel" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Konu">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Mesaj Etiketi</label>
+                                        <input type="text" id="messageLabel" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Mesaj">
+                                    </div>
+                                </div>
+
+                                <!-- Placeholder Metinleri -->
+                                <div class="border-t pt-4">
+                                    <h4 class="font-medium text-gray-800 mb-3">Placeholder Metinleri</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Ad Soyad Placeholder</label>
+                                            <input type="text" id="namePlaceholder" 
+                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="Adınız ve soyadınız">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">E-posta Placeholder</label>
+                                            <input type="text" id="emailPlaceholder" 
+                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="E-posta adresiniz">
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Konu Placeholder</label>
+                                            <input type="text" id="subjectPlaceholder" 
+                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="Mesajınızın konusu">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Mesaj Placeholder</label>
+                                            <input type="text" id="messagePlaceholder" 
+                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="Mesajınızı buraya yazın">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Buton Ayarları -->
+                                <div class="border-t pt-4">
+                                    <h4 class="font-medium text-gray-800 mb-3">Buton Ayarları</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">Gönder Butonu Metni</label>
+                                            <input type="text" id="submitButtonText" 
+                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="Mesaj Gönder">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">İptal Butonu Metni</label>
+                                            <input type="text" id="cancelButtonText" 
+                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="İptal">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="mt-4 text-sm text-gray-600">
+                                <p><i class="fas fa-info-circle mr-1"></i> Bu ayarlar sitedeki iletişim formunda görüntülenir.</p>
+                            </div>
+                        </div>
+
+                        <!-- Form Önizlemesi -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-semibold mb-4">Form Önizlemesi</h3>
+                            <div id="contactFormPreview" class="space-y-4">
+                                <!-- Form önizlemesi buraya dinamik olarak yüklenecek -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chatbot Section -->
+            <div id="chatbot-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                                <i class="fas fa-robot mr-2"></i>AI Chatbot Ayarları
+                            </h2>
+                            <p class="text-gray-600">Eylül AI asistanını özelleştirin ve yönetin</p>
+                        </div>
+                        <button onclick="testChatbot()" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all font-semibold">
+                            <i class="fas fa-vial mr-2"></i>Test Et
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-2xl shadow-xl p-8 space-y-6">
+                    <!-- Chatbot Aktif/Pasif -->
+                    <div class="bg-white rounded-xl p-6 shadow-md">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-1">
+                                    <i class="fas fa-power-off text-purple-600 mr-2"></i>Chatbot Durumu
+                                </h3>
+                                <p class="text-sm text-gray-600">Sitede AI asistanını göster veya gizle</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="chatbotEnabled" checked class="sr-only peer" onchange="saveChatbotSettings()">
+                                <div class="w-16 h-8 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-8 peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-7 after:w-7 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-600 peer-checked:to-purple-600"></div>
+                                <span class="ml-3 text-sm font-medium text-gray-900">Aktif</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Chatbot Adı -->
+                    <div class="bg-white rounded-xl p-6 shadow-md">
+                        <label class="block text-sm font-semibold text-gray-800 mb-3">
+                            <i class="fas fa-user-circle text-purple-600 mr-2"></i>Chatbot İsmi
+                        </label>
+                        <input type="text" id="chatbotName" value="Eylül" 
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg font-medium"
+                               onchange="saveChatbotSettings()" placeholder="Örn: Eylül, Asistan, Yardımcı">
+                        <p class="text-sm text-gray-500 mt-2">Kullanıcıların göreceği chatbot ismi</p>
+                    </div>
+
+                    <!-- Chatbot Profil Fotoğrafı -->
+                    <div class="bg-white rounded-xl p-6 shadow-md border-2 border-blue-200">
+                        <label class="block text-sm font-semibold text-gray-800 mb-3">
+                            <i class="fas fa-image text-blue-600 mr-2"></i>Chatbot Profil Fotoğrafı
+                        </label>
+                        
+                        <div class="space-y-4">
+                            <!-- Seçenek: Emoji veya Logo -->
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-2">Görünüm Tipi</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="chatbotAvatarType" value="emoji" checked
+                                               class="mr-2 text-blue-600 focus:ring-blue-500" onchange="toggleChatbotAvatar()">
+                                        <span class="text-sm">Emoji/İkon</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="chatbotAvatarType" value="logo"
+                                               class="mr-2 text-blue-600 focus:ring-blue-500" onchange="toggleChatbotAvatar()">
+                                        <span class="text-sm">Şirket Logosu</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="chatbotAvatarType" value="custom"
+                                               class="mr-2 text-blue-600 focus:ring-blue-500" onchange="toggleChatbotAvatar()">
+                                        <span class="text-sm">Özel Görsel</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Emoji Seçimi -->
+                            <div id="chatbotEmojiSection">
+                                <label class="block text-xs text-gray-600 mb-2">Emoji/İkon Seçin</label>
+                                <div class="grid grid-cols-6 gap-3">
+                                    <button type="button" onclick="selectChatbotEmoji('🤖')" class="text-3xl p-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all">🤖</button>
+                                    <button type="button" onclick="selectChatbotEmoji('👨‍💼')" class="text-3xl p-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all">👨‍💼</button>
+                                    <button type="button" onclick="selectChatbotEmoji('👩‍💼')" class="text-3xl p-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all">👩‍💼</button>
+                                    <button type="button" onclick="selectChatbotEmoji('💼')" class="text-3xl p-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all">💼</button>
+                                    <button type="button" onclick="selectChatbotEmoji('🎯')" class="text-3xl p-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all">🎯</button>
+                                    <button type="button" onclick="selectChatbotEmoji('⚡')" class="text-3xl p-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all">⚡</button>
+                                </div>
+                                <input type="text" id="chatbotEmoji" value="🤖" 
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg mt-2 text-center text-2xl"
+                                       placeholder="🤖" maxlength="2">
+                            </div>
+
+                            <!-- Logo Kullanımı (Şirket Logosundan) -->
+                            <div id="chatbotLogoSection" class="hidden">
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <p class="text-sm text-blue-800 mb-2">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        Site Ayarları'ndan yüklediğiniz şirket logosu otomatik kullanılacak
+                                    </p>
+                                    <div id="chatbotLogoPreview" class="flex items-center justify-center bg-white rounded p-4 mt-2">
+                                        <img id="chatbotLogoImg" src="" alt="Şirket Logosu" class="max-h-16 max-w-full object-contain hidden">
+                                        <span id="chatbotLogoPlaceholder" class="text-gray-400 text-sm">Logo yüklenmemiş</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Özel Görsel Yükleme -->
+                            <div id="chatbotCustomSection" class="hidden">
+                                <label class="block text-xs text-gray-600 mb-2">Özel Profil Görseli</label>
+                                <div class="space-y-3">
+                                    <div class="flex items-center space-x-4">
+                                        <input type="file" id="chatbotAvatarFile" accept="image/*" 
+                                               class="hidden" onchange="handleChatbotAvatarUpload(event)">
+                                        <button type="button" onclick="document.getElementById('chatbotAvatarFile').click()" 
+                                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            <i class="fas fa-upload mr-2"></i>Görsel Yükle
+                                        </button>
+                                        <span id="chatbotAvatarFileName" class="text-sm text-gray-600">Dosya seçilmedi</span>
+                                    </div>
+                                    
+                                    <!-- Görsel URL Alternatifi -->
+                                    <div>
+                                        <label class="block text-xs text-gray-600 mb-1">Ya da Görsel URL'si</label>
+                                        <input type="url" id="chatbotAvatarUrl" value="" 
+                                               class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                               placeholder="https://example.com/avatar.png" onchange="updateChatbotAvatarPreview()">
+                                    </div>
+                                    
+                                    <!-- Görsel Önizleme -->
+                                    <div class="bg-white border rounded p-3">
+                                        <div class="text-xs text-gray-500 mb-2">Önizleme:</div>
+                                        <div class="flex items-center justify-center h-20 bg-gray-50 rounded">
+                                            <img id="chatbotAvatarPreview" src="" alt="Avatar Önizleme" 
+                                                 class="max-h-16 max-w-16 rounded-full object-cover hidden">
+                                            <span id="chatbotAvatarPlaceholder" class="text-gray-400 text-sm">Görsel yüklenmedi</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-2">PNG, JPG formatlarında, max 2MB. Yuvarlak görünecektir.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Karşılama Mesajları -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- İlk Ziyaret Mesajı -->
+                        <div class="bg-white rounded-xl p-6 shadow-md">
+                            <label class="block text-sm font-semibold text-gray-800 mb-3">
+                                <i class="fas fa-comment-dots text-blue-600 mr-2"></i>Karşılama Mesajı (İlk Ziyaret)
+                            </label>
+                            <textarea id="chatbotGreeting" rows="4" 
+                                      class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                      onchange="saveChatbotSettings()" placeholder="Merhaba! Ben {name}, size nasıl yardımcı olabilirim?">Merhaba! 👋 Ben {name} - sizin dijital güvenlik süper kahramanınız! 🦸‍♀️ İSG dünyasında kaybolmak istemiyorsanız, doğru yerdesiniz!</textarea>
+                            <p class="text-sm text-gray-500 mt-2"><code class="bg-gray-100 px-2 py-1 rounded">{name}</code> yerine chatbot ismi otomatik yerleşir</p>
+                        </div>
+
+                        <!-- Dönen Kullanıcı Mesajı -->
+                        <div class="bg-white rounded-xl p-6 shadow-md">
+                            <label class="block text-sm font-semibold text-gray-800 mb-3">
+                                <i class="fas fa-redo text-green-600 mr-2"></i>Tekrar Hoş Geldiniz Mesajı
+                            </label>
+                            <textarea id="chatbotReturningMessage" rows="4" 
+                                      class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                      onchange="saveChatbotSettings()" placeholder="Tekrar hoş geldiniz! Size nasıl yardımcı olabilirim?">Tekrar hoş geldiniz! 🎉 Özlemişim sizi! Bugün hangi sorularınız var? ☕</textarea>
+                            <p class="text-sm text-gray-500 mt-2">Daha önce sohbet etmiş kullanıcılar için</p>
+                        </div>
+                    </div>
+
+                    <!-- API Key -->
+                    <div class="bg-white rounded-xl p-6 shadow-md border-2 border-purple-200">
+                        <label class="block text-sm font-semibold text-gray-800 mb-3">
+                            <i class="fas fa-key text-yellow-600 mr-2"></i>Google Gemini API Anahtarı
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="password" id="chatbotApiKey" value="AIzaSyBfRrMUE8yVSXoy6RKwDgEC5to8csj90n4" 
+                                   class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent font-mono text-sm"
+                                   onchange="saveChatbotSettings()" placeholder="AIzaSy...">
+                            <button type="button" onclick="toggleApiKeyVisibility()" 
+                                    class="px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors">
+                                <i class="fas fa-eye" id="apiKeyToggleIcon"></i>
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">
+                            <i class="fas fa-info-circle text-blue-500"></i> API anahtarınızı 
+                            <a href="https://makersuite.google.com/app/apikey" target="_blank" class="text-purple-600 hover:underline font-medium">
+                                Google AI Studio'dan <i class="fas fa-external-link-alt text-xs"></i>
+                            </a> alabilirsiniz
+                        </p>
+                    </div>
+
+                    <!-- Şirket Bilgileri -->
+                    <div class="bg-white rounded-xl p-6 shadow-md">
+                        <label class="block text-sm font-semibold text-gray-800 mb-3">
+                            <i class="fas fa-building text-blue-600 mr-2"></i>Şirket Bilgileri (Chatbot için)
+                        </label>
+                        <textarea id="chatbotCompanyInfo" rows="4" 
+                                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  onchange="saveChatbotSettings()" placeholder="Şirketiniz hakkında kısa bilgi...">NEXUS İSG - İş Sağlığı ve Güvenliği alanında Türkiye'nin en yenilikçi teknoloji şirketi. AI destekli akıllı risk analizi, 150+ müşteri, 5+ sektör, 15 yıl deneyim.</textarea>
+                        <p class="text-sm text-gray-500 mt-2">AI'ın şirketiniz hakkında kullanacağı bilgiler</p>
+                    </div>
+
+                    <!-- İletişim Bilgileri -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-xl p-6 shadow-md">
+                            <label class="block text-sm font-semibold text-gray-800 mb-3">
+                                <i class="fas fa-phone text-green-600 mr-2"></i>İletişim Telefonu
+                            </label>
+                            <input type="tel" id="chatbotPhone" value="+90 532 123 45 67" 
+                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                   onchange="saveChatbotSettings()" placeholder="+90 5XX XXX XX XX">
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-md">
+                            <label class="block text-sm font-semibold text-gray-800 mb-3">
+                                <i class="fas fa-envelope text-red-600 mr-2"></i>İletişim E-posta
+                            </label>
+                            <input type="email" id="chatbotEmail" value="info@nexusisg.com" 
+                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                   onchange="saveChatbotSettings()" placeholder="info@company.com">
+                        </div>
+                    </div>
+
+                    <!-- Hızlı Sorular -->
+                    <div class="bg-white rounded-xl p-6 shadow-md">
+                        <label class="block text-sm font-semibold text-gray-800 mb-3">
+                            <i class="fas fa-bolt text-yellow-500 mr-2"></i>Hızlı Sorular (3 adet, virgülle ayırın)
+                        </label>
+                        <input type="text" id="chatbotQuickQuestions" value="🤖 Yazılımlarınız neler?, 💰 Fiyatlar nasıl?, 🎯 Demo göster!" 
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                               onchange="saveChatbotSettings()" placeholder="Soru 1, Soru 2, Soru 3">
+                        <p class="text-sm text-gray-500 mt-2">Chatbot açıldığında gösterilecek hızlı soru butonları</p>
+                    </div>
+
+                    <!-- Kaydet Butonu -->
+                    <div class="flex items-center justify-between pt-4 border-t-2 border-gray-200">
+                        <button type="button" onclick="saveChatbotSettings()" 
+                                class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:shadow-2xl transition-all font-bold text-lg transform hover:scale-105">
+                            <i class="fas fa-robot mr-2"></i>Chatbot Ayarlarını Kaydet
+                        </button>
+                        <button type="button" onclick="testChatbot()" 
+                                class="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl hover:shadow-2xl transition-all font-bold text-lg transform hover:scale-105">
+                            <i class="fas fa-external-link-alt mr-2"></i>Sitede Test Et
+                        </button>
+                    </div>
+                    <div id="chatbotStatus" class="text-center text-lg font-medium"></div>
+                </div>
+            </div>
+
+            <!-- Messages Section -->
+            <div id="messages-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-2">
+                                <i class="fas fa-envelope-open-text mr-2"></i>İletişim Mesajları
+                            </h2>
+                            <p class="text-gray-600">Siteden gelen mesajları görüntüleyin ve yanıtlayın</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button onclick="loadMessages()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all">
+                                <i class="fas fa-sync-alt mr-2"></i>Yenile
+                            </button>
+                            <button onclick="clearAllMessages()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all">
+                                <i class="fas fa-trash-alt mr-2"></i>Tümünü Sil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mesaj Filtreleri ve Arama -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6 space-y-4">
+                    <!-- Arama Çubuğu -->
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" id="messageSearch" 
+                               class="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="İsim, e-posta, telefon, konu veya mesaj içeriğinde ara..."
+                               oninput="searchMessages(this.value)">
+                    </div>
+
+                    <!-- Tarih Filtresi -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-calendar-alt mr-2"></i>Başlangıç Tarihi
+                            </label>
+                            <input type="date" id="startDate" 
+                                   class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   onchange="filterByDate()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-calendar-alt mr-2"></i>Bitiş Tarihi
+                            </label>
+                            <input type="date" id="endDate" 
+                                   class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   onchange="filterByDate()">
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="clearDateFilter()" 
+                                    class="w-full px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition-all">
+                                <i class="fas fa-times mr-2"></i>Tarihleri Temizle
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Durum Filtreleri -->
+                    <div class="flex flex-wrap gap-3 pt-4 border-t-2 border-gray-100">
+                        <button onclick="filterMessages('all')" class="filter-btn active px-4 py-2 rounded-lg font-medium transition-all" data-filter="all">
+                            <i class="fas fa-inbox mr-2"></i>Tümü (<span id="totalCount">0</span>)
+                        </button>
+                        <button onclick="filterMessages('unread')" class="filter-btn px-4 py-2 rounded-lg font-medium transition-all" data-filter="unread">
+                            <i class="fas fa-envelope mr-2"></i>Okunmamış (<span id="unreadCountFilter">0</span>)
+                        </button>
+                        <button onclick="filterMessages('read')" class="filter-btn px-4 py-2 rounded-lg font-medium transition-all" data-filter="read">
+                            <i class="fas fa-envelope-open mr-2"></i>Okunmuş (<span id="readCount">0</span>)
+                        </button>
+                        <button onclick="filterMessages('replied')" class="filter-btn px-4 py-2 rounded-lg font-medium transition-all" data-filter="replied">
+                            <i class="fas fa-reply mr-2"></i>Yanıtlanan (<span id="repliedCount">0</span>)
+                        </button>
+                    </div>
+
+                    <!-- Aktif Filtre Bilgisi -->
+                    <div id="activeFilters" class="hidden bg-blue-50 border-l-4 border-blue-500 p-3 rounded">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm text-blue-800">
+                                <i class="fas fa-filter mr-2"></i><span id="filterInfo"></span>
+                            </p>
+                            <button onclick="clearAllFilters()" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                                <i class="fas fa-times mr-1"></i>Tüm Filtreleri Temizle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sonuç Sayısı ve Sıralama -->
+                <div class="flex items-center justify-between mb-4">
+                    <div id="resultCount" class="text-sm text-gray-600">
+                        <i class="fas fa-list mr-2"></i>Toplam <span id="resultNumber" class="font-bold text-blue-600">0</span> mesaj gösteriliyor
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-semibold text-gray-700">
+                            <i class="fas fa-sort mr-2"></i>Sıralama:
+                        </label>
+                        <select id="sortOrder" onchange="sortMessages(this.value)" 
+                                class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer bg-white">
+                            <option value="newest">Yeniden Eskiye</option>
+                            <option value="oldest">Eskiden Yeniye</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Mesajlar Listesi -->
+                <div id="messagesList" class="space-y-4">
+                    <!-- Mesajlar buraya dinamik olarak eklenecek -->
+                </div>
+
+                <!-- Boş Mesaj Durumu -->
+                <div id="emptyMessages" class="hidden bg-white rounded-lg shadow-md p-12 text-center">
+                    <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Henüz Mesaj Yok</h3>
+                    <p class="text-gray-500">Siteden gelen mesajlar burada görünecektir.</p>
+                </div>
+            </div>
+
+            <!-- Reply Modal -->
+            <div id="replyModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-2xl">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-2xl font-bold">
+                                <i class="fas fa-paper-plane mr-2"></i>Mesaj Yanıtla
+                            </h3>
+                            <button onclick="closeReplyModal()" class="text-white hover:bg-white/20 rounded-full p-2 transition-all">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-6 space-y-4">
+                        <!-- Alıcı Bilgileri -->
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-sm font-semibold text-gray-600">Alıcı:</label>
+                                    <p id="replyToName" class="text-gray-900 font-medium"></p>
+                                </div>
+                                <div>
+                                    <label class="text-sm font-semibold text-gray-600">E-posta:</label>
+                                    <p id="replyToEmail" class="text-gray-900 font-medium"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Orijinal Mesaj -->
+                        <div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4">
+                            <label class="text-sm font-semibold text-blue-900 mb-2 block">
+                                <i class="fas fa-quote-left mr-2"></i>Orijinal Mesaj:
+                            </label>
+                            <div id="originalMessage" class="text-gray-700 text-sm whitespace-pre-wrap"></div>
+                        </div>
+
+                        <!-- Yanıt Formu -->
+                        <form id="replyForm" class="space-y-4">
+                            <input type="hidden" id="replyMessageId">
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <i class="fas fa-tag mr-2"></i>Konu
+                                </label>
+                                <input type="text" id="replySubject" 
+                                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       placeholder="Örn: RE: Yazılım Teklifi" required>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <i class="fas fa-envelope-open-text mr-2"></i>Yanıtınız
+                                </label>
+                                <textarea id="replyMessage" rows="8" 
+                                          class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                          placeholder="Yanıtınızı buraya yazın..." required></textarea>
+                            </div>
+
+                            <div class="flex gap-3 pt-4">
+                                <button type="button" onclick="closeReplyModal()" 
+                                        class="flex-1 px-6 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-all">
+                                    <i class="fas fa-times mr-2"></i>İptal
+                                </button>
+                                <button type="submit" 
+                                        class="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-xl transition-all transform hover:scale-105">
+                                    <i class="fas fa-paper-plane mr-2"></i>Gönder
+                                </button>
+                            </div>
+                        </form>
+
+                        <div id="replyStatus" class="text-center text-sm font-medium"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div id="stats-section" class="content-section hidden fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">İstatistik Yönetimi</h2>
+                    <p class="text-gray-600">Ana sayfadaki istatistik kartlarını yönetin</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- İstatistik Formu -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">İstatistik Değerleri</h3>
+                            <button onclick="saveStatsInfo()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                <i class="fas fa-save mr-1"></i>Kaydet
+                            </button>
+                        </div>
+
+                        <form id="statsForm" class="space-y-6">
+                            <!-- Aktif Müşteri -->
+                            <div class="p-4 border border-gray-200 rounded-lg">
+                                <h4 class="font-medium text-gray-800 mb-3">Aktif Müşteri</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Değer</label>
+                                        <input type="text" id="customersValue" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="50+">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Başlık</label>
+                                        <input type="text" id="customersTitle" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Aktif Müşteri">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Memnuniyet Oranı -->
+                            <div class="p-4 border border-gray-200 rounded-lg">
+                                <h4 class="font-medium text-gray-800 mb-3">Memnuniyet Oranı</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Değer</label>
+                                        <input type="text" id="satisfactionValue" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="98%">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Başlık</label>
+                                        <input type="text" id="satisfactionTitle" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Memnuniyet Oranı">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Destek Hizmeti -->
+                            <div class="p-4 border border-gray-200 rounded-lg">
+                                <h4 class="font-medium text-gray-800 mb-3">Destek Hizmeti</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Değer</label>
+                                        <input type="text" id="supportValue" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="24/7">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Başlık</label>
+                                        <input type="text" id="supportTitle" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Destek Hizmeti">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Yıl Tecrübe -->
+                            <div class="p-4 border border-gray-200 rounded-lg">
+                                <h4 class="font-medium text-gray-800 mb-3">Yıl Tecrübe</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Değer</label>
+                                        <input type="text" id="experienceValue" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="10+">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Başlık</label>
+                                        <input type="text" id="experienceTitle" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Yıl Tecrübe">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p><i class="fas fa-info-circle mr-1"></i> Bu bilgiler ana sayfadaki istatistik bölümünde görüntülenir.</p>
+                        </div>
+                    </div>
+
+                    <!-- Önizleme -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Önizleme</h3>
+                            <button onclick="loadStatsPreview()" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition duration-200">
+                                <i class="fas fa-play mr-1"></i>Animasyonu Tekrarla
+                            </button>
+                        </div>
+                        <div id="statsPreview" class="space-y-4">
+                            <!-- Önizleme içeriği buraya dinamik olarak yüklenecek -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Settings Section -->
             <div id="settings-section" class="content-section hidden fade-in">
                 <div class="mb-6">
                     <h2 class="text-2xl font-bold text-gray-800 mb-2">Site Ayarları</h2>
-                    <p class="text-gray-600">Genel site ayarlarını düzenleyin</p>
+                    <p class="text-gray-600">Genel site ayarlarını düzenleyin ve değişiklikleri anında görün</p>
                 </div>
 
                 <form class="bg-white rounded-lg shadow p-6 space-y-6">
                     <!-- Şirket Bilgileri -->
                     <div>
-                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Şirket Bilgileri</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Şirket Adı</label>
-                                <input type="text" id="companyName" value="NEXUS İSG" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">
+                            <i class="fas fa-building text-blue-600 mr-2"></i>Şirket Bilgileri
+                        </h4>
+                        
+                        <!-- Şirket Adı/Logo Seçimi -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                            <h5 class="font-medium text-gray-800 mb-3">
+                                <i class="fas fa-signature text-blue-600 mr-2"></i>Şirket Adı Görünümü
+                            </h5>
+                            <div class="space-y-4">
+                                <!-- Seçenek: Metin veya Logo -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Görünüm Tipi</label>
+                                    <div class="flex space-x-4">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="companyDisplayType" value="text" checked
+                                                   class="mr-2 text-blue-600 focus:ring-blue-500" onchange="toggleCompanyDisplay()">
+                                            <span class="text-sm">Metin Olarak</span>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="companyDisplayType" value="logo"
+                                                   class="mr-2 text-blue-600 focus:ring-blue-500" onchange="toggleCompanyDisplay()">
+                                            <span class="text-sm">Logo/Görsel Olarak</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Metin Girişi -->
+                                <div id="companyTextSection">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Şirket Adı (Metin)</label>
+                                    <input type="text" id="companyName" value="NEXUS İSG" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                           onchange="updateSiteSettings()" onkeyup="debounceUpdate()" oninput="debounceUpdate()">
+                                    <small class="text-gray-500">Header ve footer'da metin olarak görünür</small>
+                                </div>
+                                
+                                <!-- Logo Yükleme -->
+                                <div id="companyLogoSection" class="hidden">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Şirket Logosu</label>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center space-x-4">
+                                            <input type="file" id="companyLogoFile" accept="image/*" 
+                                                   class="hidden" onchange="handleCompanyLogoUpload(event)">
+                                            <button type="button" onclick="document.getElementById('companyLogoFile').click()" 
+                                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                                <i class="fas fa-upload mr-2"></i>Logo Yükle
+                                            </button>
+                                            <span id="companyLogoFileName" class="text-sm text-gray-600">Dosya seçilmedi</span>
+                                        </div>
+                                        
+                                        <!-- Logo URL Alternatifi -->
+                                        <div>
+                                            <label class="block text-xs text-gray-600 mb-1">Ya da Logo URL'si</label>
+                                            <input type="url" id="companyLogoUrl" value="" 
+                                                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                   placeholder="https://example.com/company-logo.png" onchange="updateCompanyLogoPreview()">
+                                        </div>
+                                        
+                                        <!-- Logo Önizleme -->
+                                        <div class="bg-white border rounded p-3">
+                                            <div class="text-xs text-gray-500 mb-2">Önizleme:</div>
+                                            <div class="flex items-center justify-center h-16 bg-gray-50 rounded">
+                                                <img id="companyLogoPreview" src="" alt="Şirket Logo Önizleme" 
+                                                     class="max-h-12 max-w-full object-contain hidden">
+                                                <span id="companyLogoPlaceholder" class="text-gray-400 text-sm">Logo yüklenmedi</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <small class="text-gray-500">PNG, JPG, SVG formatlarında, max 2MB. Header ve footer'da logo olarak görünür.</small>
+                                </div>
                             </div>
+                        </div>
+                        
+                        <!-- Diğer Şirket Bilgileri -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">E-posta</label>
                                 <input type="email" id="companyEmail" value="info@nexusisg.com" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                       onchange="updateSiteSettings()" onkeyup="debounceUpdate()" oninput="debounceUpdate()">
+                                <small class="text-gray-500">İletişim bilgilerinde görünür</small>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Telefon</label>
                                 <input type="tel" id="companyPhone" value="+90 532 123 45 67" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                       onchange="updateSiteSettings()" onkeyup="debounceUpdate()" oninput="debounceUpdate()">
+                                <small class="text-gray-500">İletişim bilgilerinde görünür</small>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Adres</label>
                                 <input type="text" id="companyAddress" value="İstanbul, Türkiye" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                       onchange="updateSiteSettings()" onkeyup="debounceUpdate()" oninput="debounceUpdate()">
+                                <small class="text-gray-500">İletişim sayfasında görünür</small>
                             </div>
+                        </div>
+                        
+                        <!-- Kaydet Butonu -->
+                        <div class="mt-6 flex items-center justify-between">
+                            <button type="button" onclick="updateSiteSettings()" 
+                                    class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-semibold">
+                                <i class="fas fa-save mr-2"></i>Kaydet ve Uygula
+                            </button>
+                            <div id="saveStatus" class="text-sm text-gray-600"></div>
                         </div>
                     </div>
                     
                     <!-- Logo Ayarları -->
                     <div class="border-t pt-6">
-                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Logo Ayarları</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Logo URL</label>
-                                <input type="url" id="logoUrl" value="media/nexus-logo.svg" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                       placeholder="media/nexus-logo.svg">
-                                <small class="text-gray-500">Logo dosyasının yolu veya URL'si</small>
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">
+                            <i class="fas fa-image text-green-600 mr-2"></i>Logo Ayarları
+                        </h4>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <!-- Logo Yükleme -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Logo Yükle</label>
+                                    <div class="flex items-center space-x-4">
+                                        <input type="file" id="logoFileInput" accept="image/*" 
+                                               class="hidden" onchange="handleLogoUpload(event)">
+                                        <button type="button" onclick="document.getElementById('logoFileInput').click()" 
+                                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            <i class="fas fa-upload mr-2"></i>Dosya Seç
+                                        </button>
+                                        <span id="logoFileName" class="text-sm text-gray-600">Dosya seçilmedi</span>
+                                    </div>
+                                    <small class="text-gray-500">PNG, JPG, SVG formatlarında, max 2MB</small>
+                                </div>
+                                
+                                <!-- Logo URL (alternatif) -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Ya da Logo URL'si</label>
+                                    <input type="url" id="logoUrl" value="media/nexus-logo.svg" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                           placeholder="https://example.com/logo.png" onchange="updateLogoPreview()">
+                                    <small class="text-gray-500">Online logo URL'si girebilirsiniz</small>
+                                </div>
+                                
+                                <!-- Logo Boyutları -->
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Genişlik (px)</label>
+                                        <input type="number" id="logoWidth" value="120" min="50" max="300"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                               onchange="updateLogoSize()">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Yükseklik (px)</label>
+                                        <input type="number" id="logoHeight" value="40" min="20" max="150"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                               onchange="updateLogoSize()">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex items-center">
-                                <div class="bg-gray-50 p-4 rounded-lg border">
-                                    <p class="text-sm font-medium text-gray-700 mb-2">Mevcut Logo:</p>
-                                    <img id="logoPreview" src="media/nexus-logo.svg" alt="Logo Önizleme" class="h-16 w-16 object-contain">
+                            
+                            <!-- Logo Önizleme -->
+                            <div class="bg-gray-50 p-6 rounded-lg border">
+                                <h5 class="text-sm font-medium text-gray-700 mb-4">Logo Önizleme</h5>
+                                <div class="bg-white p-4 rounded border mb-4 text-center">
+                                    <img id="logoPreview" src="media/nexus-logo.svg" alt="Logo Önizleme" 
+                                         class="max-h-20 mx-auto object-contain" style="width: 120px; height: 40px;">
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" onclick="resetLogo()" 
+                                            class="text-sm text-red-600 hover:text-red-700">
+                                        <i class="fas fa-undo mr-1"></i>Varsayılan Logo'ya Dön
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="flex space-x-4">
-                        <button type="button" onclick="saveSettings()" 
-                                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                            <i class="fas fa-save mr-2"></i>Kaydet
-                        </button>
+                    <!-- Kaydet Butonu ve Durum -->
+                    <div class="border-t pt-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-4">
+                                <button type="button" onclick="saveSettings()" 
+                                        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                    <i class="fas fa-save mr-2"></i>Kaydet
+                                </button>
+                                <button type="button" onclick="resetAllSettings()" 
+                                        class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                                    <i class="fas fa-undo mr-2"></i>Varsayılana Dön
+                                </button>
+                            </div>
+                            <div id="settingsStatus" class="text-sm"></div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Değişiklikler otomatik olarak siteye yansıtılır. Manuel kaydetme isteğe bağlıdır.
+                        </p>
                     </div>
                 </form>
             </div>
@@ -560,19 +1977,19 @@
             <!-- Products Section -->
             <div id="products-section" class="content-section hidden fade-in">
                 <div class="mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Ürünler</h2>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Yazılımlar</h2>
                     <p class="text-gray-600">Yazılım ürünlerini yönetin</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow p-6">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-semibold">Ürün Listesi</h3>
+                        <h3 class="text-lg font-semibold">Yazılım Listesi</h3>
                         <div class="flex space-x-2">
                             <button onclick="loadDemoProducts()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm">
                                 <i class="fas fa-download mr-2"></i>Demo Veriler
                             </button>
                             <button onclick="addProduct()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                                <i class="fas fa-plus mr-2"></i>Yeni Ürün
+                                <i class="fas fa-plus mr-2"></i>Yeni Yazılım
                             </button>
                         </div>
                     </div>
@@ -645,7 +2062,7 @@
                 <div class="bg-white rounded-lg shadow p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-semibold">Referanslar</h3>
-                        <button onclick="console.log('Button clicked'); addReference();" class="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors">
+                        <button onclick="addReference();" class="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors">
                             <i class="fas fa-plus mr-2"></i>Referans Ekle
                         </button>
                     </div>
@@ -663,7 +2080,7 @@
     <div id="productModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 md:p-4">
         <div class="bg-white rounded-lg max-w-2xl w-full max-h-[95vh] overflow-hidden flex flex-col modal-compact">
             <div class="flex justify-between items-center p-4 border-b flex-shrink-0">
-                <h3 id="productModalTitle" class="text-lg font-semibold">Yeni Ürün</h3>
+                <h3 id="productModalTitle" class="text-lg font-semibold">Yeni Yazılım</h3>
                 <button onclick="closeProductModal()" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-times"></i>
                 </button>
@@ -674,7 +2091,7 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">
-                            <i class="fas fa-box mr-1"></i>Ürün Adı *
+                            <i class="fas fa-box mr-1"></i>Yazılım Adı *
                         </label>
                         <input type="text" id="productName" name="name" 
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm" 
@@ -1259,6 +2676,77 @@
         </div>
     </div>
 
+    <!-- Social Media Modal -->
+    <div id="socialModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white rounded-lg max-w-md w-full modal-compact">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 id="socialModalTitle" class="text-lg font-semibold">Sosyal Medya Hesabı Ekle</h3>
+                <button onclick="closeSocialModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="socialForm" onsubmit="saveSocial(event)" class="p-4 space-y-4">
+                <input type="hidden" id="socialId" name="id">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Platform</label>
+                    <select id="socialPlatform" name="platform" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                        <option value="">Platform Seçin</option>
+                        <option value="facebook">📘 Facebook</option>
+                        <option value="twitter">🐦 Twitter (X)</option>
+                        <option value="instagram">📷 Instagram</option>
+                        <option value="linkedin">💼 LinkedIn</option>
+                        <option value="youtube">📺 YouTube</option>
+                        <option value="tiktok">🎵 TikTok</option>
+                        <option value="whatsapp">💬 WhatsApp</option>
+                        <option value="telegram">✈️ Telegram</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Hesap Adı/Kullanıcı Adı</label>
+                    <input type="text" id="socialUsername" name="username" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" 
+                           placeholder="@nexusisg">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Profil URL'si</label>
+                    <input type="url" id="socialUrl" name="url" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" 
+                           placeholder="https://facebook.com/nexusisg">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Renk</label>
+                        <input type="color" id="socialColor" name="color" 
+                               class="w-full h-10 border border-gray-300 rounded-md cursor-pointer">
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input type="checkbox" id="socialActive" name="active" checked
+                               class="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="socialActive" class="text-sm text-gray-700">Aktif</label>
+                    </div>
+                </div>
+                
+                <div class="border-t pt-4 flex gap-3">
+                    <button type="button" onclick="closeSocialModal()" 
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition duration-200 text-sm">
+                        İptal
+                    </button>
+                    <button type="submit" 
+                            class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200 text-sm">
+                        <i class="fab fa-facebook mr-1"></i>Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div id="notification" class="fixed top-4 right-4 z-50 transform translate-x-96 transition-transform duration-300">
         <div class="bg-white border border-gray-200 rounded-lg shadow-lg p-4 min-w-64">
@@ -1275,6 +2763,1242 @@
     </div>
 
     <!-- CMS Script -->
+    <script src="cms-script.js"></script>
+    
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            // Initialize Charts
+            initializeCharts();
+        });
+        
+        // Chart.js Grafikleri
+        function initializeCharts() {
+            // İçerik Dağılımı Pie Chart
+            const ctxPie = document.getElementById('contentDistributionChart');
+            if (ctxPie) {
+                const data = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+                const servicesCount = (data.services || []).length;
+                const productsCount = (data.products || []).length;
+                const blogsCount = (data.blogPosts || []).length;
+                const teamCount = (data.teamMembers || []).length;
+                const referencesCount = (data.references || []).length;
+                
+                new Chart(ctxPie, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Hizmetler', 'Yazılımlar', 'Blog', 'Ekip', 'Referanslar'],
+                        datasets: [{
+                            data: [servicesCount, productsCount, blogsCount, teamCount, referencesCount],
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.8)',   // Blue
+                                'rgba(16, 185, 129, 0.8)',   // Green
+                                'rgba(139, 92, 246, 0.8)',   // Purple
+                                'rgba(245, 158, 11, 0.8)',   // Orange
+                                'rgba(236, 72, 153, 0.8)'    // Pink
+                            ],
+                            borderColor: [
+                                'rgba(59, 130, 246, 1)',
+                                'rgba(16, 185, 129, 1)',
+                                'rgba(139, 92, 246, 1)',
+                                'rgba(245, 158, 11, 1)',
+                                'rgba(236, 72, 153, 1)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                        return `${label}: ${value} (%${percentage})`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Son 7 Gün Aktivite Line Chart
+            const ctxLine = document.getElementById('activityChart');
+            if (ctxLine) {
+                // Son 7 günün tarihlerini oluştur
+                const labels = [];
+                const today = new Date();
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    labels.push(date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' }));
+                }
+                
+                // Simüle edilmiş aktivite verileri (gerçek implementasyonda localStorage'dan alınabilir)
+                const activityData = [5, 8, 12, 7, 15, 10, 18];
+                
+                new Chart(ctxLine, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Günlük Aktivite',
+                            data: activityData,
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleFont: {
+                                    size: 14
+                                },
+                                bodyFont: {
+                                    size: 13
+                                },
+                                padding: 12,
+                                cornerRadius: 8
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 5,
+                                    font: {
+                                        size: 11
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    }
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        // Grafikleri yeniden yükle fonksiyonu
+        window.refreshCharts = function() {
+            initializeCharts();
+        };
+        
+        // Sidebar Search Filter
+        window.filterSidebarMenu = function() {
+            const searchInput = document.getElementById('sidebarSearch').value.toLowerCase();
+            const menuItems = document.querySelectorAll('.sidebar-item');
+            
+            menuItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                const parentLi = item.closest('li');
+                
+                if (text.includes(searchInput)) {
+                    parentLi.style.display = '';
+                    item.style.opacity = '1';
+                } else {
+                    parentLi.style.display = 'none';
+                    item.style.opacity = '0.5';
+                }
+            });
+        };
+        
+        // Update Sidebar Counts
+        window.updateSidebarCounts = function() {
+            const data = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+            
+            // Update counts
+            const servicesCount = (data.services || []).length;
+            const productsCount = (data.products || []).length;
+            const blogCount = (data.blogPosts || []).length;
+            const teamCount = (data.teamMembers || []).length;
+            const referencesCount = (data.references || []).length;
+            
+            // Messages count
+            const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+            const totalMessages = messages.length;
+            const unreadMessages = messages.filter(m => m.status === 'unread').length;
+            
+            // Update DOM elements
+            const counters = {
+                'servicesCount': servicesCount,
+                'productsCount': productsCount,
+                'blogCount': blogCount,
+                'teamCount': teamCount,
+                'referencesCount': referencesCount
+            };
+            
+            Object.keys(counters).forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = counters[id];
+                }
+            });
+            
+            // Update dashboard stats
+            const totalServicesEl = document.getElementById('totalServices');
+            const totalProductsEl = document.getElementById('totalProducts');
+            const totalBlogPostsEl = document.getElementById('totalBlogPosts');
+            const totalTeamMembersEl = document.getElementById('totalTeamMembers');
+            const totalReferencesEl = document.getElementById('totalReferences');
+            const totalMessagesEl = document.getElementById('totalMessages');
+            const dashboardUnreadEl = document.getElementById('dashboardUnreadMessages');
+            const quickActionUnreadEl = document.getElementById('quickActionUnread');
+            
+            if (totalServicesEl) totalServicesEl.textContent = servicesCount;
+            if (totalProductsEl) totalProductsEl.textContent = productsCount;
+            if (totalBlogPostsEl) totalBlogPostsEl.textContent = blogCount;
+            if (totalTeamMembersEl) totalTeamMembersEl.textContent = teamCount;
+            if (totalReferencesEl) totalReferencesEl.textContent = referencesCount;
+            if (totalMessagesEl) totalMessagesEl.textContent = totalMessages;
+            if (dashboardUnreadEl) dashboardUnreadEl.textContent = unreadMessages;
+            if (quickActionUnreadEl) quickActionUnreadEl.textContent = unreadMessages;
+            
+            // Update recent messages in dashboard
+            updateRecentMessages(messages);
+            
+            // Update storage bar
+            updateStorageBar();
+        };
+        
+        // Update Recent Messages in Dashboard
+        window.updateRecentMessages = function(messages) {
+            const recentContainer = document.getElementById('recentMessages');
+            const inboxContainer = document.getElementById('inboxMessages');
+            const inboxCountEl = document.getElementById('inboxCount');
+            
+            // Sort messages by date (newest first) for dashboard
+            const sortedMessages = [...messages].sort((a, b) => {
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
+            });
+            
+            // Update inbox count
+            if (inboxCountEl) {
+                inboxCountEl.textContent = sortedMessages.length + ' mesaj';
+            }
+            
+            // Update Recent Messages (Son 3)
+            if (recentContainer) {
+                const recentMessages = sortedMessages.slice(0, 3);
+                
+                if (recentMessages.length === 0) {
+                    recentContainer.innerHTML = `
+                        <div class="flex items-center justify-center p-8 text-gray-400">
+                            <div class="text-center">
+                                <i class="fas fa-inbox text-4xl mb-2"></i>
+                                <p class="text-sm">Henüz mesaj yok</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    recentContainer.innerHTML = recentMessages.map(msg => {
+                        const date = new Date(msg.date);
+                        const timeAgo = getTimeAgo(date);
+                        const statusColor = msg.status === 'unread' ? 'bg-blue-50 border-l-4 border-blue-500' : 'bg-gray-50 border-l-4 border-gray-300';
+                        
+                        return `
+                            <div class="p-3 ${statusColor} rounded-lg cursor-pointer hover:shadow-md transition-all" onclick="showSection('messages')">
+                                <div class="flex items-start justify-between mb-2">
+                                    <p class="text-sm font-bold text-gray-800">${msg.name}</p>
+                                    ${msg.status === 'unread' ? '<span class="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">Yeni</span>' : ''}
+                                </div>
+                                <p class="text-xs text-gray-600 truncate mb-1">${msg.subject || msg.message.substring(0, 50) + '...'}</p>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-xs text-gray-400">${timeAgo}</p>
+                                    <i class="fas fa-arrow-right text-gray-400 text-xs"></i>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+            
+            // Update Inbox Messages (Tümü)
+            if (inboxContainer) {
+                if (sortedMessages.length === 0) {
+                    inboxContainer.innerHTML = `
+                        <div class="flex items-center justify-center p-12 text-gray-400">
+                            <div class="text-center">
+                                <i class="fas fa-inbox text-5xl mb-3"></i>
+                                <p class="text-sm font-medium">Gelen kutunuz boş</p>
+                                <p class="text-xs text-gray-400 mt-1">Yeni mesajlar burada görünecektir</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    inboxContainer.innerHTML = sortedMessages.map(msg => {
+                        const date = new Date(msg.date);
+                        const timeAgo = getTimeAgo(date);
+                        const isUnread = msg.status === 'unread';
+                        const bgColor = isUnread ? 'bg-blue-50 hover:bg-blue-100' : 'bg-white hover:bg-gray-50';
+                        const fontWeight = isUnread ? 'font-bold' : 'font-normal';
+                        
+                        return `
+                            <div class="flex items-center gap-3 p-3 ${bgColor} rounded-lg border border-gray-200 cursor-pointer transition-all" onclick="showSection('messages')">
+                                <div class="flex-shrink-0">
+                                    ${isUnread ? 
+                                        '<div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">' + msg.name.charAt(0).toUpperCase() + '</div>' :
+                                        '<div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 font-bold text-sm">' + msg.name.charAt(0).toUpperCase() + '</div>'
+                                    }
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="text-sm ${fontWeight} text-gray-800 truncate">${msg.name}</p>
+                                        <span class="text-xs text-gray-400 flex-shrink-0 ml-2">${timeAgo}</span>
+                                    </div>
+                                    ${msg.subject ? `<p class="text-xs ${fontWeight} text-gray-700 truncate mb-1">${msg.subject}</p>` : ''}
+                                    <p class="text-xs text-gray-500 truncate">${msg.message.substring(0, 60)}...</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    ${isUnread ? 
+                                        '<div class="w-3 h-3 bg-blue-500 rounded-full"></div>' : 
+                                        '<i class="fas fa-check text-gray-400 text-sm"></i>'
+                                    }
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        };
+        
+        // Update Storage Bar
+        window.updateStorageBar = function() {
+            try {
+                const data = JSON.stringify(localStorage);
+                const used = new Blob([data]).size;
+                const total = 5 * 1024 * 1024; // 5MB typical localStorage limit
+                const percentage = Math.min((used / total) * 100, 100);
+                
+                const storageBar = document.getElementById('storageBar');
+                const storagePercentage = document.getElementById('storagePercentage');
+                
+                if (storageBar) {
+                    storageBar.style.width = percentage + '%';
+                    
+                    // Change color based on usage
+                    if (percentage > 80) {
+                        storageBar.className = 'bg-gradient-to-r from-red-500 to-orange-500 h-2 rounded-full transition-all duration-500';
+                    } else if (percentage > 50) {
+                        storageBar.className = 'bg-gradient-to-r from-yellow-500 to-orange-500 h-2 rounded-full transition-all duration-500';
+                    } else {
+                        storageBar.className = 'bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500';
+                    }
+                }
+                
+                if (storagePercentage) {
+                    storagePercentage.textContent = percentage.toFixed(1) + '%';
+                }
+            } catch (e) {
+                // Storage calculation error
+            }
+        };
+        
+        // Initialize sidebar counts on load
+        setTimeout(() => {
+            updateSidebarCounts();
+            loadChatbotSettings();
+            loadMessages();
+        }, 500);
+        
+        // Update counts when data changes
+        window.addEventListener('storage', updateSidebarCounts);
+        
+        // Chatbot Settings Functions
+        window.saveChatbotSettings = function() {
+            // Get avatar type and data
+            const avatarType = document.querySelector('input[name="chatbotAvatarType"]:checked')?.value || 'emoji';
+            let avatarData = {};
+            
+            if (avatarType === 'emoji') {
+                avatarData.emoji = document.getElementById('chatbotEmoji').value || '🤖';
+            } else if (avatarType === 'logo') {
+                try {
+                    const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+                    avatarData.logo = cmsData.siteSettings?.companyLogo || cmsData.siteSettings?.logoUrl || '';
+                } catch (e) {
+                    console.error('Error loading company logo:', e);
+                    avatarData.logo = '';
+                }
+            } else if (avatarType === 'custom') {
+                const preview = document.getElementById('chatbotAvatarPreview');
+                
+                if (preview && preview.src && !preview.classList.contains('hidden')) {
+                    avatarData.customAvatar = preview.src;
+                } else {
+                    const urlInput = document.getElementById('chatbotAvatarUrl');
+                    if (urlInput && urlInput.value) {
+                        avatarData.customAvatar = urlInput.value;
+                    }
+                }
+            }
+            
+            const settings = {
+                enabled: document.getElementById('chatbotEnabled').checked,
+                name: document.getElementById('chatbotName').value,
+                greeting: document.getElementById('chatbotGreeting').value,
+                returningMessage: document.getElementById('chatbotReturningMessage').value,
+                apiKey: document.getElementById('chatbotApiKey').value,
+                companyInfo: document.getElementById('chatbotCompanyInfo').value,
+                phone: document.getElementById('chatbotPhone').value,
+                email: document.getElementById('chatbotEmail').value,
+                quickQuestions: document.getElementById('chatbotQuickQuestions').value,
+                avatarType: avatarType,
+                ...avatarData
+            };
+
+            try {
+                localStorage.setItem('nexus-chatbot-settings', JSON.stringify(settings));
+                
+                // Trigger update event
+                window.dispatchEvent(new CustomEvent('chatbotSettingsUpdated', { detail: settings }));
+                
+                const status = document.getElementById('chatbotStatus');
+                status.innerHTML = '<span class="text-green-600"><i class="fas fa-check-circle mr-1"></i>Chatbot ayarları kaydedildi ve uygulandı!</span>';
+                setTimeout(() => { status.innerHTML = ''; }, 3000);
+                
+                console.log('✅ Chatbot settings saved:', settings);
+            } catch (e) {
+                console.error('Failed to save chatbot settings:', e);
+                alert('Chatbot ayarları kaydedilemedi!');
+            }
+        };
+
+        window.loadChatbotSettings = function() {
+            try {
+                const saved = localStorage.getItem('nexus-chatbot-settings');
+                if (saved) {
+                    const settings = JSON.parse(saved);
+                    
+                    document.getElementById('chatbotEnabled').checked = settings.enabled !== false;
+                    document.getElementById('chatbotName').value = settings.name || 'Eylül';
+                    document.getElementById('chatbotGreeting').value = settings.greeting || 'Merhaba! 👋 Ben {name} - sizin dijital güvenlik süper kahramanınız!';
+                    document.getElementById('chatbotReturningMessage').value = settings.returningMessage || 'Tekrar hoş geldiniz! 🎉';
+                    document.getElementById('chatbotApiKey').value = settings.apiKey || 'AIzaSyBfRrMUE8yVSXoy6RKwDgEC5to8csj90n4';
+                    document.getElementById('chatbotCompanyInfo').value = settings.companyInfo || 'NEXUS İSG - İş Sağlığı ve Güvenliği alanında lider teknoloji şirketi.';
+                    document.getElementById('chatbotPhone').value = settings.phone || '+90 532 123 45 67';
+                    document.getElementById('chatbotEmail').value = settings.email || 'info@nexusisg.com';
+                    document.getElementById('chatbotQuickQuestions').value = settings.quickQuestions || '🤖 Yazılımlarınız neler?, 💰 Fiyatlar nasıl?, 🎯 Demo göster!';
+                    
+                    // Load avatar settings
+                    const avatarType = settings.avatarType || 'emoji';
+                    const avatarRadio = document.querySelector(`input[name="chatbotAvatarType"][value="${avatarType}"]`);
+                    if (avatarRadio) {
+                        avatarRadio.checked = true;
+                        toggleChatbotAvatar();
+                    }
+                    
+                    // Load emoji
+                    if (avatarType === 'emoji' && settings.emoji) {
+                        document.getElementById('chatbotEmoji').value = settings.emoji;
+                    }
+                    
+                    // Load custom avatar
+                    if (avatarType === 'custom' && settings.customAvatar) {
+                        updateChatbotAvatarPreview(settings.customAvatar);
+                    }
+                    
+                    console.log('📂 Chatbot settings loaded:', settings);
+                }
+            } catch (e) {
+                console.error('Failed to load chatbot settings:', e);
+            }
+        };
+
+        window.toggleApiKeyVisibility = function() {
+            const input = document.getElementById('chatbotApiKey');
+            const icon = document.getElementById('apiKeyToggleIcon');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        };
+
+        window.testChatbot = function() {
+            // Save settings first
+            saveChatbotSettings();
+            
+            // Open index.html in new tab
+            window.open('index.html', '_blank');
+            
+            const status = document.getElementById('chatbotStatus');
+            status.innerHTML = '<span class="text-blue-600"><i class="fas fa-external-link-alt mr-1"></i>Site yeni sekmede açıldı, sağ alttaki chatbot butonuna tıklayın!</span>';
+            setTimeout(() => { status.innerHTML = ''; }, 5000);
+        };
+
+        // Toggle Chatbot Avatar Type
+        window.toggleChatbotAvatar = function() {
+            const avatarType = document.querySelector('input[name="chatbotAvatarType"]:checked').value;
+            const emojiSection = document.getElementById('chatbotEmojiSection');
+            const logoSection = document.getElementById('chatbotLogoSection');
+            const customSection = document.getElementById('chatbotCustomSection');
+            
+            emojiSection.classList.add('hidden');
+            logoSection.classList.add('hidden');
+            customSection.classList.add('hidden');
+            
+            if (avatarType === 'emoji') {
+                emojiSection.classList.remove('hidden');
+            } else if (avatarType === 'logo') {
+                logoSection.classList.remove('hidden');
+                loadCompanyLogoForChatbot();
+            } else if (avatarType === 'custom') {
+                customSection.classList.remove('hidden');
+            }
+            
+            saveChatbotSettings();
+        };
+
+        // Messages Management Functions
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let dateFilter = { start: null, end: null };
+        let sortOrder = 'newest'; // 'newest' veya 'oldest'
+        
+        window.loadMessages = function() {
+            try {
+                const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+                displayMessages(messages, currentFilter);
+                updateMessageCounts(messages);
+                console.log('📧 Loaded', messages.length, 'messages');
+            } catch (e) {
+                console.error('Failed to load messages:', e);
+            }
+        };
+        
+        // Sort Messages Function
+        window.sortMessages = function(order) {
+            sortOrder = order;
+            const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+            displayMessages(messages, currentFilter);
+        };
+        
+        // Search Messages Function
+        window.searchMessages = function(query) {
+            searchQuery = query.toLowerCase().trim();
+            const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+            displayMessages(messages, currentFilter);
+            updateActiveFilters();
+        };
+        
+        // Date Filter Function
+        window.filterByDate = function() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            dateFilter.start = startDate ? new Date(startDate) : null;
+            dateFilter.end = endDate ? new Date(endDate) : null;
+            
+            // Set end date to end of day
+            if (dateFilter.end) {
+                dateFilter.end.setHours(23, 59, 59, 999);
+            }
+            
+            const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+            displayMessages(messages, currentFilter);
+            updateActiveFilters();
+        };
+        
+        // Clear Date Filter
+        window.clearDateFilter = function() {
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            dateFilter = { start: null, end: null };
+            
+            const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+            displayMessages(messages, currentFilter);
+            updateActiveFilters();
+        };
+        
+        // Clear All Filters
+        window.clearAllFilters = function() {
+            // Clear search
+            document.getElementById('messageSearch').value = '';
+            searchQuery = '';
+            
+            // Clear date filter
+            clearDateFilter();
+            
+            // Reset to 'all' filter
+            currentFilter = 'all';
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filter === 'all') {
+                    btn.classList.add('active');
+                }
+            });
+            
+            const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+            displayMessages(messages, 'all');
+            updateActiveFilters();
+        };
+        
+        // Update Active Filters Display
+        window.updateActiveFilters = function() {
+            const activeFiltersDiv = document.getElementById('activeFilters');
+            const filterInfo = document.getElementById('filterInfo');
+            
+            let filters = [];
+            
+            if (searchQuery) {
+                filters.push(`Arama: "${searchQuery}"`);
+            }
+            
+            if (dateFilter.start || dateFilter.end) {
+                let dateText = 'Tarih: ';
+                if (dateFilter.start && dateFilter.end) {
+                    dateText += `${dateFilter.start.toLocaleDateString('tr-TR')} - ${dateFilter.end.toLocaleDateString('tr-TR')}`;
+                } else if (dateFilter.start) {
+                    dateText += `${dateFilter.start.toLocaleDateString('tr-TR')} ve sonrası`;
+                } else if (dateFilter.end) {
+                    dateText += `${dateFilter.end.toLocaleDateString('tr-TR')} ve öncesi`;
+                }
+                filters.push(dateText);
+            }
+            
+            if (currentFilter !== 'all') {
+                const filterNames = {
+                    'unread': 'Okunmamış',
+                    'read': 'Okunmuş',
+                    'replied': 'Yanıtlanan'
+                };
+                filters.push(`Durum: ${filterNames[currentFilter]}`);
+            }
+            
+            if (filters.length > 0) {
+                filterInfo.textContent = filters.join(' | ');
+                activeFiltersDiv.classList.remove('hidden');
+            } else {
+                activeFiltersDiv.classList.add('hidden');
+            }
+        };
+        
+        window.displayMessages = function(messages, filter = 'all') {
+            const container = document.getElementById('messagesList');
+            const emptyState = document.getElementById('emptyMessages');
+            
+            let filteredMessages = messages;
+            
+            // Apply status filter
+            if (filter === 'unread') {
+                filteredMessages = messages.filter(m => m.status === 'unread');
+            } else if (filter === 'read') {
+                filteredMessages = messages.filter(m => m.status === 'read');
+            } else if (filter === 'replied') {
+                filteredMessages = messages.filter(m => m.replied === true);
+            }
+            
+            // Apply search filter
+            if (searchQuery) {
+                filteredMessages = filteredMessages.filter(msg => {
+                    const searchFields = [
+                        msg.name,
+                        msg.email,
+                        msg.phone || '',
+                        msg.subject || '',
+                        msg.message
+                    ].map(field => field.toLowerCase());
+                    
+                    return searchFields.some(field => field.includes(searchQuery));
+                });
+            }
+            
+            // Apply date filter
+            if (dateFilter.start || dateFilter.end) {
+                filteredMessages = filteredMessages.filter(msg => {
+                    const msgDate = new Date(msg.date);
+                    
+                    if (dateFilter.start && msgDate < dateFilter.start) {
+                        return false;
+                    }
+                    
+                    if (dateFilter.end && msgDate > dateFilter.end) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+            }
+            
+            // Apply sorting
+            filteredMessages.sort((a, b) => {
+                const dateA = new Date(a.date).getTime();
+                const dateB = new Date(b.date).getTime();
+                
+                if (sortOrder === 'newest') {
+                    return dateB - dateA; // Yeniden eskiye
+                } else {
+                    return dateA - dateB; // Eskiden yeniye
+                }
+            });
+            
+            if (filteredMessages.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                document.getElementById('resultCount').classList.add('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+            // Update result count
+            const resultCountEl = document.getElementById('resultCount');
+            const resultNumberEl = document.getElementById('resultNumber');
+            if (resultCountEl && resultNumberEl) {
+                resultNumberEl.textContent = filteredMessages.length;
+                resultCountEl.classList.remove('hidden');
+            }
+            
+            container.innerHTML = filteredMessages.map(msg => {
+                const date = new Date(msg.date);
+                const timeAgo = getTimeAgo(date);
+                const statusClass = msg.status === 'unread' ? 'unread' : msg.replied ? 'replied' : 'read';
+                const statusIcon = msg.status === 'unread' ? 'fa-envelope' : msg.replied ? 'fa-check-double' : 'fa-envelope-open';
+                const statusColor = msg.status === 'unread' ? 'text-blue-600' : msg.replied ? 'text-green-600' : 'text-gray-600';
+                
+                return `
+                    <div class="message-card ${statusClass} bg-white rounded-xl shadow-md p-6" data-id="${msg.id}">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-red-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                    ${msg.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">${msg.name}</h3>
+                                    <div class="flex items-center gap-2 text-sm text-gray-500">
+                                        <i class="fas fa-clock"></i>
+                                        <span>${timeAgo}</span>
+                                        <i class="fas ${statusIcon} ${statusColor} ml-2"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                ${msg.status === 'unread' ? `
+                                    <button onclick="markAsRead(${msg.id})" class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-all" title="Okundu olarak işaretle">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                ` : `
+                                    <button onclick="markAsUnread(${msg.id})" class="text-gray-600 hover:bg-gray-50 p-2 rounded-lg transition-all" title="Okunmadı olarak işaretle">
+                                        <i class="fas fa-envelope"></i>
+                                    </button>
+                                `}
+                                <button onclick="deleteMessage(${msg.id})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg transition-all" title="Sil">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                <i class="fas fa-envelope text-pink-500"></i>
+                                <a href="mailto:${msg.email}" class="hover:text-pink-600 transition-colors">${msg.email}</a>
+                            </div>
+                            ${msg.phone ? `
+                                <div class="flex items-center gap-2 text-sm text-gray-600">
+                                    <i class="fas fa-phone text-green-500"></i>
+                                    <a href="tel:${msg.phone}" class="hover:text-green-600 transition-colors">${msg.phone}</a>
+                                </div>
+                            ` : ''}
+                            ${msg.subject ? `
+                                <div class="flex items-center gap-2 text-sm text-gray-600">
+                                    <i class="fas fa-tag text-blue-500"></i>
+                                    <span class="font-semibold text-gray-700">${msg.subject}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                            <p class="text-gray-700 whitespace-pre-wrap">${msg.message}</p>
+                        </div>
+                        
+                        <div class="flex flex-wrap items-center gap-3">
+                            <button onclick="openReplyModal(${msg.id})" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all font-semibold">
+                                <i class="fas fa-paper-plane mr-2"></i>CMS'ten Yanıtla
+                            </button>
+                            <button onclick="replyToMessage(${msg.id}, '${msg.email}')" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-all font-semibold">
+                                <i class="fas fa-envelope mr-2"></i>E-posta İstemcisi
+                            </button>
+                            <span class="text-xs text-gray-400 ml-auto">${date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        };
+        
+        window.updateMessageCounts = function(messages) {
+            const total = messages.length;
+            const unread = messages.filter(m => m.status === 'unread').length;
+            const read = messages.filter(m => m.status === 'read').length;
+            const replied = messages.filter(m => m.replied === true).length;
+            
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('unreadCountFilter').textContent = unread;
+            document.getElementById('readCount').textContent = read;
+            document.getElementById('repliedCount').textContent = replied;
+            
+            // Update sidebar badge
+            const badge = document.getElementById('unreadCount');
+            if (unread > 0) {
+                badge.textContent = unread;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        };
+        
+        window.filterMessages = function(filter) {
+            currentFilter = filter;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+            
+            loadMessages();
+            updateActiveFilters();
+        };
+        
+        window.markAsRead = function(id) {
+            try {
+                const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+                const message = messages.find(m => m.id === id);
+                if (message) {
+                    message.status = 'read';
+                    localStorage.setItem('nexus-contact-messages', JSON.stringify(messages));
+                    loadMessages();
+                }
+            } catch (e) {
+                console.error('Failed to mark as read:', e);
+            }
+        };
+        
+        window.markAsUnread = function(id) {
+            try {
+                const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+                const message = messages.find(m => m.id === id);
+                if (message) {
+                    message.status = 'unread';
+                    localStorage.setItem('nexus-contact-messages', JSON.stringify(messages));
+                    loadMessages();
+                }
+            } catch (e) {
+                console.error('Failed to mark as unread:', e);
+            }
+        };
+        
+        window.deleteMessage = function(id) {
+            if (!confirm('Bu mesajı silmek istediğinizden emin misiniz?')) return;
+            
+            try {
+                let messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+                messages = messages.filter(m => m.id !== id);
+                localStorage.setItem('nexus-contact-messages', JSON.stringify(messages));
+                loadMessages();
+            } catch (e) {
+                console.error('Failed to delete message:', e);
+            }
+        };
+        
+        window.clearAllMessages = function() {
+            if (!confirm('TÜM mesajları silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!')) return;
+            
+            try {
+                localStorage.setItem('nexus-contact-messages', '[]');
+                loadMessages();
+            } catch (e) {
+                console.error('Failed to clear messages:', e);
+            }
+        };
+        
+        window.replyToMessage = function(id, email) {
+            try {
+                const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+                const message = messages.find(m => m.id === id);
+                if (message) {
+                    message.replied = true;
+                    message.status = 'read';
+                    localStorage.setItem('nexus-contact-messages', JSON.stringify(messages));
+                }
+                
+                // Open default email client
+                const subjectText = message.subject ? `RE: ${message.subject}` : 'NEXUS İSG - Mesajınıza Yanıt';
+                const subject = encodeURIComponent(subjectText);
+                const body = encodeURIComponent(`Merhaba ${message.name},\n\nMesajınız için teşekkür ederiz.\n\n---\nOrijinal Mesaj:\n${message.subject ? 'Konu: ' + message.subject + '\n' : ''}${message.message}\n\n`);
+                window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+                
+                loadMessages();
+            } catch (e) {
+                console.error('Failed to reply:', e);
+            }
+        };
+        
+        window.getTimeAgo = function(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + ' yıl önce';
+            
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + ' ay önce';
+            
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + ' gün önce';
+            
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + ' saat önce';
+            
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + ' dakika önce';
+            
+            return 'Az önce';
+        };
+        
+        // Listen for new messages from site
+        window.addEventListener('newContactMessage', function(e) {
+            console.log('📧 New message received:', e.detail);
+            if (document.getElementById('messages-section').classList.contains('active')) {
+                loadMessages();
+            }
+            updateMessageCounts(JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]'));
+        });
+
+        // Reply Modal Functions
+        window.openReplyModal = function(messageId) {
+            try {
+                const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+                const message = messages.find(m => m.id === messageId);
+                
+                if (!message) {
+                    alert('Mesaj bulunamadı!');
+                    return;
+                }
+                
+                // Fill modal with message details
+                document.getElementById('replyMessageId').value = messageId;
+                document.getElementById('replyToName').textContent = message.name;
+                document.getElementById('replyToEmail').textContent = message.email;
+                document.getElementById('originalMessage').textContent = message.message;
+                
+                // Set subject
+                const subjectPrefix = message.subject ? `RE: ${message.subject}` : 'NEXUS İSG - Mesajınıza Yanıt';
+                document.getElementById('replySubject').value = subjectPrefix;
+                
+                // Set default reply message
+                document.getElementById('replyMessage').value = `Merhaba ${message.name},\n\nMesajınız için teşekkür ederiz.\n\n`;
+                
+                // Show modal
+                document.getElementById('replyModal').classList.remove('hidden');
+                
+                // Mark as read
+                message.status = 'read';
+                localStorage.setItem('nexus-contact-messages', JSON.stringify(messages));
+                
+            } catch (e) {
+                console.error('Failed to open reply modal:', e);
+                alert('Yanıt modalı açılamadı!');
+            }
+        };
+        
+        window.closeReplyModal = function() {
+            document.getElementById('replyModal').classList.add('hidden');
+            document.getElementById('replyForm').reset();
+            document.getElementById('replyStatus').innerHTML = '';
+        };
+        
+        // Handle reply form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const replyForm = document.getElementById('replyForm');
+            if (replyForm) {
+                replyForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const messageId = parseInt(document.getElementById('replyMessageId').value);
+                    const subject = document.getElementById('replySubject').value;
+                    const replyText = document.getElementById('replyMessage').value;
+                    const statusDiv = document.getElementById('replyStatus');
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    
+                    // Show loading
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Gönderiliyor...';
+                    
+                    try {
+                        const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+                        const message = messages.find(m => m.id === messageId);
+                        
+                        if (message) {
+                            // In a real application, this would send an actual email via backend
+                            // For now, we'll simulate it and mark as replied
+                            
+                            message.replied = true;
+                            message.replySubject = subject;
+                            message.replyText = replyText;
+                            message.replyDate = new Date().toISOString();
+                            
+                            localStorage.setItem('nexus-contact-messages', JSON.stringify(messages));
+                            
+                            setTimeout(() => {
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Gönder';
+                                
+                                statusDiv.innerHTML = '<span class="text-green-600"><i class="fas fa-check-circle mr-2"></i>✅ Yanıt kaydedildi! (Backend entegrasyonu ile gerçek e-posta gönderilecek)</span>';
+                                
+                                setTimeout(() => {
+                                    closeReplyModal();
+                                    loadMessages();
+                                }, 2000);
+                            }, 1000);
+                        }
+                    } catch (e) {
+                        console.error('Failed to send reply:', e);
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Gönder';
+                        statusDiv.innerHTML = '<span class="text-red-600"><i class="fas fa-times-circle mr-2"></i>❌ Yanıt gönderilemedi!</span>';
+                    }
+                });
+            }
+        });
+
+        // Select Chatbot Emoji
+        window.selectChatbotEmoji = function(emoji) {
+            document.getElementById('chatbotEmoji').value = emoji;
+            saveChatbotSettings();
+        };
+
+        // Load Company Logo for Chatbot
+        window.loadCompanyLogoForChatbot = function() {
+            try {
+                const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+                const logoImg = document.getElementById('chatbotLogoImg');
+                const placeholder = document.getElementById('chatbotLogoPlaceholder');
+                
+                if (cmsData.siteSettings && cmsData.siteSettings.companyLogo) {
+                    logoImg.src = cmsData.siteSettings.companyLogo;
+                    logoImg.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                } else if (cmsData.siteSettings && cmsData.siteSettings.logoUrl) {
+                    logoImg.src = cmsData.siteSettings.logoUrl;
+                    logoImg.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                } else {
+                    logoImg.classList.add('hidden');
+                    placeholder.classList.remove('hidden');
+                }
+            } catch (e) {
+                console.error('Error loading company logo:', e);
+            }
+        };
+
+        // Handle Chatbot Avatar Upload
+        window.handleChatbotAvatarUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            document.getElementById('chatbotAvatarFileName').textContent = file.name;
+            
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Dosya boyutu 2MB\'dan küçük olmalıdır!');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                document.getElementById('chatbotAvatarUrl').value = '';
+                updateChatbotAvatarPreview(base64);
+                saveChatbotSettings();
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // Update Chatbot Avatar Preview
+        window.updateChatbotAvatarPreview = function(imageUrl) {
+            const preview = document.getElementById('chatbotAvatarPreview');
+            const placeholder = document.getElementById('chatbotAvatarPlaceholder');
+            const url = imageUrl || document.getElementById('chatbotAvatarUrl').value;
+            
+            if (url) {
+                preview.src = url;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            } else {
+                preview.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+            }
+            
+            if (!imageUrl) {
+                saveChatbotSettings();
+            }
+        };
+        
+        // Company Display Type Toggle
+        window.toggleCompanyDisplay = function() {
+            const displayType = document.querySelector('input[name="companyDisplayType"]:checked').value;
+            const textSection = document.getElementById('companyTextSection');
+            const logoSection = document.getElementById('companyLogoSection');
+            
+            if (displayType === 'text') {
+                textSection.classList.remove('hidden');
+                logoSection.classList.add('hidden');
+            } else {
+                textSection.classList.add('hidden');
+                logoSection.classList.remove('hidden');
+            }
+            
+            // Save preference
+            const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+            if (!cmsData.siteSettings) cmsData.siteSettings = {};
+            cmsData.siteSettings.companyDisplayType = displayType;
+            localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
+            
+            updateSiteSettings();
+        };
+        
+        // Handle Company Logo Upload
+        window.handleCompanyLogoUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validate file
+            if (!file.type.startsWith('image/')) {
+                alert('Lütfen geçerli bir görsel dosyası seçin!');
+                return;
+            }
+            
+            if (file.size > 2 * 1024 * 1024) { // 2MB
+                alert('Dosya boyutu 2MB\'dan küçük olmalıdır!');
+                return;
+            }
+            
+            // Show file name
+            document.getElementById('companyLogoFileName').textContent = file.name;
+            
+            // Read and convert to base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                
+                // Update preview
+                const preview = document.getElementById('companyLogoPreview');
+                const placeholder = document.getElementById('companyLogoPlaceholder');
+                preview.src = base64;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                
+                // Save to localStorage
+                const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+                if (!cmsData.siteSettings) cmsData.siteSettings = {};
+                cmsData.siteSettings.companyLogo = base64;
+                localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
+                
+                // Update site
+                updateSiteSettings();
+                
+                // Show success message
+                alert('✅ Şirket logosu başarıyla yüklendi!');
+            };
+            reader.readAsDataURL(file);
+        };
+        
+        // Update Company Logo Preview from URL
+        window.updateCompanyLogoPreview = function() {
+            const url = document.getElementById('companyLogoUrl').value;
+            if (!url) return;
+            
+            const preview = document.getElementById('companyLogoPreview');
+            const placeholder = document.getElementById('companyLogoPlaceholder');
+            
+            // Test if URL is valid
+            const img = new Image();
+            img.onload = function() {
+                preview.src = url;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                
+                // Save to localStorage
+                const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+                if (!cmsData.siteSettings) cmsData.siteSettings = {};
+                cmsData.siteSettings.companyLogo = url;
+                localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
+                
+                updateSiteSettings();
+            };
+            img.onerror = function() {
+                alert('⚠️ Geçersiz görsel URL\'si!');
+            };
+            img.src = url;
+        };
+        
+        // Load saved company display settings
+        setTimeout(() => {
+            const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+            if (cmsData.siteSettings?.companyDisplayType) {
+                const radio = document.querySelector(`input[name="companyDisplayType"][value="${cmsData.siteSettings.companyDisplayType}"]`);
+                if (radio) {
+                    radio.checked = true;
+                    toggleCompanyDisplay();
+                }
+            }
+            
+            if (cmsData.siteSettings?.companyLogo) {
+                const preview = document.getElementById('companyLogoPreview');
+                const placeholder = document.getElementById('companyLogoPlaceholder');
+                preview.src = cmsData.siteSettings.companyLogo;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                
+                // Set URL field if it's a URL
+                if (cmsData.siteSettings.companyLogo.startsWith('http')) {
+                    document.getElementById('companyLogoUrl').value = cmsData.siteSettings.companyLogo;
+                }
+            }
+        }, 500);
+    </script>
+    
+    <!-- CMS Script - TÜM FONKSİYONLAR BURADA -->
     <script src="cms-script.js"></script>
 </body>
 </html>

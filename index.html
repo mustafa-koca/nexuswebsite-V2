@@ -34,6 +34,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* Prevent horizontal overflow */
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
         /* Hero background with animation */
         .hero-bg {
             background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
@@ -56,6 +66,34 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
         
+        /* Team Slider Styles */
+        #team-container {
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        /* Navigation button hover effects */
+        #teamPrevBtn:hover, #teamNextBtn:hover {
+            background-color: #f8fafc;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Ensure navigation buttons are visible */
+        #teamPrevBtn, #teamNextBtn {
+            min-width: 48px;
+            min-height: 48px;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            position: absolute !important;
+        }
+        
+        /* Hide navigation buttons on mobile */
+        @media (max-width: 767px) {
+            #teamPrevBtn, #teamNextBtn {
+                display: none !important;
+            }
+        }
+        
         /* Section padding with responsive design */
         .section-padding {
             padding: 5rem 0;
@@ -64,6 +102,16 @@
         /* Smooth scrolling for better UX */
         html {
             scroll-behavior: smooth;
+        }
+        
+        /* Dropdown menu styles */
+        .group:hover .group-hover\:opacity-100 {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        .group:hover .group-hover\:visible {
+            visibility: visible !important;
         }
         
         /* Logo animation */
@@ -76,6 +124,65 @@
             to { transform: rotate(360deg); }
         }
         
+        /* Logo glow effect - parlak ışıltılı animasyon */
+        .logo-glow {
+            animation: logoGlow 3s ease-in-out infinite, logoPulse 2s ease-in-out infinite;
+            transition: transform 0.5s ease, filter 0.3s ease;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6)) 
+                        drop-shadow(0 0 40px rgba(59, 130, 246, 0.4))
+                        brightness(1.1);
+            }
+            50% {
+                filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.8)) 
+                        drop-shadow(0 0 60px rgba(59, 130, 246, 0.6))
+                        drop-shadow(0 0 80px rgba(96, 165, 250, 0.4))
+                        brightness(1.2);
+            }
+        }
+        
+        @keyframes logoPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes logoSpinHover {
+            from {
+                transform: scale(1.2) rotate(0deg);
+            }
+            to {
+                transform: scale(1.2) rotate(360deg);
+            }
+        }
+        
+        .logo-glow:hover {
+            animation: logoSpinHover 2s linear infinite, logoGlow 1s ease-in-out infinite !important;
+            filter: drop-shadow(0 0 35px rgba(59, 130, 246, 0.9)) 
+                    drop-shadow(0 0 70px rgba(59, 130, 246, 0.7))
+                    drop-shadow(0 0 100px rgba(96, 165, 250, 0.5))
+                    brightness(1.3) !important;
+        }
+        
+        /* Responsive logo sizes */
+        [data-logo] {
+            width: 60px !important;
+            height: 60px !important;
+        }
+        
+        @media (min-width: 768px) {
+            [data-logo] {
+                width: 90px !important;
+                height: 90px !important;
+            }
+        }
+        
         /* Stats counter animation */
         .stats-counter {
             animation: countUp 2s ease-out;
@@ -84,6 +191,26 @@
         @keyframes countUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Services title transition animation - Extra soft with only fade */
+        .title-transition {
+            animation: titleFade 1.5s ease-in-out;
+        }
+        
+        @keyframes titleFade {
+            0% { 
+                opacity: 0;
+            }
+            40% {
+                opacity: 0;
+            }
+            60% {
+                opacity: 0;
+            }
+            100% { 
+                opacity: 1;
+            }
         }
         
         /* Enhanced button styles */
@@ -100,10 +227,17 @@
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .section-padding {
-                padding: 3rem 0;
+                padding: 2rem 0;
             }
             .hero-bg {
                 background-size: 200% 200%;
+                padding-top: 5rem !important;
+            }
+            
+            /* Prevent text overflow */
+            h1, h2, h3, h4, h5, h6, p {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
             }
         }
         
@@ -369,26 +503,81 @@
                 padding: 6rem 0;
             }
         }
+        
+        /* Software Modal Styles */
+        #softwareModal .bg-white {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        #software-list .bg-white {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+        
+        #software-list .bg-white:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Software modal responsive */
+        @media (max-width: 768px) {
+            #softwareModal .max-w-6xl {
+                max-width: 95vw;
+                margin: 1rem;
+            }
+            
+            #software-list {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            #software-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center">
-                    <img src="media/nexus-logo.svg" alt="NEXUS İSG" class="h-16 w-16 mr-4 logo-spin cursor-pointer" data-logo>
-                    <span class="text-2xl font-bold text-gray-800" data-company-name>NEXUS İSG</span>
+            <div class="flex justify-between items-center py-1">
+                <div class="flex items-center gap-2 md:gap-4">
+                    <img src="media/nexus-logo.svg" alt="NEXUS İSG" class="logo-spin cursor-pointer logo-glow" data-logo style="width:60px; height:60px; filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6)) brightness(1.1); transition: all 0.3s ease;">
+                    <div class="text-lg md:text-2xl font-bold text-gray-800 whitespace-nowrap" data-company-name>NEXUS İSG</div>
                 </div>
                 
-                <div class="hidden md:flex space-x-8">
+                <div class="hidden md:flex space-x-8 items-center">
                     <a href="#anasayfa" class="text-blue-600 font-medium hover:text-blue-800 transition duration-300">Ana Sayfa</a>
-                    <a href="#hakkimizda" class="text-gray-700 hover:text-blue-600 transition duration-300">Hakkımızda</a>
-                    <a href="#hizmetler" class="text-gray-700 hover:text-blue-600 transition duration-300">Hizmetler</a>
-                    <a href="#urunler" class="text-gray-700 hover:text-blue-600 transition duration-300">Ürünler</a>
+                    
+                    <!-- Hakkımızda Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-blue-600 transition duration-300 flex items-center">
+                            Hakkımızda
+                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <a href="#hakkimizda" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-200">
+                                <i class="fas fa-info-circle mr-2"></i>Hakkımızda
+                            </a>
+                            <a href="#ekip" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-200">
+                                <i class="fas fa-users mr-2"></i>Ekibimiz
+                            </a>
+                            <a href="#referanslar" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-200">
+                                <i class="fas fa-star mr-2"></i>Referanslar
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <a href="#hizmetler" class="text-gray-700 hover:text-blue-600 transition duration-300">
+                        <span id="headerServicesLink" class="inline-block transition-all duration-500" style="min-width: 110px; text-align: center;">Hizmetler</span>
+                    </a>
+                    <a href="#urunler" class="text-gray-700 hover:text-blue-600 transition duration-300">Yazılımlar</a>
                     <a href="#blog" class="text-gray-700 hover:text-blue-600 transition duration-300">Blog</a>
-                    <a href="#ekip" class="text-gray-700 hover:text-blue-600 transition duration-300">Ekip</a>
-                    <a href="#referanslar" class="text-gray-700 hover:text-blue-600 transition duration-300">Referanslar</a>
                     <a href="#iletisim" class="text-gray-700 hover:text-blue-600 transition duration-300">İletişim</a>
                 </div>
                 
@@ -403,7 +592,7 @@
                         <a href="login.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-200">
                             <i class="fas fa-cog mr-2"></i>CMS Giriş
                         </a>
-                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-200">
+                        <a href="#" onclick="openSoftwareModal(); return false;" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-200">
                             <i class="fas fa-desktop mr-2"></i>Yazılımlarımıza Giriş
                         </a>
                     </div>
@@ -417,19 +606,36 @@
                 <div id="mobileMenu" class="hidden md:hidden absolute top-full left-0 w-full bg-white shadow-lg">
                     <div class="px-4 py-2 space-y-2">
                         <a href="#anasayfa" class="block py-2 text-blue-600 font-medium">Ana Sayfa</a>
-                        <a href="#hakkimizda" class="block py-2 text-gray-700 hover:text-blue-600">Hakkımızda</a>
+                        
+                        <!-- Mobile Hakkımızda Dropdown -->
+                        <div>
+                            <button onclick="toggleMobileDropdown('hakkimizdaDropdown')" class="w-full text-left py-2 text-gray-700 hover:text-blue-600 flex items-center justify-between">
+                                Hakkımızda
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
+                            <div id="hakkimizdaDropdown" class="hidden pl-4 space-y-1">
+                                <a href="#hakkimizda" class="block py-2 text-gray-600 hover:text-blue-600 text-sm">
+                                    <i class="fas fa-info-circle mr-2"></i>Hakkımızda
+                                </a>
+                                <a href="#ekip" class="block py-2 text-gray-600 hover:text-blue-600 text-sm">
+                                    <i class="fas fa-users mr-2"></i>Ekibimiz
+                                </a>
+                                <a href="#referanslar" class="block py-2 text-gray-600 hover:text-blue-600 text-sm">
+                                    <i class="fas fa-star mr-2"></i>Referanslar
+                                </a>
+                            </div>
+                        </div>
+                        
                         <a href="#hizmetler" class="block py-2 text-gray-700 hover:text-blue-600">Hizmetler</a>
-                        <a href="#urunler" class="block py-2 text-gray-700 hover:text-blue-600">Ürünler</a>
+                        <a href="#urunler" class="block py-2 text-gray-700 hover:text-blue-600">Yazılımlar</a>
                         <a href="#blog" class="block py-2 text-gray-700 hover:text-blue-600">Blog</a>
-                        <a href="#ekip" class="block py-2 text-gray-700 hover:text-blue-600">Ekip</a>
-                        <a href="#referanslar" class="block py-2 text-gray-700 hover:text-blue-600">Referanslar</a>
                         <a href="#iletisim" class="block py-2 text-gray-700 hover:text-blue-600">İletişim</a>
                         <!-- Mobile Login Options -->
                         <div class="border-t pt-2 mt-2">
                             <a href="login.html" class="block py-2 text-gray-700 hover:text-blue-600">
                                 <i class="fas fa-cog mr-2"></i>CMS Giriş
                             </a>
-                            <a href="#" class="block py-2 text-gray-700 hover:text-blue-600">
+                            <a href="#" onclick="openSoftwareModal(); return false;" class="block py-2 text-gray-700 hover:text-blue-600">
                                 <i class="fas fa-desktop mr-2"></i>Yazılımlarımıza Giriş
                             </a>
                         </div>
@@ -443,35 +649,35 @@
     <section id="anasayfa" class="hero-bg pt-20">
         <div class="max-w-7xl mx-auto px-4 section-padding">
             <div class="text-center text-white">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">İş Sağlığı ve Güvenliği'nde<br class="hidden md:block">Dijital Dönüşüm</h1>
-                <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto opacity-90">Modern işletmeler için kapsamlı İSG çözümleri. Yapay zeka destekli yazılımlarımız ve uzman ekibimizle güvenli çalışma ortamları oluşturuyoruz.</p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button onclick="scrollToSection('urunler')" class="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-                        <i class="fas fa-rocket mr-2"></i>Ürünlerimizi İncele
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight px-2" data-hero-title>İş Sağlığı ve Güvenliği'nde<br class="hidden sm:block">Dijital Dönüşüm</h1>
+                <p class="text-sm sm:text-base md:text-lg lg:text-xl mb-6 md:mb-8 max-w-3xl mx-auto opacity-90 px-4" data-hero-subtitle>Modern işletmeler için kapsamlı İSG çözümleri. Yapay zeka destekli yazılımlarımız ve uzman ekibimizle güvenli çalışma ortamları oluşturuyoruz.</p>
+                <div class="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
+                    <button onclick="scrollToSection('urunler')" class="bg-white text-blue-600 px-6 py-3 md:px-8 md:py-4 rounded-xl font-semibold hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-sm md:text-base">
+                        <i class="fas fa-rocket mr-2"></i>Yazılımlarımızı İncele
                     </button>
-                    <button onclick="openContactModal()" class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-blue-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <button onclick="openContactModal()" class="border-2 border-white text-white px-6 py-3 md:px-8 md:py-4 rounded-xl font-semibold hover:bg-white hover:text-blue-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-sm md:text-base">
                         <i class="fas fa-play mr-2"></i>Ücretsiz Demo
                     </button>
                 </div>
             </div>
             
             <!-- Stats -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 text-center text-white">
-                <div class="bg-white bg-opacity-10 rounded-xl p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
-                    <div class="text-2xl md:text-3xl font-bold mb-2 stats-counter" data-stats-customers>50+</div>
-                    <div class="text-sm opacity-80">Aktif Müşteri</div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mt-12 md:mt-16 text-center text-white px-2">
+                <div class="bg-white bg-opacity-10 rounded-xl p-4 md:p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                    <div class="text-xl md:text-2xl lg:text-3xl font-bold mb-2 stats-counter" data-stats-customers>50+</div>
+                    <div class="text-xs md:text-sm opacity-80" data-stats-customers-title>Aktif Müşteri</div>
                 </div>
-                <div class="bg-white bg-opacity-10 rounded-xl p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
-                    <div class="text-2xl md:text-3xl font-bold mb-2 stats-counter" data-stats-satisfaction>98%</div>
-                    <div class="text-sm opacity-80">Memnuniyet Oranı</div>
+                <div class="bg-white bg-opacity-10 rounded-xl p-4 md:p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                    <div class="text-xl md:text-2xl lg:text-3xl font-bold mb-2 stats-counter" data-stats-satisfaction>98%</div>
+                    <div class="text-xs md:text-sm opacity-80" data-stats-satisfaction-title>Memnuniyet Oranı</div>
                 </div>
-                <div class="bg-white bg-opacity-10 rounded-xl p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
-                    <div class="text-2xl md:text-3xl font-bold mb-2 stats-counter" data-stats-support>24/7</div>
-                    <div class="text-sm opacity-80">Destek Hizmeti</div>
+                <div class="bg-white bg-opacity-10 rounded-xl p-4 md:p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                    <div class="text-xl md:text-2xl lg:text-3xl font-bold mb-2 stats-counter" data-stats-support>24/7</div>
+                    <div class="text-xs md:text-sm opacity-80" data-stats-support-title>Destek Hizmeti</div>
                 </div>
-                <div class="bg-white bg-opacity-10 rounded-xl p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
-                    <div class="text-2xl md:text-3xl font-bold mb-2 stats-counter" data-stats-experience>10+</div>
-                    <div class="text-sm opacity-80">Yıl Tecrübe</div>
+                <div class="bg-white bg-opacity-10 rounded-xl p-4 md:p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                    <div class="text-xl md:text-2xl lg:text-3xl font-bold mb-2 stats-counter" data-stats-experience>10+</div>
+                    <div class="text-xs md:text-sm opacity-80" data-stats-experience-title>Yıl Tecrübe</div>
                 </div>
             </div>
         </div>
@@ -483,7 +689,7 @@
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Hakkımızda</h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto" id="about-description">
-                    NEXUS İSG olarak, Türkiye'de iş sağlığı ve güvenliği alanında teknoloji tabanlı çözümler sunan öncü bir firmayız. 
+                    <span data-company-name>NEXUS İSG</span> olarak, Türkiye'de iş sağlığı ve güvenliği alanında teknoloji tabanlı çözümler sunan öncü bir firmayız. 
                     2014 yılından beri sektöre hizmet veren ekibimiz, işletmelerin yasal yükümlülüklerini yerine getirmesine ve 
                     çalışan güvenliğini en üst düzeyde sağlamasına yardımcı olmaktadır.
                 </p>
@@ -521,7 +727,9 @@
     <section id="hizmetler" class="section-padding bg-gray-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Hizmetlerimiz</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    <span id="servicesTitle" class="inline-block transition-all duration-500" style="min-width: 250px; text-align: center;">Hizmetlerimiz</span>
+                </h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     İş sağlığı ve güvenliği alanında kapsamlı hizmet yelpazesi ile yanınızdayız.
                 </p>
@@ -537,7 +745,7 @@
     <section id="urunler" class="section-padding bg-white">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Yazılım Ürünlerimiz</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Yazılımlarımız</h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     İSG süreçlerinizi dijitalleştiren, verimliliği artıran yazılım çözümlerimizi keşfedin.
                 </p>
@@ -566,7 +774,7 @@
             <!-- Additional Features -->
             <div class="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8">
                 <div class="text-center mb-8">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Neden NEXUS İSG Yazılımları?</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Neden <span data-company-name>NEXUS İSG</span> Yazılımları?</h3>
                     <p class="text-gray-600">İSG yönetiminde fark yaratan özelliklerimiz</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-6">
@@ -726,16 +934,37 @@
 
     <!-- Team Section -->
     <section id="ekip" class="section-padding bg-white">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="max-w-7xl mx-auto px-4 md:px-16">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Ekibimiz</h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     Alanında uzman, deneyimli profesyonellerden oluşan ekibimizle tanışın.
                 </p>
+                <p class="text-sm text-gray-500 mt-2 md:hidden">
+                    <i class="fas fa-hand-point-left mr-1"></i>Kaydırmak için sola/sağa çekin
+                </p>
             </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8" id="team-container">
-                <!-- Team members will be loaded dynamically -->
+        <!-- Team Slider Container -->
+            <div class="relative overflow-visible">
+                <!-- Navigation Buttons -->
+                <button id="teamPrevBtn" class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-12 z-20 bg-white shadow-xl rounded-full p-3 hover:bg-gray-50 transition-colors border border-gray-200" style="display: flex; align-items: center; justify-content: center;">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button id="teamNextBtn" class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-12 z-20 bg-white shadow-xl rounded-full p-3 hover:bg-gray-50 transition-colors border border-gray-200" style="display: flex; align-items: center; justify-content: center;">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+                
+                <!-- Slider Track -->
+                <div class="overflow-hidden rounded-lg">
+                    <div class="flex transition-transform duration-500 ease-in-out gap-6" id="team-container">
+                        <!-- Team members will be loaded dynamically -->
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -790,7 +1019,7 @@
                             <div>
                                 <h4 class="font-semibold text-gray-900">İletişim</h4>
                                 <p class="text-gray-600" data-company-phone>+90 212 123 45 67</p>
-                                <p class="text-gray-600 text-sm">+90 532 123 45 67 (WhatsApp)</p>
+                                <p class="text-gray-600 text-sm" data-company-whatsapp>+90 532 123 45 67 (WhatsApp)</p>
                             </div>
                         </div>
                         
@@ -801,7 +1030,7 @@
                             <div>
                                 <h4 class="font-semibold text-gray-900">E-posta</h4>
                                 <p class="text-gray-600" data-company-email>info@nexusisg.com</p>
-                                <p class="text-gray-600 text-sm">destek@nexusisg.com</p>
+                                <p class="text-gray-600 text-sm" data-company-support-email>destek@nexusisg.com</p>
                             </div>
                         </div>
                     </div>
@@ -812,22 +1041,28 @@
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Ad Soyad</label>
-                                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <input type="text" id="contact-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">E-posta</label>
-                                <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <input type="email" id="contact-email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
                             </div>
                         </div>
                         
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Konu</label>
-                            <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Telefon</label>
+                                <input type="tel" id="contact-phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Konu</label>
+                                <input type="text" id="contact-subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Örn: Yazılım Teklifi">
+                            </div>
                         </div>
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Mesaj</label>
-                            <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required></textarea>
+                            <textarea rows="4" id="contact-message" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required></textarea>
                         </div>
                         
                         <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
@@ -842,16 +1077,16 @@
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="md:col-span-2">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
                     <div class="flex items-center mb-4">
-                        <img src="media/nexus-logo.svg" alt="NEXUS İSG" class="h-16 w-16 mr-3" data-logo>
-                        <span class="text-2xl font-bold" data-company-name>NEXUS İSG</span>
+                        <img src="media/nexus-logo.svg" alt="NEXUS İSG" data-logo-footer class="flex-shrink-0" style="width:40px; height:40px; object-fit:contain; margin:0; padding:0;">
+                        <span class="text-xl font-bold" data-company-name-footer style="margin:0; padding:0;">NEXUS İSG</span>
                     </div>
                     <p class="text-gray-300 mb-4">
                         İş sağlığı ve güvenliği alanında teknoloji odaklı çözümler sunan öncü şirket.
                     </p>
-                    <div class="flex space-x-4">
+                    <div id="social-media-links" class="flex space-x-4">
                         <a href="#" class="text-gray-300 hover:text-white transition duration-300">
                             <i class="fab fa-linkedin text-xl"></i>
                         </a>
@@ -869,7 +1104,7 @@
                     <ul class="space-y-2">
                         <li><a href="#hakkimizda" class="text-gray-300 hover:text-white transition duration-300">Hakkımızda</a></li>
                         <li><a href="#hizmetler" class="text-gray-300 hover:text-white transition duration-300">Hizmetler</a></li>
-                        <li><a href="#urunler" class="text-gray-300 hover:text-white transition duration-300">Ürünler</a></li>
+                        <li><a href="#urunler" class="text-gray-300 hover:text-white transition duration-300">Yazılımlar</a></li>
                         <li><a href="#blog" class="text-gray-300 hover:text-white transition duration-300">Blog</a></li>
                     </ul>
                 </div>
@@ -880,16 +1115,48 @@
                         <li data-company-address>Maslak, İstanbul</li>
                         <li data-company-phone>+90 212 123 45 67</li>
                         <li data-company-email>info@nexusisg.com</li>
-                        <li class="text-sm">Destek: destek@nexusisg.com</li>
+                        <li class="text-sm" data-company-support-email-footer>Destek: destek@nexusisg.com</li>
                     </ul>
                 </div>
             </div>
             
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
-                <p>&copy; 2025 <span data-company-name>NEXUS İSG</span>. Tüm hakları saklıdır.</p>
+                <p>&copy; 2025 <span data-company-name-footer>NEXUS İSG</span>. Tüm hakları saklıdır.</p>
             </div>
         </div>
     </footer>
+
+    <!-- Software List Modal -->
+    <div id="softwareModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900">Yazılımlarımıza Giriş</h3>
+                    <p class="text-gray-600 mt-1">İSG yazılım ürünlerimizi keşfedin ve giriş yapın</p>
+                </div>
+                <button onclick="closeSoftwareModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="software-list">
+                    <!-- Software items will be loaded dynamically -->
+                </div>
+                
+                <!-- Empty State -->
+                <div id="software-empty-state" class="hidden text-center py-16">
+                    <i class="fas fa-desktop text-gray-300 text-6xl mb-6"></i>
+                    <h3 class="text-xl font-bold text-gray-700 mb-3">Henüz Yazılım Eklenmemiş</h3>
+                    <p class="text-gray-500 mb-6">İSG yazılım ürünlerinizi CMS üzerinden kolayca ekleyebilirsiniz.</p>
+                    <a href="admin.html" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
+                        <i class="fas fa-plus mr-2"></i>
+                        İlk Yazılımı Ekle
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Contact Modal -->
     <div id="contactModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -955,15 +1222,122 @@
         </div>
     </div>
 
+    <!-- Test Software Data Script -->
+    <script src="test-software-data.js"></script>
+    
     <!-- Dynamic Content Script -->
     <script src="dynamic-content.js"></script>
 
     <script>
+        // OTOMATIK GÜNCELLENBİLİR POLLING SİSTEMİ
+        let lastSettings = null;
+        
+        function checkAndUpdateSettings() {
+            try {
+                const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+                const settings = cmsData.siteSettings;
+                
+                if (!settings) return;
+                
+                // Değişiklik var mı kontrol et
+                const currentSettings = JSON.stringify(settings);
+                if (currentSettings !== lastSettings) {
+                    lastSettings = currentSettings;
+                    
+                    // dynamic-content.js'deki fonksiyonu kullan
+                    if (typeof updateCompanyInfo === 'function') {
+                        updateCompanyInfo(settings);
+                    } else {
+                        // Fallback - basit text update
+                        if (settings.companyName) {
+                            document.querySelectorAll('[data-company-name], [data-company-name-footer]').forEach(el => {
+                                el.textContent = settings.companyName;
+                            });
+                        }
+                    }
+                    
+                    // Email güncelle
+                    if (settings.companyEmail) {
+                        document.querySelectorAll('[data-company-email]').forEach(el => {
+                            el.textContent = settings.companyEmail;
+                            if (el.tagName === 'A') el.href = 'mailto:' + settings.companyEmail;
+                        });
+                    }
+                    
+                    // Telefon güncelle
+                    if (settings.companyPhone) {
+                        document.querySelectorAll('[data-company-phone]').forEach(el => {
+                            el.textContent = settings.companyPhone;
+                            if (el.tagName === 'A') el.href = 'tel:' + settings.companyPhone;
+                        });
+                    }
+                    
+                    // Adres güncelle
+                    if (settings.companyAddress) {
+                        document.querySelectorAll('[data-company-address]').forEach(el => {
+                            el.textContent = settings.companyAddress;
+                        });
+                    }
+                    
+                    // Logo güncelle (sadece logoUrl varsa ve displayType text ise)
+                    if (settings.logoUrl && (!settings.companyDisplayType || settings.companyDisplayType === 'text')) {
+                        const logoWidth = settings.logoWidth ? parseInt(settings.logoWidth) : 60;
+                        const logoHeight = settings.logoHeight ? parseInt(settings.logoHeight) : 60;
+                        
+                        // Header logoları
+                        document.querySelectorAll('[data-logo]').forEach(el => {
+                            el.src = settings.logoUrl;
+                            el.style.width = logoWidth + 'px';
+                            el.style.height = logoHeight + 'px';
+                        });
+                        
+                        // Footer logoları (sabit 40px)
+                        document.querySelectorAll('[data-logo-footer]').forEach(el => {
+                            el.src = settings.logoUrl;
+                            el.style.width = '40px';
+                            el.style.height = '40px';
+                        });
+                    }
+                }
+            } catch (e) {
+                // Error handling
+            }
+        }
+        
+        // İlk yükleme
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAndUpdateSettings();
+            
+            // Her 500ms'de bir kontrol et (basit ve etkili)
+            setInterval(checkAndUpdateSettings, 500);
+        });
+        
+        // Storage event de dinle
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'nexus-isg-cms-data') {
+                checkAndUpdateSettings();
+            }
+        });
+        
         // Mobile menu toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', function() {
             const mobileMenu = document.getElementById('mobileMenu');
             mobileMenu.classList.toggle('hidden');
         });
+        
+        // Mobile dropdown toggle function
+        function toggleMobileDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            dropdown.classList.toggle('hidden');
+            
+            // Toggle chevron rotation
+            const button = dropdown.previousElementSibling;
+            const icon = button.querySelector('i.fa-chevron-down');
+            if (icon) {
+                icon.style.transform = dropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+                icon.style.transition = 'transform 0.3s ease';
+            }
+        }
 
         // Login dropdown toggle
         document.getElementById('loginBtn').addEventListener('click', function(e) {
@@ -1001,6 +1375,130 @@
             });
         });
 
+        // Software modal functions
+        function openSoftwareModal() {
+            document.getElementById('softwareModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            loadSoftwareList();
+        }
+
+        function closeSoftwareModal() {
+            document.getElementById('softwareModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Expose as globals for inline onclick handlers
+        window.openSoftwareModal = openSoftwareModal;
+        window.closeSoftwareModal = closeSoftwareModal;
+    // also expose list and redirect/contact helpers
+    window.loadSoftwareList = loadSoftwareList;
+    window.redirectToSoftware = redirectToSoftware;
+    window.openContactModal = openContactModal;
+    window.closeContactModal = closeContactModal;
+
+        // Load software list from CMS data
+        function loadSoftwareList() {
+            const softwareList = document.getElementById('software-list');
+            const emptyState = document.getElementById('software-empty-state');
+            
+            // Get products from localStorage
+            let products = [];
+            try {
+                const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+                products = cmsData.products || [];
+            } catch (e) {
+                products = [];
+            }
+
+            // Show empty state if no products
+            if (products.length === 0) {
+                softwareList.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            // Hide empty state and show products
+            emptyState.classList.add('hidden');
+            softwareList.classList.remove('hidden');
+
+            // Generate HTML for products
+            const softwareHTML = products.map((product, index) => {
+                // Determine product color and icon
+                const colors = ['blue', 'green', 'purple', 'indigo', 'pink', 'yellow'];
+                const productColor = product.color || colors[index % colors.length];
+                
+                let productIcon = product.icon || 'fas fa-cog';
+                if (product.name.toLowerCase().includes('pro')) productIcon = 'fas fa-crown';
+                if (product.name.toLowerCase().includes('kobi') || product.name.toLowerCase().includes('kobİ')) productIcon = 'fas fa-building';
+                if (product.name.toLowerCase().includes('mobile') || product.name.toLowerCase().includes('mobil')) productIcon = 'fas fa-mobile-alt';
+
+                return `
+                    <div class="bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                        <!-- Product Header -->
+                        <div class="bg-gradient-to-r from-${productColor}-500 to-${productColor}-600 p-4 text-white rounded-t-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="${productIcon} text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold">${product.name}</h3>
+                                    ${product.price ? `<p class="text-${productColor}-100 text-sm">${product.price}</p>` : ''}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product Content -->
+                        <div class="p-4">
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">${product.description}</p>
+                            
+                            ${product.target ? `
+                                <div class="bg-gray-50 rounded p-2 mb-4">
+                                    <p class="text-xs text-gray-700">
+                                        <i class="fas fa-users text-${productColor}-600 mr-1"></i>
+                                        ${product.target}
+                                    </p>
+                                </div>
+                            ` : ''}
+
+                            <!-- Action Buttons -->
+                            <div class="space-y-2">
+                                <button onclick="redirectToSoftware('${product.name}', '${product.loginUrl || '#'}')" 
+                                        class="w-full bg-${productColor}-600 text-white py-2 px-4 rounded-lg hover:bg-${productColor}-700 transition duration-300 flex items-center justify-center text-sm">
+                                    <i class="fas fa-sign-in-alt mr-2"></i>
+                                    Giriş Yap
+                                </button>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="openContactModal('${product.name}')" 
+                                            class="border border-${productColor}-600 text-${productColor}-600 py-1 px-3 rounded-lg hover:bg-${productColor}-50 transition duration-300 text-xs">
+                                        <i class="fas fa-play mr-1"></i>
+                                        Demo
+                                    </button>
+                                    <button onclick="showProductDetails(${product.id || index})" 
+                                            class="bg-gray-100 text-gray-700 py-1 px-3 rounded-lg hover:bg-gray-200 transition duration-300 text-xs">
+                                        <i class="fas fa-info mr-1"></i>
+                                        Detay
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            softwareList.innerHTML = softwareHTML;
+        }
+
+        // Redirect to software login
+        function redirectToSoftware(softwareName, loginUrl) {
+            if (loginUrl && loginUrl !== '#') {
+                // If a specific login URL is provided, redirect there
+                window.open(loginUrl, '_blank');
+            } else {
+                // Default behavior - could redirect to a general login page or show info
+                showNotification(`${softwareName} giriş sayfası yakında aktif olacak!`, 'info');
+            }
+        }
+
         // Contact modal functions
         function openContactModal(productName = '') {
             document.getElementById('contactModal').classList.remove('hidden');
@@ -1021,6 +1519,13 @@
         document.getElementById('contactModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeContactModal();
+            }
+        });
+
+        // Close software modal when clicking outside
+        document.getElementById('softwareModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSoftwareModal();
             }
         });
 
@@ -1144,17 +1649,49 @@
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
             
+            // Get form data
+            const formData = {
+                id: Date.now(),
+                name: document.getElementById('contact-name').value.trim(),
+                email: document.getElementById('contact-email').value.trim(),
+                phone: document.getElementById('contact-phone').value.trim(),
+                subject: document.getElementById('contact-subject').value.trim(),
+                message: document.getElementById('contact-message').value.trim(),
+                date: new Date().toISOString(),
+                status: 'unread',
+                replied: false
+            };
+            
+            // Validate
+            if (!formData.name || !formData.email || !formData.message) {
+                showNotification('Lütfen tüm zorunlu alanları doldurun!', 'error');
+                return;
+            }
+            
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Gönderiliyor...';
             
-            // Simulate API call
-            setTimeout(() => {
+            // Save to localStorage
+            try {
+                const messages = JSON.parse(localStorage.getItem('nexus-contact-messages') || '[]');
+                messages.unshift(formData); // Add to beginning
+                localStorage.setItem('nexus-contact-messages', JSON.stringify(messages));
+                
+                // Trigger event for CMS
+                window.dispatchEvent(new CustomEvent('newContactMessage', { detail: formData }));
+                
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    showNotification('✅ Mesajınız başarıyla alındı! En kısa sürede size dönüş yapacağız.', 'success');
+                    this.reset();
+                }, 1500);
+            } catch (e) {
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
-                showNotification('Mesajınız başarıyla alındı! En kısa sürede size dönüş yapacağız.', 'success');
-                this.reset();
-            }, 1500);
+                showNotification('❌ Mesaj gönderilemedi. Lütfen tekrar deneyin.', 'error');
+            }
         });
 
         // Navbar scroll effect
@@ -1171,6 +1708,7 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeContactModal();
+                closeSoftwareModal();
             }
         });
 
@@ -1243,6 +1781,56 @@
                 element.textContent = displayValue;
             }, stepTime);
         }
+        
+        // Services title animation - Toggle between "Hizmetlerimiz" and "Çözümlerimiz"
+        // Header services link animation - Toggle between "Hizmetler" and "Çözümlerimiz"
+        // Extra soft and subtle animation with longer intervals
+        document.addEventListener('DOMContentLoaded', function() {
+            const servicesTitle = document.getElementById('servicesTitle');
+            const headerServicesLink = document.getElementById('headerServicesLink');
+            
+            if (servicesTitle) {
+                const serviceTitles = ['Hizmetlerimiz', 'Çözümlerimiz'];
+                let serviceIndex = 0;
+                
+                setInterval(() => {
+                    // Add animation class
+                    servicesTitle.classList.add('title-transition');
+                    
+                    // Change text after longer fade-out
+                    setTimeout(() => {
+                        serviceIndex = (serviceIndex + 1) % serviceTitles.length;
+                        servicesTitle.textContent = serviceTitles[serviceIndex];
+                    }, 750); // Longer wait for fade-out
+                    
+                    // Remove animation class after animation completes
+                    setTimeout(() => {
+                        servicesTitle.classList.remove('title-transition');
+                    }, 1500);
+                }, 5000); // Change every 5 seconds (even longer interval)
+            }
+            
+            if (headerServicesLink) {
+                const headerTitles = ['Hizmetler', 'Çözümlerimiz'];
+                let headerIndex = 0;
+                
+                setInterval(() => {
+                    // Add animation class
+                    headerServicesLink.classList.add('title-transition');
+                    
+                    // Change text after longer fade-out
+                    setTimeout(() => {
+                        headerIndex = (headerIndex + 1) % headerTitles.length;
+                        headerServicesLink.textContent = headerTitles[headerIndex];
+                    }, 750);
+                    
+                    // Remove animation class after animation completes
+                    setTimeout(() => {
+                        headerServicesLink.classList.remove('title-transition');
+                    }, 1500);
+                }, 5000); // Change every 5 seconds (even longer interval)
+            }
+        });
 
         // Add CSS class for fade-in animation
         document.head.insertAdjacentHTML('beforeend', `
@@ -1328,5 +1916,38 @@
         }
     }
     </script>
+    
+    <!-- AI Chatbot - Eylül -->
+    <script src="ai-chatbot.js"></script>
+    
+    <style>
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .animate-slideIn {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
 </body>
 </html>
