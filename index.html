@@ -1215,20 +1215,33 @@
                     class="bg-green-600 text-white px-3 py-2 rounded shadow hover:bg-green-700 transition-colors text-sm">
                 <i class="fas fa-sync mr-1"></i>Yenile
             </button>
-            <button onclick="window.clearTestReferences()" 
-                    class="bg-red-600 text-white px-3 py-2 rounded shadow hover:bg-red-700 transition-colors text-sm">
-                <i class="fas fa-trash mr-1"></i>Test Sil
+            <button onclick="checkReferences()" 
+                    class="bg-blue-600 text-white px-3 py-2 rounded shadow hover:bg-blue-700 transition-colors text-sm">
+                <i class="fas fa-search mr-1"></i>Kontrol
             </button>
         </div>
     </div>
 
-    <!-- Test Software Data Script -->
-    <script src="test-software-data.js"></script>
-    
     <!-- Dynamic Content Script -->
     <script src="dynamic-content.js"></script>
 
     <script>
+        // Debug function to check references
+        function checkReferences() {
+            const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+            const references = cmsData.references || [];
+            alert(`LocalStorage'da ${references.length} referans bulundu.\n\n${references.length > 0 ? 'İlk referans: ' + references[0].companyName : 'Henüz referans eklenmemiş.'}`);
+            console.log('References in localStorage:', references);
+            
+            // Manuel yükleme dene
+            if (typeof loadReferencesFromCMS === 'function') {
+                loadReferencesFromCMS();
+                alert('loadReferencesFromCMS() fonksiyonu çağrıldı!');
+            } else {
+                alert('loadReferencesFromCMS() fonksiyonu bulunamadı!');
+            }
+        }
+        
         // OTOMATIK GÜNCELLENBİLİR POLLING SİSTEMİ
         let lastSettings = null;
         

@@ -1160,7 +1160,8 @@ window.showAllBlogPosts = function() {
 };
 
 // Load references from CMS data
-function loadReferencesFromCMS() {
+// Load References from CMS
+window.loadReferencesFromCMS = function loadReferencesFromCMS() {
     const referencesContainer = document.getElementById('references-container');
     if (!referencesContainer) return;
 
