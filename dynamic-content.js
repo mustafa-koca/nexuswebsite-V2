@@ -618,9 +618,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Listen for CMS data updates (both custom events and storage changes)
     window.addEventListener('cmsDataUpdated', function(e) {
-        console.log('CMS data updated event received, refreshing content...');
         loadSiteSettingsFromCMS();
-        loadHeroFromCMS(); // Refresh hero section
+        loadHeroFromCMS();
+        loadServicesFromCMS();
+        loadProductsFromCMS();
+        loadBlogFromCMS();
+        loadTeamFromCMS();
+        loadReferencesFromCMS(); // Referansları da yenile
         
         // Refresh specific sections if needed
         if (e.detail?.section === 'hero') {
@@ -632,23 +636,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Listen for storage changes (when data is updated in another tab)
     window.addEventListener('storage', function(e) {
         if (e.key === 'nexus-isg-cms-data') {
-            console.log('CMS data changed in storage, refreshing site settings...');
             setTimeout(() => {
                 loadSiteSettingsFromCMS();
-            }, 100); // Kısa bir gecikme ile
+                loadReferencesFromCMS(); // Referansları da yenile
+            }, 100);
         }
     });
     
     // Listen for custom storage events
     window.addEventListener('storageUpdate', function(e) {
         if (e.detail && e.detail.key === 'nexus-isg-cms-data') {
-            console.log('Storage update event received, refreshing site settings...');
             loadSiteSettingsFromCMS();
+            loadReferencesFromCMS(); // Referansları da yenile
         }
     });
-    
-    // Test event listener
-    console.log('CMS event listeners registered successfully');
     
     // Refresh content every 30 seconds to sync with CMS changes
     setInterval(function() {
@@ -663,7 +664,7 @@ document.addEventListener('DOMContentLoaded', function() {
             loadStatsFromCMS();
             loadSiteSettingsFromCMS();
         } catch (e) {
-            console.warn('Periodic refresh error:', e);
+            // Periodic refresh error
         }
     }, 30000);
 
@@ -1167,9 +1168,8 @@ function loadReferencesFromCMS() {
     try {
         const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
         references = cmsData.references || [];
-        console.log('Loading references from CMS:', references);
     } catch (e) {
-        console.error('Error loading references data:', e);
+        references = [];
     }
 
     if (references.length === 0) {
@@ -1470,7 +1470,6 @@ window.clearTestReferences = function() {
         keysToCheck.forEach(key => {
             if (localStorage.getItem(key)) {
                 localStorage.removeItem(key);
-                console.log(`Removed ${key} from localStorage`);
             }
         });
         
@@ -1479,7 +1478,6 @@ window.clearTestReferences = function() {
         if (cmsData.references) {
             cmsData.references = [];
             localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
-            console.log('Cleared references from CMS data');
         }
         
         // Refresh the page
@@ -1509,10 +1507,15 @@ function showNotification(message, type = 'info') {
 
 // Export functions for manual refresh
 window.refreshDynamicContent = function() {
-    console.log('Manually refreshing dynamic content...');
     loadServicesFromCMS();
     loadProductsFromCMS();
     loadBlogFromCMS();
+    loadTeamFromCMS();
+    loadReferencesFromCMS();
+    loadSocialMediaFromCMS();
+    loadContactInfoFromCMS();
+    loadStatsFromCMS();
+};
     loadTeamFromCMS();
     loadReferencesFromCMS();
     loadSocialMediaFromCMS();
