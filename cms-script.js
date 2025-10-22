@@ -4346,42 +4346,8 @@ function loadSettings() {
     }
 }
 
-// Test functions for debugging
-window.testSiteSettingsUpdate = function() {
-    console.log('Testing site settings update...');
-    
-    // Test localStorage save
-    const testSettings = {
-        companyName: 'TEST ŞIRKET',
-        companyEmail: 'test@test.com',
-        companyPhone: '+90 555 123 45 67',
-        companyAddress: 'Test Adres, Test Şehir',
-        logoUrl: 'media/nexus-logo.svg'
-    };
-    
-    let cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
-    cmsData.siteSettings = testSettings;
-    localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
-    
-    console.log('Test settings saved:', testSettings);
-    
-    // Trigger update
-    window.dispatchEvent(new CustomEvent('cmsDataUpdated'));
-    
-    return testSettings;
-};
-
-window.checkCurrentSettings = function() {
-    const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
-    console.log('Current CMS data:', cmsData);
-    console.log('Site settings:', cmsData.siteSettings);
-    return cmsData.siteSettings;
-};
-
 // Immediate preview update function
 function immediateUpdatePreview(settings) {
-    console.log('Immediate preview update with:', settings);
-    
     // 1. BroadcastChannel ile tüm tabları güncelle
     if (window.BroadcastChannel) {
         const channel = new BroadcastChannel('nexus-cms-updates');
@@ -4389,7 +4355,6 @@ function immediateUpdatePreview(settings) {
             type: 'siteSettingsUpdated',
             data: settings
         });
-        console.log('Broadcast message sent');
     }
     
     // 2. LocalStorage event trigger
@@ -4407,6 +4372,6 @@ function immediateUpdatePreview(settings) {
             }, '*');
         }
     } catch (e) {
-        console.log('Window messaging error:', e);
+        // Window messaging error
     }
 }
