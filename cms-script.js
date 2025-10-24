@@ -4158,6 +4158,108 @@ function debounceUpdate() {
     }, 300); // 300ms bekle (daha hızlı)
 }
 
+// Load current company data from localStorage
+function loadCurrentCompanyData() {
+    try {
+        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        const settings = cmsData.siteSettings || {};
+        
+        console.log('📥 Loading current company data:', settings);
+        
+        // Şirket adı
+        if (settings.companyName) {
+            const companyNameInput = document.getElementById('companyName');
+            if (companyNameInput) {
+                companyNameInput.value = settings.companyName;
+            }
+        }
+        
+        // Display type
+        if (settings.companyDisplayType) {
+            const displayTypeRadio = document.querySelector(`input[name="companyDisplayType"][value="${settings.companyDisplayType}"]`);
+            if (displayTypeRadio) {
+                displayTypeRadio.checked = true;
+                toggleCompanyDisplay(); // Display type'a göre form göster/gizle
+            }
+        }
+        
+        // Logo URL (eğer logo görünüm modundaysa)
+        if (settings.companyDisplayType === 'logo') {
+            const companyLogoUrl = document.getElementById('companyLogoUrl');
+            if (companyLogoUrl && (settings.companyLogo || settings.logoUrl)) {
+                companyLogoUrl.value = settings.companyLogo || settings.logoUrl || '';
+                updateCompanyLogoPreview();
+            }
+        }
+        
+        // E-posta
+        if (settings.companyEmail) {
+            const emailInput = document.getElementById('companyEmail');
+            if (emailInput) {
+                emailInput.value = settings.companyEmail;
+            }
+        }
+        
+        // Telefon
+        if (settings.companyPhone) {
+            const phoneInput = document.getElementById('companyPhone');
+            if (phoneInput) {
+                phoneInput.value = settings.companyPhone;
+            }
+        }
+        
+        // Adres
+        if (settings.companyAddress) {
+            const addressInput = document.getElementById('companyAddress');
+            if (addressInput) {
+                addressInput.value = settings.companyAddress;
+            }
+        }
+        
+        // Logo URL (Logo Ayarları bölümü)
+        if (settings.logoUrl) {
+            const logoUrlInput = document.getElementById('logoUrl');
+            if (logoUrlInput) {
+                logoUrlInput.value = settings.logoUrl;
+                updateLogoPreview();
+            }
+        }
+        
+        // Logo boyutları
+        if (settings.logoWidth) {
+            const logoWidthInput = document.getElementById('logoWidth');
+            if (logoWidthInput) {
+                logoWidthInput.value = settings.logoWidth;
+            }
+        }
+        
+        if (settings.logoHeight) {
+            const logoHeightInput = document.getElementById('logoHeight');
+            if (logoHeightInput) {
+                logoHeightInput.value = settings.logoHeight;
+            }
+        }
+        
+        // Başarı bildirimi
+        showNotification('Mevcut veriler başarıyla yüklendi!', 'success');
+        
+        // Status mesajı
+        const saveStatus = document.getElementById('saveStatus');
+        if (saveStatus) {
+            saveStatus.innerHTML = '<span class="text-blue-600 font-semibold"><i class="fas fa-check-circle mr-1"></i>Veriler yüklendi</span>';
+            setTimeout(() => {
+                saveStatus.innerHTML = '';
+            }, 3000);
+        }
+        
+        console.log('✅ Company data loaded successfully');
+        
+    } catch (error) {
+        console.error('Error loading company data:', error);
+        showNotification('Veriler yüklenirken hata oluştu', 'error');
+    }
+}
+
 function updateSiteSettings() {
     console.log('🔥 updateSiteSettings ÇAĞRILDI!');
     try {
