@@ -646,7 +646,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="anasayfa" class="hero-bg pt-20">
+    <section id="anasayfa" data-section="hero" class="hero-bg pt-20">
         <div class="max-w-7xl mx-auto px-4 section-padding">
             <div class="text-center text-white">
                 <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight px-2" data-hero-title>İş Sağlığı ve Güvenliği'nde<br class="hidden sm:block">Dijital Dönüşüm</h1>
@@ -662,14 +662,14 @@
             </div>
             
             <!-- Stats -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mt-12 md:mt-16 text-center text-white px-2">
+            <div data-section="stats" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mt-12 md:mt-16 text-center text-white px-2">
                 <div class="bg-white bg-opacity-10 rounded-xl p-4 md:p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
                     <div class="text-xl md:text-2xl lg:text-3xl font-bold mb-2 stats-counter" data-stats-customers>50+</div>
                     <div class="text-xs md:text-sm opacity-80" data-stats-customers-title>Aktif Müşteri</div>
                 </div>
                 <div class="bg-white bg-opacity-10 rounded-xl p-4 md:p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
-                    <div class="text-xl md:text-2xl lg:text-3xl font-bold mb-2 stats-counter" data-stats-satisfaction>98%</div>
-                    <div class="text-xs md:text-sm opacity-80" data-stats-satisfaction-title>Memnuniyet Oranı</div>
+                    <div class="text-xl md:text-2xl lg:text-3xl font-bold mb-2 stats-counter" data-stats-satisfaction>1.200+</div>
+                    <div class="text-xs md:text-sm opacity-80" data-stats-satisfaction-title>Dijital Form</div>
                 </div>
                 <div class="bg-white bg-opacity-10 rounded-xl p-4 md:p-6 hover:bg-opacity-20 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
                     <div class="text-xl md:text-2xl lg:text-3xl font-bold mb-2 stats-counter" data-stats-support>24/7</div>
@@ -724,7 +724,7 @@
     </section>
 
     <!-- Services Section -->
-    <section id="hizmetler" class="section-padding bg-gray-50">
+    <section id="hizmetler" data-section="services" class="section-padding bg-gray-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -742,7 +742,7 @@
     </section>
 
     <!-- Products Section -->
-    <section id="urunler" class="section-padding bg-white">
+    <section id="urunler" data-section="products" class="section-padding bg-white">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Yazılımlarımız</h2>
@@ -805,7 +805,7 @@
     </section>
 
     <!-- Blog Section -->
-    <section id="blog" class="section-padding bg-gray-50">
+    <section id="blog" data-section="blog" class="section-padding bg-gray-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-16">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
@@ -933,7 +933,7 @@
     </section>
 
     <!-- Team Section -->
-    <section id="ekip" class="section-padding bg-white">
+    <section id="ekip" data-section="team" class="section-padding bg-white">
         <div class="max-w-7xl mx-auto px-4 md:px-16">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Ekibimiz</h2>
@@ -970,7 +970,7 @@
     </section>
 
     <!-- References Section -->
-    <section id="referanslar" class="section-padding bg-white">
+    <section id="referanslar" data-section="references" class="section-padding bg-white">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Referanslarımız</h2>
@@ -987,7 +987,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="iletisim" class="section-padding bg-gray-50">
+    <section id="iletisim" data-section="contact" class="section-padding bg-gray-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">İletişim</h2>
@@ -1208,39 +1208,69 @@
         </div>
     </div>
 
-    <!-- Debug: Content Refresh Button -->
-    <div class="fixed bottom-4 left-4 z-50">
-        <div class="flex gap-2">
-            <button onclick="window.refreshDynamicContent()" 
-                    class="bg-green-600 text-white px-3 py-2 rounded shadow hover:bg-green-700 transition-colors text-sm">
-                <i class="fas fa-sync mr-1"></i>Yenile
-            </button>
-            <button onclick="checkReferences()" 
-                    class="bg-blue-600 text-white px-3 py-2 rounded shadow hover:bg-blue-700 transition-colors text-sm">
-                <i class="fas fa-search mr-1"></i>Kontrol
-            </button>
-        </div>
-    </div>
-
     <!-- Dynamic Content Script -->
     <script src="dynamic-content.js"></script>
 
     <script>
-        // Debug function to check references
-        function checkReferences() {
-            const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
-            const references = cmsData.references || [];
-            alert(`LocalStorage'da ${references.length} referans bulundu.\n\n${references.length > 0 ? 'İlk referans: ' + references[0].companyName : 'Henüz referans eklenmemiş.'}`);
-            console.log('References in localStorage:', references);
-            
-            // Manuel yükleme dene
-            if (typeof loadReferencesFromCMS === 'function') {
-                loadReferencesFromCMS();
-                alert('loadReferencesFromCMS() fonksiyonu çağrıldı!');
-            } else {
-                alert('loadReferencesFromCMS() fonksiyonu bulunamadı!');
+        // Cleanup null values from references on page load
+        (function cleanupReferenceData() {
+            try {
+                const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+                let updated = false;
+                
+                // Update stats if still old values
+                if (cmsData.stats && cmsData.stats.satisfaction) {
+                    if (cmsData.stats.satisfaction.title === 'Memnuniyet Oranı' || cmsData.stats.satisfaction.value === '98%') {
+                        cmsData.stats.satisfaction = {
+                            value: "1.200+",
+                            title: "Dijital Form"
+                        };
+                        updated = true;
+                        console.log('📊 Stats güncellendi: Memnuniyet Oranı → Dijital Form');
+                    }
+                }
+                
+                if (cmsData.references && Array.isArray(cmsData.references)) {
+                    let cleaned = false;
+                    
+                    cmsData.references = cmsData.references.map(ref => {
+                        if (ref.services && Array.isArray(ref.services)) {
+                            const originalLength = ref.services.length;
+                            // Remove null, undefined, empty strings, and "null" strings
+                            ref.services = ref.services.filter(s => {
+                                return s && 
+                                       typeof s === 'string' && 
+                                       s.trim() !== '' && 
+                                       s.trim().toLowerCase() !== 'null';
+                            });
+                            
+                            if (ref.services.length !== originalLength) {
+                                cleaned = true;
+                                console.log(`🧹 ${ref.companyName}: ${originalLength - ref.services.length} null servis temizlendi`);
+                            }
+                        } else {
+                            ref.services = [];
+                        }
+                        return ref;
+                    });
+                    
+                    if (cleaned) {
+                        updated = true;
+                    }
+                }
+                
+                if (updated) {
+                    localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
+                    console.log('✅ LocalStorage güncellendi!');
+                    // Force reload references
+                    if (typeof window.loadReferencesFromCMS === 'function') {
+                        setTimeout(() => window.loadReferencesFromCMS(), 100);
+                    }
+                }
+            } catch (e) {
+                console.error('Cleanup error:', e);
             }
-        }
+        })();
         
         // OTOMATIK GÜNCELLENBİLİR POLLING SİSTEMİ
         let lastSettings = null;
@@ -1930,7 +1960,190 @@
     }
     </script>
     
-    <!-- AI Chatbot - Eylül -->
+    <!-- Announcement Pop-up System -->
+    <script>
+    // ==================== DUYURU POP-UP SİSTEMİ ====================
+    function checkAndShowAnnouncement() {
+        try {
+            const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+            const announcement = cmsData.announcement;
+            
+            // Duyuru yoksa veya pasifse çık
+            if (!announcement || !announcement.enabled) {
+                console.log('📢 No active announcement');
+                return;
+            }
+            
+            console.log('📢 Checking announcement:', announcement);
+            
+            // Frekans kontrolü
+            const lastShown = localStorage.getItem('nexus-announcement-last-shown');
+            const now = new Date().getTime();
+            
+            let shouldShow = true;
+            
+            if (announcement.frequency === 'once' && lastShown) {
+                shouldShow = false;
+                console.log('📢 Announcement already shown once');
+            } else if (announcement.frequency === 'daily' && lastShown) {
+                const hoursSinceLastShown = (now - parseInt(lastShown)) / (1000 * 60 * 60);
+                shouldShow = hoursSinceLastShown >= 24;
+                console.log(`📢 Hours since last shown: ${hoursSinceLastShown}`);
+            } else if (announcement.frequency === 'weekly' && lastShown) {
+                const daysSinceLastShown = (now - parseInt(lastShown)) / (1000 * 60 * 60 * 24);
+                shouldShow = daysSinceLastShown >= 7;
+                console.log(`📢 Days since last shown: ${daysSinceLastShown}`);
+            }
+            
+            if (shouldShow) {
+                showAnnouncementPopup(announcement);
+                localStorage.setItem('nexus-announcement-last-shown', now.toString());
+            }
+            
+        } catch (error) {
+            console.error('Error checking announcement:', error);
+        }
+    }
+    
+    function showAnnouncementPopup(announcement) {
+        // Type'a göre renkler ve ikonlar
+        const typeConfig = {
+            info: { 
+                bg: 'from-blue-500 to-blue-600', 
+                icon: 'fa-info-circle', 
+                button: 'bg-blue-600 hover:bg-blue-700',
+                pulse: 'bg-blue-400'
+            },
+            success: { 
+                bg: 'from-green-500 to-green-600', 
+                icon: 'fa-check-circle', 
+                button: 'bg-green-600 hover:bg-green-700',
+                pulse: 'bg-green-400'
+            },
+            warning: { 
+                bg: 'from-yellow-500 to-orange-500', 
+                icon: 'fa-exclamation-triangle', 
+                button: 'bg-yellow-600 hover:bg-yellow-700',
+                pulse: 'bg-yellow-400'
+            },
+            celebration: { 
+                bg: 'from-purple-500 to-pink-500', 
+                icon: 'fa-gift', 
+                button: 'bg-purple-600 hover:bg-purple-700',
+                pulse: 'bg-purple-400'
+            }
+        };
+        
+        const config = typeConfig[announcement.type] || typeConfig.info;
+        
+        const popupHTML = `
+            <div id="announcementPopup" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" style="animation: fadeIn 0.3s ease-out;">
+                <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full relative" style="animation: slideUp 0.4s ease-out;">
+                    <!-- Pulse effect -->
+                    <div class="absolute -top-2 -right-2 w-4 h-4 ${config.pulse} rounded-full animate-ping"></div>
+                    <div class="absolute -top-2 -right-2 w-4 h-4 ${config.pulse} rounded-full"></div>
+                    
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r ${config.bg} text-white p-6 rounded-t-2xl relative overflow-hidden">
+                        <!-- Decorative circles -->
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+                        <div class="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+                        
+                        <button onclick="closeAnnouncementPopup()" class="absolute top-4 right-4 text-white hover:bg-white/20 rounded-full p-2 transition-all z-10">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                        
+                        <div class="flex items-center gap-3 mb-2 relative z-10">
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                <i class="fas ${config.icon} text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold">${announcement.title}</h3>
+                        </div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-6">
+                        <p class="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap mb-4">${announcement.message}</p>
+                        
+                        <div class="flex gap-3">
+                            ${announcement.buttonText ? `
+                                <a href="${announcement.buttonLink || '#'}" ${announcement.buttonLink ? 'target="_blank"' : ''} 
+                                   class="${config.button} text-white px-6 py-3 rounded-lg font-semibold flex-1 text-center transition-all shadow-lg hover:shadow-xl">
+                                    ${announcement.buttonText}
+                                    ${announcement.buttonLink ? '<i class="fas fa-external-link-alt ml-2 text-sm"></i>' : ''}
+                                </a>
+                            ` : ''}
+                            <button onclick="closeAnnouncementPopup()" 
+                                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-all ${announcement.buttonText ? '' : 'flex-1'}">
+                                Kapat
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', popupHTML);
+        
+        // Otomatik kapanma
+        if (announcement.autoClose > 0) {
+            setTimeout(() => {
+                closeAnnouncementPopup();
+            }, announcement.autoClose * 1000);
+        }
+        
+        console.log('📢 Announcement popup shown');
+    }
+    
+    function closeAnnouncementPopup() {
+        const popup = document.getElementById('announcementPopup');
+        if (popup) {
+            popup.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => {
+                popup.remove();
+            }, 300);
+        }
+    }
+    
+    // Sayfa yüklendiğinde duyuruyu kontrol et (biraz gecikme ile)
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            checkAndShowAnnouncement();
+        }, 1000); // 1 saniye bekle
+    });
+    
+    // CMS'den güncelleme geldiğinde
+    window.addEventListener('cmsDataUpdated', function(e) {
+        if (e.detail && e.detail.type === 'announcement') {
+            console.log('📢 Announcement updated from CMS');
+            // Eğer enabled ise ve popup yoksa göster
+            if (e.detail.enabled || (e.detail.data && e.detail.data.enabled)) {
+                const existingPopup = document.getElementById('announcementPopup');
+                if (!existingPopup) {
+                    checkAndShowAnnouncement();
+                }
+            }
+        }
+    });
+    
+    // BroadcastChannel dinle
+    if (window.BroadcastChannel) {
+        const channel = new BroadcastChannel('nexus-cms-updates');
+        channel.onmessage = function(event) {
+            if (event.data.type === 'announcementUpdated') {
+                console.log('📢 Announcement updated via BroadcastChannel');
+                const existingPopup = document.getElementById('announcementPopup');
+                if (event.data.enabled && !existingPopup) {
+                    checkAndShowAnnouncement();
+                } else if (!event.data.enabled && existingPopup) {
+                    closeAnnouncementPopup();
+                }
+            }
+        };
+    }
+    </script>
+    
+    <!-- AI Chatbot -->
     <script src="ai-chatbot.js"></script>
     
     <style>
@@ -1951,6 +2164,26 @@
             }
             to {
                 opacity: 1;
+            }
+        }
+        
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
             }
         }
         

@@ -589,6 +589,163 @@ function showErrorState(containerId, errorMessage, actionButton = null) {
     `;
 }
 
+// Load References from CMS - Global function for immediate access
+window.loadReferencesFromCMS = function() {
+    console.log('🔵 loadReferencesFromCMS() ÇAĞRILDI');
+    
+    const referencesContainer = document.getElementById('references-container');
+    if (!referencesContainer) {
+        console.warn('❌ references-container not found');
+        return;
+    }
+    
+    console.log('✅ references-container bulundu');
+
+    let references = [];
+    try {
+        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        references = cmsData.references || [];
+        console.log('📦 LocalStorage\'dan yüklenen referans sayısı:', references.length);
+        if (references.length > 0) {
+            console.log('📝 İlk referans:', references[0]);
+        }
+    } catch (e) {
+        console.error('❌ LocalStorage okuma hatası:', e);
+        references = [];
+    }
+
+    if (references.length === 0) {
+        console.log('⚠️ Hiç referans yok, boş mesaj gösteriliyor');
+        referencesContainer.innerHTML = `
+            <div class="col-span-full text-center py-8">
+                <div class="mb-4">
+                    <p class="text-gray-500">Henüz referans eklenmemiş.</p>
+                </div>
+            </div>
+        `;
+        return;
+    }
+    
+    console.log('🎨 Referanslar render ediliyor...');
+
+    // Create 4-card carousel structure  
+    const slides = [];
+    for (let i = 0; i < references.length; i += 4) {
+        slides.push(references.slice(i, i + 4));
+    }
+    
+    referencesContainer.innerHTML = `
+        <div class="relative w-full">
+            <!-- Carousel wrapper -->
+            <div class="overflow-hidden relative">
+                <div id="referenceCarousel" class="flex transition-transform duration-500 ease-in-out">
+                    ${slides.map((slideRefs, slideIndex) => `
+                        <div class="min-w-full flex-shrink-0 px-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                ${slideRefs.map(reference => `
+                                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-4">
+                                        <!-- Logo ve Başlık -->
+                                        <div class="flex items-center mb-3">
+                                            ${reference.logo ? `
+                                                <img src="${reference.logo}" alt="${reference.companyName}" 
+                                                     class="w-10 h-10 object-contain mr-3 rounded border">
+                                            ` : `
+                                                <div class="w-10 h-10 bg-blue-100 rounded flex items-center justify-center mr-3">
+                                                    <i class="fas fa-building text-blue-600 text-sm"></i>
+                                                </div>
+                                            `}
+                                            <div class="flex-1 min-w-0">
+                                                <h3 class="font-semibold text-sm text-gray-800 truncate">${reference.companyName}</h3>
+                                                <p class="text-xs text-gray-600 truncate">${reference.sector || 'Sektör Belirtilmemiş'}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Status Badge -->
+                                        <div class="mb-3">
+                                            <span class="inline-block text-xs px-2 py-1 rounded-full ${
+                                                reference.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                                reference.status === 'ongoing' ? 'bg-blue-100 text-blue-800' :
+                                                'bg-yellow-100 text-yellow-800'
+                                            }">
+                                                ${reference.status === 'completed' ? 'Tamamlandı' :
+                                                  reference.status === 'ongoing' ? 'Devam Ediyor' :
+                                                  'Planlanan'}
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Proje Açıklaması -->
+                                        <p class="text-gray-700 text-xs mb-3 line-clamp-2 leading-4">
+                                            ${reference.projectDescription}
+                                        </p>
+                                        
+                                        <!-- Bilgiler -->
+                                        <div class="flex justify-between text-xs text-gray-600 mb-3">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-users text-blue-600 mr-1"></i>
+                                                <span>${reference.employeeCount}</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <i class="fas fa-calendar text-blue-600 mr-1"></i>
+                                                <span>${reference.startDate ? new Date(reference.startDate).getFullYear() : 'N/A'}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Hizmetler -->
+                                        ${reference.services && reference.services.length > 0 ? `
+                                            <div class="mb-3">
+                                                <div class="flex flex-wrap gap-1">
+                                                    ${reference.services.filter(s => s && s.trim()).slice(0, 2).map(service => `
+                                                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                                                            ${service}
+                                                        </span>
+                                                    `).join('')}
+                                                    ${reference.services.filter(s => s && s.trim()).length > 2 ? `
+                                                        <span class="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
+                                                            +${reference.services.filter(s => s && s.trim()).length - 2}
+                                                        </span>
+                                                    ` : ''}
+                                                </div>
+                                            </div>
+                                        ` : ''}
+                                        
+                                        <!-- Detay Butonu -->
+                                        <button onclick="showReferenceDetails(${reference.id})" 
+                                                class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 px-3 rounded transition-colors">
+                                            <i class="fas fa-info-circle mr-1"></i>Detayları Gör
+                                        </button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            
+            ${slides.length > 1 ? `
+                <!-- Navigation buttons -->
+                <button class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-r-lg shadow-lg transition-all carousel-prev">
+                    <i class="fas fa-chevron-left text-gray-800"></i>
+                </button>
+                <button class="absolute right-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-l-lg shadow-lg transition-all carousel-next">
+                    <i class="fas fa-chevron-right text-gray-800"></i>
+                </button>
+                
+                <!-- Indicators -->
+                <div class="flex justify-center gap-2 mt-4">
+                    ${slides.map((_, index) => `
+                        <button class="w-2 h-2 rounded-full bg-gray-300 hover:bg-blue-500 transition-all carousel-indicator" data-slide="${index}"></button>
+                    `).join('')}
+                </div>
+            ` : ''}
+        </div>
+    `;
+    
+    // Initialize carousel functionality
+    if (slides.length > 1) {
+        initReferenceCarousel(slides.length);
+    }
+};
+
 // Initialize dynamic content loading
 document.addEventListener('DOMContentLoaded', function() {
     // Show loading states initially
@@ -1159,157 +1316,6 @@ window.showAllBlogPosts = function() {
     }
 };
 
-// Load references from CMS data
-// Load References from CMS
-window.loadReferencesFromCMS = function loadReferencesFromCMS() {
-    const referencesContainer = document.getElementById('references-container');
-    if (!referencesContainer) return;
-
-    let references = [];
-    try {
-        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
-        references = cmsData.references || [];
-    } catch (e) {
-        references = [];
-    }
-
-    if (references.length === 0) {
-        referencesContainer.innerHTML = `
-            <div class="col-span-full text-center py-8">
-                <div class="mb-4">
-                    <p class="text-gray-500">Henüz referans eklenmemiş.</p>
-                </div>
-                <button onclick="clearTestReferences()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm">
-                    <i class="fas fa-trash mr-2"></i>Test Verilerini Temizle
-                </button>
-            </div>
-        `;
-        return;
-    }
-
-    // Create 4-card carousel structure  
-    const slides = [];
-    for (let i = 0; i < references.length; i += 4) {
-        slides.push(references.slice(i, i + 4));
-    }
-    
-    referencesContainer.innerHTML = `
-        <div class="relative w-full">
-            <!-- Carousel wrapper -->
-            <div class="overflow-hidden relative">
-                <div id="referenceCarousel" class="flex transition-transform duration-500 ease-in-out">
-                    ${slides.map((slideRefs, slideIndex) => `
-                        <div class="min-w-full flex-shrink-0 px-2">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                ${slideRefs.map(reference => `
-                                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-4">
-                                        <!-- Logo ve Başlık -->
-                                        <div class="flex items-center mb-3">
-                                            ${reference.logo ? `
-                                                <img src="${reference.logo}" alt="${reference.companyName}" 
-                                                     class="w-10 h-10 object-contain mr-3 rounded border">
-                                            ` : `
-                                                <div class="w-10 h-10 bg-blue-100 rounded flex items-center justify-center mr-3">
-                                                    <i class="fas fa-building text-blue-600 text-sm"></i>
-                                                </div>
-                                            `}
-                                            <div class="flex-1 min-w-0">
-                                                <h3 class="font-semibold text-sm text-gray-800 truncate">${reference.companyName}</h3>
-                                                <p class="text-xs text-gray-600 truncate">${reference.sector}</p>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Status Badge -->
-                                        <div class="mb-3">
-                                            <span class="inline-block text-xs px-2 py-1 rounded-full ${
-                                                reference.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                                reference.status === 'ongoing' ? 'bg-blue-100 text-blue-800' :
-                                                'bg-yellow-100 text-yellow-800'
-                                            }">
-                                                ${reference.status === 'completed' ? 'Tamamlandı' :
-                                                  reference.status === 'ongoing' ? 'Devam Ediyor' :
-                                                  'Planlanan'}
-                                            </span>
-                                        </div>
-                                        
-                                        <!-- Proje Açıklaması -->
-                                        <p class="text-gray-700 text-xs mb-3 line-clamp-2 leading-4">
-                                            ${reference.projectDescription}
-                                        </p>
-                                        
-                                        <!-- Bilgiler -->
-                                        <div class="flex justify-between text-xs text-gray-600 mb-3">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-users text-blue-600 mr-1"></i>
-                                                <span>${reference.employeeCount}</span>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <i class="fas fa-calendar text-blue-600 mr-1"></i>
-                                                <span>${reference.startDate ? new Date(reference.startDate).getFullYear() : 'N/A'}</span>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Hizmetler -->
-                                        ${reference.services && reference.services.length > 0 ? `
-                                            <div class="mb-3">
-                                                <div class="flex flex-wrap gap-1">
-                                                    ${reference.services.slice(0, 2).map(service => `
-                                                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
-                                                            ${service}
-                                                        </span>
-                                                    `).join('')}
-                                                    ${reference.services.length > 2 ? `
-                                                        <span class="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
-                                                            +${reference.services.length - 2}
-                                                        </span>
-                                                    ` : ''}
-                                                </div>
-                                            </div>
-                                        ` : ''}
-                                        
-                                        <!-- Detay Butonu -->
-                                        <button onclick="showReferenceDetails('${reference.id}')" 
-                                                class="w-full bg-blue-600 text-white py-2 px-3 rounded hover:bg-blue-700 transition-colors text-xs font-medium">
-                                            <i class="fas fa-info-circle mr-1"></i>Detaylar
-                                        </button>
-                                    </div>
-                                `).join('')}
-                                
-                                <!-- Boş kartlar (4'lü grup tamamlaması için) -->
-                                ${slideRefs.length < 4 ? Array(4 - slideRefs.length).fill().map(() => `
-                                    <div class="hidden lg:block"></div>
-                                `).join('') : ''}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-            
-            <!-- Carousel controls -->
-            ${slides.length > 1 ? `
-                <button id="prevRef" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-lg transition-all z-10">
-                    <i class="fas fa-chevron-left text-gray-600"></i>
-                </button>
-                <button id="nextRef" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-lg transition-all z-10">
-                    <i class="fas fa-chevron-right text-gray-600"></i>
-                </button>
-                
-                <!-- Carousel indicators -->
-                <div class="flex justify-center mt-4 space-x-2">
-                    ${slides.map((_, index) => `
-                        <button class="w-2 h-2 rounded-full bg-gray-300 hover:bg-blue-500 transition-all carousel-indicator" data-slide="${index}"></button>
-                    `).join('')}
-                </div>
-            ` : ''}
-        </div>
-    `;
-    
-    // Initialize carousel functionality
-    if (slides.length > 1) {
-        initReferenceCarousel(slides.length);
-    }
-}
-
 // Initialize reference carousel
 function initReferenceCarousel(totalSlides) {
     let currentSlide = 0;
@@ -1511,12 +1517,6 @@ window.refreshDynamicContent = function() {
     loadServicesFromCMS();
     loadProductsFromCMS();
     loadBlogFromCMS();
-    loadTeamFromCMS();
-    loadReferencesFromCMS();
-    loadSocialMediaFromCMS();
-    loadContactInfoFromCMS();
-    loadStatsFromCMS();
-};
     loadTeamFromCMS();
     loadReferencesFromCMS();
     loadSocialMediaFromCMS();
@@ -1802,7 +1802,7 @@ function animateCounter(element, finalValue) {
 let currentTeamSlide = 0;
 let isTeamSliding = false;
 
-function initializeTeamSlider() {
+window.initializeTeamSlider = function() {
     const teamContainer = document.getElementById('team-container');
     const prevBtn = document.getElementById('teamPrevBtn');
     const nextBtn = document.getElementById('teamNextBtn');
@@ -2172,7 +2172,6 @@ function updateCompanyInfo(settings) {
         if (metaAuthor) {
             metaAuthor.content = settings.companyName;
         }
-    }
     
         const ogTitle = document.querySelector('meta[property="og:title"]');
         if (ogTitle) {
@@ -2255,3 +2254,73 @@ function updateFavicon(logoUrl) {
     }
     appleFavicon.href = logoUrl;
 }
+
+// ==================== BÖLÜM GÖRÜNÜRLÜK SİSTEMİ ====================
+// Section Visibility Management
+function applySectionVisibility() {
+    try {
+        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        const visibility = cmsData.sectionVisibility || {
+            hero: true,
+            services: true,
+            references: true,
+            products: true,
+            team: true,
+            blog: true,
+            stats: true,
+            contact: true
+        };
+        
+        console.log('🔍 Applying section visibility:', visibility);
+        
+        // Her section için görünürlük kontrolü
+        Object.keys(visibility).forEach(sectionName => {
+            const section = document.querySelector(`[data-section="${sectionName}"]`);
+            if (section) {
+                if (visibility[sectionName]) {
+                    section.style.display = '';
+                    section.classList.remove('hidden');
+                    console.log(`✅ ${sectionName} section visible`);
+                } else {
+                    section.style.display = 'none';
+                    section.classList.add('hidden');
+                    console.log(`❌ ${sectionName} section hidden`);
+                }
+            }
+        });
+        
+    } catch (error) {
+        console.error('Error applying section visibility:', error);
+    }
+}
+
+// Sayfa yüklendiğinde görünürlük ayarlarını uygula
+applySectionVisibility();
+
+// CMS'den güncelleme geldiğinde tekrar uygula
+window.addEventListener('cmsDataUpdated', function(e) {
+    if (e.detail && e.detail.type === 'sectionVisibility') {
+        console.log('🔄 Section visibility updated:', e.detail);
+        applySectionVisibility();
+    }
+});
+
+// Storage event için de dinle (cross-tab communication)
+window.addEventListener('storage', function(e) {
+    if (e.key === 'nexus-isg-cms-data') {
+        applySectionVisibility();
+    }
+});
+
+// BroadcastChannel desteği
+if (window.BroadcastChannel) {
+    const visibilityChannel = new BroadcastChannel('nexus-cms-updates');
+    visibilityChannel.onmessage = function(event) {
+        if (event.data.type === 'sectionVisibilityUpdated') {
+            console.log('📡 BroadcastChannel: Section visibility updated');
+            applySectionVisibility();
+        }
+    };
+}
+
+}); // DOMContentLoaded End

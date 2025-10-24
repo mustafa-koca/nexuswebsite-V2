@@ -71,11 +71,30 @@ class EylulChatbot {
     }
 
     init() {
-        this.createChatWidget();
-        this.attachEventListeners();
-        this.loadUserProfile();
-        this.loadChatHistory();
-        this.greetUser();
+        console.log('🔧 Starting chatbot initialization...');
+        console.log('📝 Settings:', this.settings);
+        
+        try {
+            this.createChatWidget();
+            console.log('✅ Chat widget created');
+            
+            this.attachEventListeners();
+            console.log('✅ Event listeners attached');
+            
+            this.loadUserProfile();
+            console.log('✅ User profile loaded');
+            
+            this.loadChatHistory();
+            console.log('✅ Chat history loaded');
+            
+            this.greetUser();
+            console.log('✅ User greeted');
+            
+            console.log('🎉 Chatbot initialization complete!');
+        } catch (error) {
+            console.error('❌ Chatbot initialization failed:', error);
+            console.error('Stack trace:', error.stack);
+        }
     }
 
     createChatWidget() {
@@ -165,93 +184,6 @@ class EylulChatbot {
                                 ${q}
                             </button>
                         `).join('')}
-                    </div>
-                </div>
-            </div>
-        `;
-
-        document.body.insertAdjacentHTML('beforeend', chatHTML);
-    }
-                        <div class="bg-gray-900 text-white text-sm rounded-lg py-2 px-4 whitespace-nowrap shadow-lg">
-                            Merhaba! Ben Eylül 👋
-                        </div>
-                    </div>
-                </button>
-            </div>
-
-            <!-- Chat Window -->
-            <div id="eylul-chat-window" class="fixed bottom-24 right-6 w-96 h-[600px] bg-white rounded-2xl shadow-2xl z-50 hidden flex flex-col overflow-hidden border border-gray-200">
-                <!-- Header -->
-                <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between rounded-t-2xl">
-                    <div class="flex items-center gap-3">
-                        <div class="relative">
-                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl">
-                                🤖
-                            </div>
-                            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-lg">Eylül</h3>
-                            <p class="text-xs text-blue-100">AI Asistan - Çevrimiçi</p>
-                        </div>
-                    </div>
-                    <button id="eylul-close-btn" class="text-white hover:bg-white/20 rounded-full p-2 transition-all">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Messages Container -->
-                <div id="eylul-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-                    <!-- User Profile Summary (if data exists) -->
-                    <div id="eylul-profile-summary" class="hidden bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-3 mb-2">
-                        <div class="text-xs font-semibold text-blue-700 mb-1">📊 Profil Özeti</div>
-                        <div id="eylul-profile-content" class="text-xs text-gray-700 space-y-1"></div>
-                    </div>
-                    <!-- Messages will be appended here -->
-                </div>
-
-                <!-- Typing Indicator -->
-                <div id="eylul-typing" class="px-4 py-2 hidden">
-                    <div class="flex items-center gap-2 text-gray-500 text-sm">
-                        <div class="flex gap-1">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0s"></div>
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
-                        </div>
-                        <span>Eylül yazıyor...</span>
-                    </div>
-                </div>
-
-                <!-- Input Area -->
-                <div class="p-4 bg-white border-t border-gray-200">
-                    <div class="flex gap-2">
-                        <input 
-                            type="text" 
-                            id="eylul-input" 
-                            placeholder="Mesajınızı yazın..." 
-                            class="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                        <button 
-                            id="eylul-send-btn" 
-                            class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="flex gap-2 mt-2">
-                        <button class="quick-question text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition-all">
-                            🤖 Yazılımlarınız neler?
-                        </button>
-                        <button class="quick-question text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full hover:bg-purple-200 transition-all">
-                            💰 Fiyatlar nasıl?
-                        </button>
-                        <button class="quick-question text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full hover:bg-green-200 transition-all">
-                            🎯 Demo göster!
-                        </button>
                     </div>
                 </div>
             </div>
@@ -881,6 +813,25 @@ Kullanıcı sorusu:`;
 
 // Initialize chatbot when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🤖 Initializing Eylül AI Chatbot...');
+    let settings = getChatbotSettings();
+    console.log('⚙️ Chatbot Settings:', settings);
+    console.log('✅ Chatbot Enabled:', settings.enabled);
+    
+    if (!settings.enabled) {
+        console.warn('⚠️ Chatbot is DISABLED in settings!');
+        console.log('� Auto-enabling chatbot...');
+        
+        // Auto-enable chatbot
+        settings.enabled = true;
+        try {
+            localStorage.setItem('nexus-chatbot-settings', JSON.stringify(settings));
+            console.log('✅ Chatbot auto-enabled successfully!');
+        } catch (e) {
+            console.error('❌ Failed to enable chatbot:', e);
+        }
+    }
+    
     window.eylulBot = new EylulChatbot();
-    console.log('🤖 Eylül AI Chatbot initialized!');
+    console.log('✅ Eylül AI Chatbot initialized successfully!');
 });

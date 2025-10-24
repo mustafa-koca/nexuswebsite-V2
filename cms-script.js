@@ -204,8 +204,8 @@ let cmsData = {
             title: "Aktif Müşteri"
         },
         satisfaction: {
-            value: "98%",
-            title: "Memnuniyet Oranı"
+            value: "1.200+",
+            title: "Dijital Form"
         },
         support: {
             value: "24/7",
@@ -2366,7 +2366,7 @@ function loadReferences() {
                             <div>
                                 <h4 class="font-semibold text-gray-800">${ref.companyName}</h4>
                                 <p class="text-sm text-gray-600 mb-1">
-                                    <i class="fas fa-industry mr-1"></i>${ref.sector}
+                                    <i class="fas fa-industry mr-1"></i>${ref.sector || 'Sektör Belirtilmemiş'}
                                 </p>
                                 ${ref.employeeCount ? `
                                     <p class="text-sm text-gray-600 mb-1">
@@ -2394,14 +2394,14 @@ function loadReferences() {
                                 </div>
                                 ${ref.services && ref.services.length > 0 ? `
                                     <div class="flex flex-wrap gap-1">
-                                        ${ref.services.slice(0, 3).map(service => `
+                                        ${ref.services.filter(s => s && typeof s === 'string' && s.trim() !== '' && s.trim().toLowerCase() !== 'null').slice(0, 3).map(service => `
                                             <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
                                                 ${service}
                                             </span>
                                         `).join('')}
-                                        ${ref.services.length > 3 ? `
+                                        ${ref.services.filter(s => s && typeof s === 'string' && s.trim() !== '' && s.trim().toLowerCase() !== 'null').length > 3 ? `
                                             <span class="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
-                                                +${ref.services.length - 3}
+                                                +${ref.services.filter(s => s && typeof s === 'string' && s.trim() !== '' && s.trim().toLowerCase() !== 'null').length - 3}
                                             </span>
                                         ` : ''}
                                     </div>
@@ -2456,7 +2456,7 @@ function editReference(id) {
         form.querySelector('[name="startDate"]').value = reference.startDate || '';
         form.querySelector('[name="endDate"]').value = reference.endDate || '';
         form.querySelector('[name="status"]').value = reference.status || 'planned';
-        form.querySelector('[name="logoUrl"]').value = reference.logo && !reference.logo.startsWith('data:') ? reference.logo : '';
+        form.querySelector('[name="logo"]').value = reference.logo && !reference.logo.startsWith('data:') ? reference.logo : '';
         
         // Fill services
         const servicesContainer = document.getElementById('referenceServices');
@@ -3206,6 +3206,11 @@ document.addEventListener('DOMContentLoaded', function() {
             handleReferenceSubmit();
         });
     }
+    
+    // Load section visibility settings
+    setTimeout(() => {
+        loadSectionVisibilitySettings();
+    }, 500);
 });
 
 function handleReferenceSubmit() {
@@ -3235,21 +3240,24 @@ function handleReferenceSubmit() {
         }
     });
     
-    // Get logo if uploaded
-    const logoInput = document.getElementById('referenceLogo');
-    if (logoInput.files && logoInput.files[0]) {
+    // Get logo - check file upload first, then URL input
+    const logoFileInput = document.getElementById('referenceLogoFile');
+    const logoUrlInput = document.getElementById('referenceLogo');
+    
+    if (logoFileInput && logoFileInput.files && logoFileInput.files[0]) {
+        // File uploaded - convert to base64
         const reader = new FileReader();
         reader.onload = function(e) {
             reference.logo = e.target.result;
             saveReference(reference);
         };
-        reader.readAsDataURL(logoInput.files[0]);
+        reader.readAsDataURL(logoFileInput.files[0]);
+    } else if (logoUrlInput && logoUrlInput.value.trim()) {
+        // URL provided
+        reference.logo = logoUrlInput.value.trim();
+        saveReference(reference);
     } else {
-        // Check if logo URL is provided
-        const logoUrl = formData.get('logoUrl');
-        if (logoUrl && logoUrl.trim()) {
-            reference.logo = logoUrl.trim();
-        }
+        // No logo provided
         saveReference(reference);
     }
 }
@@ -4375,3 +4383,442 @@ function immediateUpdatePreview(settings) {
         // Window messaging error
     }
 }
+
+// ==================== BÖLÜM GÖRÜNÜRLÜK SİSTEMİ ====================
+// Section Visibility Management
+function updateSectionVisibility(sectionName, isVisible) {
+    console.log(`🔄 Updating section visibility: ${sectionName} = ${isVisible}`);
+    
+    try {
+        // LocalStorage'dan mevcut ayarları al
+        let cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        
+        // sectionVisibility objesini oluştur veya güncelle
+        if (!cmsData.sectionVisibility) {
+            cmsData.sectionVisibility = {
+                hero: true,
+                services: true,
+                references: true,
+                products: true,
+                team: true,
+                blog: true,
+                stats: true,
+                contact: true,
+                map: true
+            };
+        }
+        
+        // İlgili bölümün görünürlüğünü güncelle
+        cmsData.sectionVisibility[sectionName] = isVisible;
+        
+        // LocalStorage'a kaydet
+        localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
+        
+        console.log('✅ Section visibility saved:', cmsData.sectionVisibility);
+        
+        // Event dispatch - Ana sayfayı güncelle
+        window.dispatchEvent(new CustomEvent('cmsDataUpdated', { 
+            detail: { 
+                type: 'sectionVisibility', 
+                section: sectionName,
+                visible: isVisible,
+                data: cmsData.sectionVisibility 
+            } 
+        }));
+        
+        // BroadcastChannel ile diğer tabları bilgilendir
+        if (window.BroadcastChannel) {
+            const channel = new BroadcastChannel('nexus-cms-updates');
+            channel.postMessage({
+                type: 'sectionVisibilityUpdated',
+                section: sectionName,
+                visible: isVisible,
+                data: cmsData.sectionVisibility
+            });
+        }
+        
+        // Storage event trigger
+        const storageEvent = new StorageEvent('storage', {
+            key: 'nexus-isg-cms-data',
+            newValue: JSON.stringify(cmsData),
+            storageArea: localStorage
+        });
+        window.dispatchEvent(storageEvent);
+        
+        // Bildirim göster
+        showNotification(
+            `${getSectionDisplayName(sectionName)} bölümü ${isVisible ? 'gösterilecek' : 'gizlenecek'}`,
+            'success'
+        );
+        
+    } catch (error) {
+        console.error('Error updating section visibility:', error);
+        showNotification('Görünürlük ayarı kaydedilemedi', 'error');
+    }
+}
+
+// Bölüm adlarını kullanıcı dostu formata çevir
+function getSectionDisplayName(sectionName) {
+    const names = {
+        hero: 'Hero Bölümü',
+        services: 'Hizmetler',
+        references: 'Referanslar',
+        products: 'Ürünler',
+        team: 'Ekibimiz',
+        blog: 'Blog',
+        stats: 'İstatistikler',
+        contact: 'İletişim',
+        map: 'Harita'
+    };
+    return names[sectionName] || sectionName;
+}
+
+// Sayfa yüklendiğinde mevcut görünürlük ayarlarını checkbox'lara yansıt
+function loadSectionVisibilitySettings() {
+    try {
+        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        const visibility = cmsData.sectionVisibility || {
+            hero: true,
+            services: true,
+            references: true,
+            products: true,
+            team: true,
+            blog: true,
+            stats: true,
+            contact: true,
+            map: true
+        };
+        
+        // Her checkbox'ı güncelle
+        Object.keys(visibility).forEach(section => {
+            const checkbox = document.getElementById(`toggle${section.charAt(0).toUpperCase() + section.slice(1)}`);
+            if (checkbox) {
+                checkbox.checked = visibility[section];
+            }
+        });
+        
+        console.log('✅ Section visibility settings loaded:', visibility);
+        
+    } catch (error) {
+        console.error('Error loading section visibility settings:', error);
+    }
+}
+
+// ==================== DUYURU SİSTEMİ ====================
+// Announcement Management Functions
+
+// Toggle announcement on/off
+function toggleAnnouncement(isEnabled) {
+    try {
+        let cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        
+        if (!cmsData.announcement) {
+            cmsData.announcement = {
+                enabled: false,
+                type: 'info',
+                title: '',
+                message: '',
+                buttonText: '',
+                buttonLink: '',
+                frequency: 'daily',
+                autoClose: 0
+            };
+        }
+        
+        cmsData.announcement.enabled = isEnabled;
+        localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
+        
+        // UI güncellemeleri
+        const statusText = document.getElementById('announcementStatusText');
+        const statusInfo = document.getElementById('announcementInfo');
+        const badge = document.getElementById('activeAnnouncementBadge');
+        
+        if (isEnabled) {
+            statusText.textContent = 'Aktif';
+            statusText.classList.add('text-green-600');
+            statusInfo.innerHTML = '<i class="fas fa-check-circle text-green-600 mr-2"></i>Duyuru aktif! Ziyaretçiler siteye girdiğinde pop-up görecekler.';
+            if (badge) {
+                badge.classList.remove('hidden');
+            }
+        } else {
+            statusText.textContent = 'Pasif';
+            statusText.classList.remove('text-green-600');
+            statusInfo.innerHTML = '<i class="fas fa-info-circle text-yellow-600 mr-2"></i>Duyuru şu an pasif durumda. Aktif ettiğinizde ziyaretçiler siteye girdiğinde pop-up görecekler.';
+            if (badge) {
+                badge.classList.add('hidden');
+            }
+        }
+        
+        // Event dispatch
+        window.dispatchEvent(new CustomEvent('cmsDataUpdated', { 
+            detail: { 
+                type: 'announcement', 
+                enabled: isEnabled 
+            } 
+        }));
+        
+        // BroadcastChannel
+        if (window.BroadcastChannel) {
+            const channel = new BroadcastChannel('nexus-cms-updates');
+            channel.postMessage({
+                type: 'announcementUpdated',
+                enabled: isEnabled
+            });
+        }
+        
+        showNotification(
+            `Duyuru ${isEnabled ? 'aktif edildi' : 'pasif edildi'}`,
+            'success'
+        );
+        
+    } catch (error) {
+        console.error('Error toggling announcement:', error);
+        showNotification('Duyuru durumu değiştirilemedi', 'error');
+    }
+}
+
+// Save announcement
+function saveAnnouncement() {
+    try {
+        const type = document.querySelector('input[name="announcementType"]:checked').value;
+        const title = document.getElementById('announcementTitle').value.trim();
+        const message = document.getElementById('announcementMessage').value.trim();
+        const buttonText = document.getElementById('announcementButton').value.trim();
+        const buttonLink = document.getElementById('announcementButtonLink').value.trim();
+        const frequency = document.getElementById('announcementFrequency').value;
+        const autoClose = parseInt(document.getElementById('announcementAutoClose').value) || 0;
+        
+        // Validation
+        if (!title) {
+            showNotification('Lütfen bir başlık girin', 'error');
+            document.getElementById('announcementTitle').focus();
+            return;
+        }
+        
+        if (!message) {
+            showNotification('Lütfen bir mesaj girin', 'error');
+            document.getElementById('announcementMessage').focus();
+            return;
+        }
+        
+        if (buttonText && !buttonLink) {
+            showNotification('Buton metni varsa link de girmelisiniz', 'error');
+            document.getElementById('announcementButtonLink').focus();
+            return;
+        }
+        
+        // Save to localStorage
+        let cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        
+        cmsData.announcement = {
+            enabled: document.getElementById('announcementEnabled').checked,
+            type: type,
+            title: title,
+            message: message,
+            buttonText: buttonText,
+            buttonLink: buttonLink,
+            frequency: frequency,
+            autoClose: autoClose,
+            updatedAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem('nexus-isg-cms-data', JSON.stringify(cmsData));
+        
+        console.log('✅ Announcement saved:', cmsData.announcement);
+        
+        // Event dispatch
+        window.dispatchEvent(new CustomEvent('cmsDataUpdated', { 
+            detail: { 
+                type: 'announcement', 
+                data: cmsData.announcement 
+            } 
+        }));
+        
+        // BroadcastChannel
+        if (window.BroadcastChannel) {
+            const channel = new BroadcastChannel('nexus-cms-updates');
+            channel.postMessage({
+                type: 'announcementUpdated',
+                data: cmsData.announcement
+            });
+        }
+        
+        // Storage event
+        const storageEvent = new StorageEvent('storage', {
+            key: 'nexus-isg-cms-data',
+            newValue: JSON.stringify(cmsData),
+            storageArea: localStorage
+        });
+        window.dispatchEvent(storageEvent);
+        
+        showNotification('Duyuru başarıyla kaydedildi!', 'success');
+        
+        // Status mesajı
+        const statusDiv = document.getElementById('announcementSaveStatus');
+        if (statusDiv) {
+            statusDiv.innerHTML = '<span class="text-green-600 font-semibold">✓ Kaydedildi ve yayında!</span>';
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 3000);
+        }
+        
+    } catch (error) {
+        console.error('Error saving announcement:', error);
+        showNotification('Duyuru kaydedilemedi', 'error');
+    }
+}
+
+// Preview announcement
+function previewAnnouncement() {
+    const type = document.querySelector('input[name="announcementType"]:checked').value;
+    const title = document.getElementById('announcementTitle').value.trim();
+    const message = document.getElementById('announcementMessage').value.trim();
+    const buttonText = document.getElementById('announcementButton').value.trim();
+    const buttonLink = document.getElementById('announcementButtonLink').value.trim();
+    
+    if (!title || !message) {
+        showNotification('Önizleme için başlık ve mesaj gerekli', 'error');
+        return;
+    }
+    
+    // Önizleme pop-up'ı oluştur
+    showAnnouncementPreview({
+        type: type,
+        title: title,
+        message: message,
+        buttonText: buttonText,
+        buttonLink: buttonLink
+    });
+}
+
+// Show announcement preview
+function showAnnouncementPreview(announcement) {
+    // Type'a göre renkler
+    const typeColors = {
+        info: { bg: 'from-blue-500 to-blue-600', icon: 'fa-info-circle', button: 'bg-blue-600 hover:bg-blue-700' },
+        success: { bg: 'from-green-500 to-green-600', icon: 'fa-check-circle', button: 'bg-green-600 hover:bg-green-700' },
+        warning: { bg: 'from-yellow-500 to-orange-500', icon: 'fa-exclamation-triangle', button: 'bg-yellow-600 hover:bg-yellow-700' },
+        celebration: { bg: 'from-purple-500 to-pink-500', icon: 'fa-gift', button: 'bg-purple-600 hover:bg-purple-700' }
+    };
+    
+    const colors = typeColors[announcement.type] || typeColors.info;
+    
+    const previewHTML = `
+        <div id="announcementPreview" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 animate-fadeIn">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full animate-slideUp">
+                <!-- Header -->
+                <div class="bg-gradient-to-r ${colors.bg} text-white p-6 rounded-t-2xl relative">
+                    <button onclick="closeAnnouncementPreview()" class="absolute top-4 right-4 text-white hover:bg-white/20 rounded-full p-2 transition-all">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fas ${colors.icon} text-3xl"></i>
+                        <h3 class="text-2xl font-bold">${announcement.title}</h3>
+                    </div>
+                    <div class="bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-semibold inline-block">
+                        <i class="fas fa-eye mr-1"></i>ÖNİZLEME
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="p-6">
+                    <p class="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap">${announcement.message}</p>
+                    
+                    ${announcement.buttonText ? `
+                        <div class="mt-6">
+                            <button class="${colors.button} text-white px-6 py-3 rounded-lg font-semibold w-full transition-all">
+                                ${announcement.buttonText}
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', previewHTML);
+}
+
+// Close announcement preview
+function closeAnnouncementPreview() {
+    const preview = document.getElementById('announcementPreview');
+    if (preview) {
+        preview.remove();
+    }
+}
+
+// Load announcement settings
+function loadAnnouncementSettings() {
+    try {
+        const cmsData = JSON.parse(localStorage.getItem('nexus-isg-cms-data') || '{}');
+        const announcement = cmsData.announcement || {
+            enabled: false,
+            type: 'info',
+            title: '',
+            message: '',
+            buttonText: '',
+            buttonLink: '',
+            frequency: 'daily',
+            autoClose: 0
+        };
+        
+        // Form alanlarını doldur
+        document.getElementById('announcementEnabled').checked = announcement.enabled;
+        document.querySelector(`input[name="announcementType"][value="${announcement.type}"]`).checked = true;
+        document.getElementById('announcementTitle').value = announcement.title || '';
+        document.getElementById('announcementMessage').value = announcement.message || '';
+        document.getElementById('announcementButton').value = announcement.buttonText || '';
+        document.getElementById('announcementButtonLink').value = announcement.buttonLink || '';
+        document.getElementById('announcementFrequency').value = announcement.frequency || 'daily';
+        document.getElementById('announcementAutoClose').value = announcement.autoClose || 0;
+        
+        // Durum güncelleme
+        toggleAnnouncement(announcement.enabled);
+        
+        // Buton link section göster/gizle
+        if (announcement.buttonText) {
+            document.getElementById('buttonLinkSection').classList.remove('hidden');
+        }
+        
+        console.log('✅ Announcement settings loaded:', announcement);
+        
+    } catch (error) {
+        console.error('Error loading announcement settings:', error);
+    }
+}
+
+// Buton metni girildiğinde link bölümünü göster
+document.addEventListener('DOMContentLoaded', function() {
+    const buttonTextInput = document.getElementById('announcementButton');
+    if (buttonTextInput) {
+        buttonTextInput.addEventListener('input', function() {
+            const linkSection = document.getElementById('buttonLinkSection');
+            if (this.value.trim()) {
+                linkSection.classList.remove('hidden');
+            } else {
+                linkSection.classList.add('hidden');
+            }
+        });
+    }
+    
+    // Announcements section açıldığında ayarları yükle
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.target.id === 'announcements-section' && 
+                !mutation.target.classList.contains('hidden')) {
+                loadAnnouncementSettings();
+            }
+        });
+    });
+    
+    const announcementsSection = document.getElementById('announcements-section');
+    if (announcementsSection) {
+        observer.observe(announcementsSection, { 
+            attributes: true, 
+            attributeFilter: ['class'] 
+        });
+    }
+});
+
+// DOMContentLoaded event listener'ı dosyanın en sonunda zaten var,
+// o yüzden orada çağıracağız
